@@ -1,0 +1,105 @@
+/* Import centralized variables */
+@import url('../main/variables.css');
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-secondary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-secondary.active {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--fifth-color);
+  border-color: var(--fifth-color);
+}
+
+.input-group-text {
+  border-color: var(--light-grey);
+}
+
+.form-control {
+  border-color: var(--light-grey);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+}
+
+/* Fix for password input groups */
+.input-group > .form-control:not(:last-child) {
+  border-left: 0;
+}
+
+.input-group > .input-group-text:last-child {
+  border-right: 0;
+}
+/* Ensure proper height and flex behavior */
+html, body {
+  height: 100%;
+}
+
+.container-fluid.min-vh-100 {
+  min-height: 100vh !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.row.flex-grow-1 {
+  flex: 1;
+  height: 100%;
+}
+
+/* Ensure columns take full height */
+.row.flex-grow-1 > [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card takes full width inside column */
+.card {
+  width: 100%;
+}
+
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--white);
+  color: var(--primary-color);
+  border-color: var(--fifth-color);
+}
+
+.error-message {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.d-flex.justify-content-between.align-items-center h5 {
+  margin-bottom: 0 !important;
+}
+
+.error-alert {
+  text-align: right;
+  border-radius: 6px;
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+}

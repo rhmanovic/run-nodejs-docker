@@ -1,0 +1,193 @@
+
+extends layout
+
+block content
+  .main.p-3.p-md-4
+    .container-fluid
+      // Page header with actions
+      .row.mb-4
+        .col-12
+          .card.border-0.shadow-sm
+            .card-body.p-4
+              .d-flex.justify-content-between.align-items-center.flex-wrap
+                div
+                  if category
+                    h2.fw-bold.text-primary تعديل التصنيف
+                    p.text-muted.mb-0 قم بتحديث معلومات التصنيف
+                  else
+                    h2.fw-bold.text-primary إضافة تصنيف جديد
+                    p.text-muted.mb-0 أدخل معلومات التصنيف الجديد
+                .d-flex.mt-3.mt-md-0
+                  a.btn.btn-outline-secondary(href='/manager/category')
+                    i.fa.fa-arrow-right.me-2
+                    span.mx-1 العودة للتصنيفات
+
+      // Form Card
+      .row
+        .col-md-8.mx-auto
+          .card.border-0.shadow-sm
+            .card-body.p-4
+              if category
+                form#categoryForm(method='POST', action='/manager/edit-category', enctype='multipart/form-data')
+                  input(type='hidden', name='categoryId', value=category._id)
+                  
+                  // Category image preview
+                  .mb-4.text-center
+                    if category.imgsrc
+                      .mb-3
+                        img#imagePreview.img-thumbnail.rounded(src=category.imgsrc, alt='صورة التصنيف', style='max-height: 200px;')
+                    else
+                      .mb-3
+                        .bg-light.rounded.d-flex.justify-content-center.align-items-center(style='height: 200px; width: 200px; margin: 0 auto;')
+                          i.fa.fa-folder.fa-4x.text-muted
+                    
+                    // Image upload
+                    .custom-file-upload
+                      label.btn.btn-outline-primary.mt-2(for='category_img')
+                        i.fa.fa-upload.me-2
+                        span.mx-1 تغيير الصورة
+                      input#category_img.d-none(type='file', name='category_img1')
+                  
+                  .row
+                    // Category ID/Number
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='category_number') رقم التصنيف
+                      input#category_number.form-control(type='text', value=category.category_number, disabled)
+                    
+                    // Status switch
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold.d-block التفعيل
+                      label.switch
+                        input#status(type='checkbox', name='status', checked=category.status)
+                        span.switch-slider.round
+                        span.checkmark.fas.fa-check(style=category.status ? '' : 'display: none;')
+                    
+                    
+                  
+                  .row
+                    // Arabic Name
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='ArabicName') الإسم (AR)
+                      input#ArabicName.form-control(type='text', name='ArabicName', value=category.ArabicName, required)
+                    
+                    // English Name
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='EnglishName') الإسم (EN)
+                      input#EnglishName.form-control(type='text', name='EnglishName', value=category.EnglishName, required)
+                  
+                  .row
+                    // Discount Percentage
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='discountPerc') الخصم (%)
+                      .input-group
+                        input#discountPerc.form-control(type='number', name='discountPerc', value=category.discountPerc || 0, min='0', max='100')
+                        span.input-group-text %
+                    
+                    // Sort Order
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='sort') الترتيب
+                      input#sort.form-control(type='number', name='sort', value=category.sort || 0, min='0')
+                  
+                  // Submit Buttons
+                  .d-flex.justify-content-end.mt-4
+                    button.btn.btn-outline-secondary.mx-1(type='button', onclick="window.location.href='/manager/category'")
+                      i.fa.fa-times.me-2
+                      span.mx-1 إلغاء
+                    button.btn.btn-primary(type='submit')
+                      i.fa.fa-save.me-2
+                      span.mx-1 حفظ التغييرات
+              else
+                form#categoryForm(method='POST', action='/manager/add-category', enctype='multipart/form-data')
+                  // Category image preview
+                  .mb-4.text-center
+                    .mb-3
+                      .bg-light.rounded.d-flex.justify-content-center.align-items-center(style='height: 200px; width: 200px; margin: 0 auto;')
+                        i.fa.fa-folder.fa-4x.text-muted#imageIcon
+                      img#imagePreview.img-thumbnail.rounded.d-none(alt='صورة التصنيف', style='max-height: 200px;')
+                    
+                    // Image upload
+                    .custom-file-upload
+                      label.btn.btn-outline-primary.mt-2(for='category_img')
+                        i.fa.fa-upload.me-2
+                        span.mx-1 إضافة صورة
+                      input#category_img.d-none(type='file', name='category_img')
+                  
+                  .row
+                    // Status switch
+                    .col-md-12.mb-3
+                      label.form-label.fw-semibold.d-block التفعيل
+                      label.switch
+                        input#status(type='checkbox', name='status', checked)
+                        span.switch-slider.round
+                        span.checkmark.fas.fa-check
+                  
+                  .row
+                    // Arabic Name
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='ArabicName') الإسم (AR)
+                      input#ArabicName.form-control(type='text', name='ArabicName', required)
+                    
+                    // English Name
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='EnglishName') الإسم (EN)
+                      input#EnglishName.form-control(type='text', name='EnglishName', required)
+                  
+                  .row
+                    // Discount Percentage
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='discountPerc') الخصم (%)
+                      .input-group
+                        input#discountPerc.form-control(type='number', name='discountPerc', value='0', min='0', max='100')
+                        span.input-group-text %
+                    
+                    // Sort Order
+                    .col-md-6.mb-3
+                      label.form-label.fw-semibold(for='sort') الترتيب
+                      input#sort.form-control(type='number', name='sort', value='0', min='0')
+                  
+                  // Submit Buttons
+                  .d-flex.justify-content-end.mt-4
+                    button.btn.btn-outline-secondary.mx-1(type='button', onclick="window.location.href='/manager/category'")
+                      i.fa.fa-times.me-2
+                      span.mx-1 إلغاء
+                    button.btn.btn-primary(type='submit')
+                      i.fa.fa-plus-circle.me-2
+                      span.mx-1 إضافة تصنيف
+
+  // Image preview JavaScript
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const imageInput = document.getElementById('category_img');
+      const imagePreview = document.getElementById('imagePreview');
+      const imageIcon = document.getElementById('imageIcon');
+      
+      imageInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.classList.remove('d-none');
+            if (imageIcon) {
+              imageIcon.parentElement.classList.add('d-none');
+            }
+          };
+          
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+      
+      // Toggle status label text
+      const statusSwitch = document.getElementById('status');
+      const statusLabel = statusSwitch.nextElementSibling.querySelector('span');
+      
+      statusSwitch.addEventListener('change', function() {
+        if (this.checked) {
+          statusLabel.className = 'text-success';
+          statusLabel.textContent = 'نشط';
+        } else {
+          statusLabel.className = 'text-muted';
+          statusLabel.textContent = 'معطل';
+        }
+      });
+    });

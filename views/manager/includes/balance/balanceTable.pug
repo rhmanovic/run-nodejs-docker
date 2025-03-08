@@ -1,0 +1,24 @@
+// balanceTable
+if balances && balances.length > 0
+  .row.justify-content-center
+    .col-lg-8.col-md-12
+      h2.text-center.mt-4 الارصدة
+      table.table.table-bordered.table-striped.text-center
+        thead
+          tr.align-middle
+            th.col-4 المصدر
+            th.col-4 الرصيد
+            th.col-4 الإجراءات
+        tbody
+          each balanceItem in balances
+            tr.align-middle(data-id=balanceItem._id)
+              td.col-4= balanceItem.name
+              
+              td.col-4= balanceItem.balance.toFixed(3) + ' د.ك'
+              td.col-4
+                button.btn.btn-warning.btn-sm.mx-1(onclick=`editBalanceForm('${balanceItem._id}', '${balanceItem.name}')`) تعديل
+                button.btn.btn-danger.btn-sm.mx-1(onclick=`deleteBalance('${balanceItem._id}', '${balanceItem.name}')`) حذف
+else
+  .row.justify-content-center
+    .col-lg-8.col-md-12.text-center
+      p.text-muted لا يوجد أرصدة متاحة حاليًا

@@ -1,0 +1,258 @@
+{
+  "en": {
+    "homeLead": "The Ultimate E-commerce CRM",
+    "homeTitle": "Create Your Online Store with Our CRM and Boost Your Sales",
+    "homeSubtitle": "A Smart Solution for Modern Businesses",
+    "getStarted": "Get Started",
+    "topClients": "Payment Gateways",
+    "exclusivePartner": "We Connect You With",
+    "powerLinkTitle": "Sell More & Manage Your Business Effortlessly",
+    "powerLinkDesc": "The ultimate e-commerce and POS solution to sell online, accept payments, and manage orders seamlessly.",
+    "powerLinkDesc2": "Set up your online store, process in-store sales, and engage with customers using smart automation. Track sales, manage inventory in real-time, and convert visitors into loyal customers—all while reducing costs and boosting revenue. 🚀",
+    "knowMore": "Learn More",
+    "strategyTitle": "Smart System for Business Growth",
+    "strategyDesc": "E-commerce is evolving fast, and our CRM is the perfect tool trusted by businesses worldwide to stay connected with customers, process orders efficiently, and enhance their shopping experience.",
+    "featuresTitle": "Feature-Packed for Your Success",
+    "featuresDesc": "Our CRM is packed with tools to simplify sales, customer management, and marketing automation. Whether you're just starting or managing a large-scale business, our platform is designed for you.",
+    "featuresDesc2": "A powerful solution that works for you 24/7, ensuring smooth operations and increased profitability.",
+    "seeAllFeatures": "See All Features",
+    "multiSocialTitle": "Omnichannel Sales Management",
+    "multiSocialDesc": "Manage all your sales channels, including social media, website, and marketplace integrations, from a single dashboard.",
+    "qualityLeadsTitle": "High-Quality Leads",
+    "qualityLeadsDesc": "Attract and convert high-value customers with smart marketing tools and targeted engagement.",
+    "respondFastTitle": "Instant Customer Support",
+    "respondFastDesc": "Enhance customer satisfaction by providing quick responses to inquiries about orders, delivery, and product details.",
+    "saveMoneyTitle": "Maximize Profitability",
+    "saveMoneyDesc": "Reduce operational costs and boost ROI by automating workflows and optimizing resource allocation.",
+    "home": "Home",
+    "featuresnav": "Features",
+    "benefits": "Benefits",
+    "ourClients": "Our Clients",
+    "contactSales": "Contact Sales",
+    "contact": "Contact",
+    "prices": "Prices",
+    "myAccount": "My Account",
+    "importantLinks": "Important Links",
+    "returnPolicy": "Return & Refund Policy",
+    "privacyPolicy": "Privacy Policy",
+    "faq": "FAQ",
+    "contactUs": "Contact Us",
+    "customerService": "Customer Service Available 10 AM - 10 PM",
+    "allRightsReserved": "All rights reserved © 2024",
+    "downloadApp": "Download Our App",
+    "footerHeadline": "Grow Your Business with Our CRM",
+    "footerParagraph": "Manage your e-commerce operations effortlessly in one place.",
+    "googlePlay": "Google Play",
+    "appStore": "App Store",
+    "copyright": "Copyright © 2024",
+    "termsConditions": "Terms & Conditions",
+    "features": [
+      {
+        "icon": "1.png",
+        "title": "Sell Online with Ease",
+        "description": "Launch your own e-commerce store with a seamless setup, fast checkout, and mobile-friendly design."
+      },
+      {
+        "icon": "2.png",
+        "title": "Multi-Channel Selling",
+        "description": "Sell on Instagram, WhatsApp, and your online store simultaneously, managing everything from one dashboard."
+      },
+      {
+        "icon": "3.png",
+        "title": "Automated Order Management",
+        "description": "Track orders, send updates to customers, and manage deliveries effortlessly."
+      },
+      {
+        "icon": "4.png",
+        "title": "Boost Sales with Promotions",
+        "description": "Run discounts, flash sales, and special offers to attract and retain more customers."
+      },
+      {
+        "icon": "5.png",
+        "title": "Smart Inventory Management",
+        "description": "Keep track of stock levels, receive low-stock alerts, and avoid running out of best-selling products."
+      },
+      {
+        "icon": "6.png",
+        "title": "Automated Customer Engagement",
+        "description": "Send personalized messages, order confirmations, and follow-ups via WhatsApp and SMS."
+      },
+      {
+        "icon": "7.png",
+        "title": "Seamless Payment Integration",
+        "description": "Accept online payments securely through KNET, MyFatoorah, Hesabe, and other gateways."
+      },
+      {
+        "icon": "8.png",
+        "title": "Cash & Bank Balance Tracking",
+        "description": "Monitor your shop’s cash flow, online transactions, and bank balances in real time."
+      },
+      {
+        "icon": "9.png",
+        "title": "Manage Customer Inquiries",
+        "description": "Handle customer questions efficiently with a built-in ticketing system and chat support."
+      },
+      {
+        "icon": "10.png",
+        "title": "Easy Product Management",
+        "description": "Add, edit, and organize products quickly with images, pricing, and stock availability."
+      },
+      {
+        "icon": "11.png",
+        "title": "Custom Dashboard & Reports",
+        "description": "Get real-time insights into sales, customer trends, and business performance."
+      },
+      {
+        "icon": "12.png",
+        "title": "Multi-User Access",
+        "description": "Allow employees to manage different aspects of the store with role-based permissions."
+      },
+      {
+        "icon": "13.png",
+        "title": "Offer Buy Now, Pay Later",
+        "description": "Increase conversions by enabling flexible payment options like installment plans."
+      },
+      {
+        "icon": "14.png",
+        "title": "Instant Bulk Messaging",
+        "description": "Send promotions, updates, and special announcements to all your customers at once."
+      }
+    ],
+    "smartGrowthTitle": "Your Success Doesn’t Stop at the Beginning",
+    "smartGrowthDesc": "Sustained growth and expansion are the keys to excellence. We provide the tools that make management easier and sales bigger.",
+    "businessFlexTitle": "Flexibility for Every Business",
+    "businessFlexDesc": "No matter your industry, we offer a comprehensive solution that helps attract customers and increase profits.",
+    "marketExpansionTitle": "Helping You Stand Out",
+    "marketExpansionDesc": "With our market expertise, we equip you with the right tools to reach new markets and outshine competitors.",
+    "continuousSupportTitle": "Your Partner Every Step of the Way",
+    "continuousSupportDesc": "Smart technology, precise analytics, and continuous support to help your business grow steadily. 🚀"
+  },
+  "ar": {
+    "homeLead": "نظام إدارة علاقات العملاء للتجارة الإلكترونية",
+    "homeTitle": "انشئ متجرك الإلكتروني باستخدام نظامنا لزيادة المبيعات",
+    "homeSubtitle": "حل ذكي للأعمال الحديثة",
+    "getStarted": "ابدأ الآن",
+    "topClients": "بوابات الدفع",
+    "exclusivePartner": "نربطك مع",
+    "powerLinkTitle": "حقق المزيد من المبيعات وأدر أعمالك بكل سهولة",
+    "powerLinkDesc": "الحل الأمثل للتجارة الإلكترونية ونقاط البيع لبيع المنتجات عبر الإنترنت، وقبول المدفوعات، وإدارة الطلبات بسلاسة.",
+    "powerLinkDesc2": "أنشئ متجرك الإلكتروني، وأدر مبيعات المتجر الفعلي، وتفاعل مع العملاء باستخدام الأتمتة الذكية. تتبع المبيعات، وأدر المخزون في الوقت الفعلي، وحوّل الزوار إلى عملاء دائمين مع تقليل التكاليف وزيادة الأرباح. 🚀",
+    "knowMore": "اعرف المزيد",
+    "strategyTitle": "نظام ذكي لنمو أعمالك",
+    "strategyDesc": "التجارة الإلكترونية تتطور بسرعة، ونظامنا هو الحل المثالي الذي تعتمد عليه الشركات للبقاء على اتصال بالعملاء وتحسين عمليات الطلبات والتسويق.",
+    "featuresTitle": "ميزات متكاملة لنجاحك",
+    "featuresDesc": "نظامنا يوفر أدوات متطورة لإدارة المبيعات، والعملاء، وأتمتة التسويق. سواء كنت بدأت حديثًا أو تدير مشروعًا كبيرًا، فإن منصتنا مصممة لك.",
+    "featuresDesc2": "حل قوي يعمل على مدار الساعة لضمان سير العمليات بسلاسة وتحقيق أرباح أعلى.",
+    "seeAllFeatures": "عرض جميع الميزات",
+    "multiSocialTitle": "إدارة المبيعات عبر قنوات متعددة",
+    "multiSocialDesc": "قم بإدارة جميع قنوات البيع الخاصة بك، بما في ذلك وسائل التواصل الاجتماعي، والموقع الإلكتروني، والتكامل مع الأسواق، من لوحة تحكم واحدة.",
+    "qualityLeadsTitle": "عملاء محتملون بجودة عالية",
+    "qualityLeadsDesc": "استهدف العملاء ذوي القيمة العالية وحوّلهم إلى مشترين فعليين باستخدام أدوات تسويق ذكية.",
+    "respondFastTitle": "دعم فوري للعملاء",
+    "respondFastDesc": "حسّن رضا العملاء من خلال تقديم ردود سريعة على استفساراتهم حول الطلبات والتوصيل وتفاصيل المنتجات.",
+    "saveMoneyTitle": "تعظيم الأرباح",
+    "saveMoneyDesc": "قلل التكاليف التشغيلية وزد من العائد على الاستثمار عن طريق أتمتة العمليات وتحسين توزيع الموارد.",
+    "home": "الرئيسية",
+    "featuresnav": "المميزات",
+    "benefits": "الفوائد",
+    "ourClients": "عملاؤنا",
+    "contactSales": "اتصل بالمبيعات",
+    "contact": "اتصل بنا",
+    "prices": "الاسعار",
+    "myAccount": "حسابي",
+    "importantLinks": "روابط هامة",
+    "returnPolicy": "سياسة الإرجاع والاسترداد",
+    "privacyPolicy": "سياسة الخصوصية",
+    "faq": "الأسئلة الشائعة",
+    "contactUs": "اتصل بنا",
+    "customerService": "خدمة العملاء متاحة من 10 صباحًا إلى 10 مساءً",
+    "allRightsReserved": "جميع الحقوق محفوظة © 2024",
+    "downloadApp": "حمل تطبيقنا",
+    "footerHeadline": "نمِ أعمالك مع نظامنا",
+    "footerParagraph": "أدِر عمليات متجرك الإلكتروني بسهولة في مكان واحد.",
+    "googlePlay": "جوجل بلاي",
+    "appStore": "آب ستور",
+    "copyright": "حقوق النشر © 2024",
+    "termsConditions": "الشروط والأحكام",
+    "features": [
+      {
+        "icon": "1.png",
+        "title": "بيع منتجاتك بسهولة عبر الإنترنت",
+        "description": "أطلق متجرك الإلكتروني بسهولة مع إعداد سلس، ودفع سريع، وتصميم متوافق مع الجوال."
+      },
+      {
+        "icon": "2.png",
+        "title": "البيع عبر قنوات متعددة",
+        "description": "قم بالبيع على إنستجرام، واتساب، ومتجرك الإلكتروني في نفس الوقت وإدارة كل شيء من لوحة تحكم واحدة."
+      },
+      {
+        "icon": "3.png",
+        "title": "إدارة الطلبات تلقائيًا",
+        "description": "تتبع الطلبات، وأرسل التحديثات للعملاء، وأدر عمليات التوصيل بسهولة."
+      },
+      {
+        "icon": "4.png",
+        "title": "زيادة المبيعات بالعروض الترويجية",
+        "description": "قم بتشغيل الخصومات، والعروض السريعة، والعروض الخاصة لجذب المزيد من العملاء والاحتفاظ بهم."
+      },
+      {
+        "icon": "5.png",
+        "title": "إدارة المخزون الذكية",
+        "description": "راقب مستويات المخزون، واحصل على تنبيهات عند انخفاض الكمية، وتجنب نفاد المنتجات الأكثر مبيعًا."
+      },
+      {
+        "icon": "6.png",
+        "title": "التفاعل التلقائي مع العملاء",
+        "description": "أرسل رسائل مخصصة، وتأكيدات الطلبات، والمتابعات عبر واتساب والرسائل القصيرة."
+      },
+      {
+        "icon": "7.png",
+        "title": "تكامل سلس مع بوابات الدفع",
+        "description": "قم بقبول المدفوعات الإلكترونية بأمان عبر KNET، ماي فاتورة، Hesabe، وغيرها."
+      },
+      {
+        "icon": "8.png",
+        "title": "تتبع الرصيد النقدي والبنكي",
+        "description": "راقب التدفقات النقدية لمتجرك، والمعاملات الإلكترونية، وأرصدة البنوك في الوقت الفعلي."
+      },
+      {
+        "icon": "9.png",
+        "title": "إدارة استفسارات العملاء",
+        "description": "تعامل مع استفسارات العملاء بكفاءة من خلال نظام التذاكر والدردشة المدمج."
+      },
+      {
+        "icon": "10.png",
+        "title": "إدارة المنتجات بسهولة",
+        "description": "أضف، وعدّل، ونظم المنتجات بسرعة مع الصور، والأسعار، وتوفر المخزون."
+      },
+      {
+        "icon": "11.png",
+        "title": "لوحة تحكم وتقارير مخصصة",
+        "description": "احصل على رؤى فورية حول المبيعات واتجاهات العملاء وأداء الأعمال."
+      },
+      {
+        "icon": "12.png",
+        "title": "إدارة متعددة للمستخدمين",
+        "description": "اسمح للموظفين بإدارة جوانب مختلفة من المتجر بصلاحيات محددة لكل مستخدم."
+      },
+      {
+        "icon": "13.png",
+        "title": "تقديم الدفع بالتقسيط",
+        "description": "قم بزيادة عمليات الشراء من خلال توفير خيارات دفع مرنة مثل الدفع بالتقسيط."
+      },
+      {
+        "icon": "14.png",
+        "title": "الإرسال الفوري للرسائل الجماعية",
+        "description": "أرسل العروض الترويجية والتحديثات والإعلانات الخاصة لجميع عملائك دفعة واحدة."
+      }
+    ],
+    "smartGrowthTitle": "نموك لا يتوقف عند البداية",
+    "smartGrowthDesc": "التوسع سر النجاح، ونوفر لك الأدوات التي تسهل إدارتك وتزيد مبيعاتك.",
+    "businessFlexTitle": "مرونة تناسب جميع الأنشطة",
+    "businessFlexDesc": "مهما كان مجالك، نقدم لك حلولًا متكاملة لجذب العملاء وزيادة الأرباح.",
+    "marketExpansionTitle": "نساعدك على التميز",
+    "marketExpansionDesc": "بأدوات احترافية، نمنحك القوة لدخول أسواق جديدة والتفوق على المنافسين.",
+    "continuousSupportTitle": "شريكك في كل خطوة",
+    "continuousSupportDesc": "تقنيات ذكية، تحليلات دقيقة، ودعم متواصل لنمو أعمالك بثبات. 🚀"
+  }
+}

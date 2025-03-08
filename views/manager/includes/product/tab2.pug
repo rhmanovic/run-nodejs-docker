@@ -1,0 +1,103 @@
+
+.table-responsive
+  table.table.table-hover.align-middle.border
+    tbody
+      tr.align-middle.border.border-secondary.border-end-0.border-start-0(style='background-color: #dee2e6')
+        th.py-3(colspan="2")
+          .d-flex.align-items-center
+            i.fa.fa-tag.text-primary.me-2.fa-lg
+            h5.mb-0.mx-1 معلومات السعر والمخزون
+
+      tr.align-middle
+        td.fw-bold.bg-light.text-nowrap(width="30%") سعر البيع د.ك
+        td
+          .form-floating.mb-0
+            input.form-control#sale_price_1(type='number', name='sale_price', min='0', step='.001', placeholder='سعر البيع', required='true', itsTab="tab2", value=product.sale_price)
+            label(for='sale_price_1') أدخل سعر البيع
+            span.spanLocalError.badge.bg-danger.text-white.hidden.mt-1 هذا الحقل إجباري
+
+      tr.align-middle
+        td.fw-bold.bg-light تكلفة د.ك المنتج (إن وجدت)
+        td
+          .form-floating.mb-0
+            input.form-control#input_purchase_price(type='number', name='purchase_price', min='0', step='.001', placeholder='تكلفة المنتج', value=product.purchase_price)
+            label(for='input_purchase_price') تكلفة المنتج
+
+      tr.align-middle
+        td.fw-bold.bg-light حد الشراء
+        td
+          .form-floating.mb-0
+            input.form-control#input_purchase_limit(type='number', name='purchase_limit', min='0', step='1', placeholder='حد الشراء', value=product.purchase_limit)
+            label(for='input_purchase_limit') أقصى عدد يمكن شراؤه في الطلب الواحد
+
+      tr.align-middle
+        td.fw-bold.bg-light الرمز الشريطي
+        td
+          .form-floating.mb-0
+            input.form-control#input_barcode(type='text', name='barcode', placeholder='الرمز الشريطي', value=product.barcode)
+            label(for='input_barcode') أدخل الرمز الشريطي (Barcode)
+
+      tr.align-middle.border.border-secondary.border-end-0.border-start-0(style='background-color: #dee2e6')
+        th.py-3(colspan="2")
+          .d-flex.align-items-center
+            i.fa.fa-percent.text-primary.me-2.fa-lg
+            h5.mb-0.mx-1 إعدادات الخصم
+
+      tr.align-middle
+        td.fw-bold.bg-light نوع الخصم
+        td
+          .form-floating.mb-0
+            select.form-select#pdt_discount_type(name='pdt_discount_type', itsTab="tab2")
+              option(value='nodiscount', selected=(product.pdt_discount_type === undefined || product.pdt_discount_type === 'nodiscount' ? true : false)) بدون خصم
+              option(value='percentage', selected=(product.pdt_discount_type === 'percentage' ? true : false)) نسبه مئويه
+              option(value='quantity', selected=(product.pdt_discount_type === 'quantity' ? true : false)) كمية
+            label(for='pdt_discount_type') اختر نوع الخصم
+
+      tr.align-middle
+        td.fw-bold.bg-light قيمة الخصم
+        td
+          .form-floating.mb-0
+            input.form-control#discount(type='number', name='pdt_discount', min='0', step='.01', max='99', placeholder='خصم', value=product.pdt_discount)
+            label(for='discount') أدخل قيمة الخصم
+
+      tr.align-middle.border.border-secondary.border-end-0.border-start-0(style='background-color: #dee2e6')
+        th.py-3(colspan="2")
+          .d-flex.align-items-center
+            i.fa.fa-cubes.text-primary.me-2.fa-lg
+            h5.mb-0.mx-1 إدارة المخزون
+
+      tr.align-middle
+        td.fw-bold.bg-light كمية المخزون
+        td
+          .form-floating.mb-0
+            input.form-control#Stock(type='number', name='Stock', step='1', placeholder='كمية المخزون', value=product.Stock)
+            label(for='Stock') أدخل كمية المخزون المتاحة للبيع
+
+      tr.align-middle
+        td.fw-bold.bg-light المخزون في المستودع
+        td
+          .form-floating.mb-0
+            input.form-control#warehouse_stock(type='number', name='warehouse_stock', step='1', placeholder='المخزون في المستودع', value=product.warehouse_stock)
+            label(for='warehouse_stock') أدخل كمية المخزون في المستودع
+
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add event listener for discount type change
+      const discountTypeSelect = document.getElementById('pdt_discount_type');
+      const discountInput = document.getElementById('discount');
+      
+      discountTypeSelect.addEventListener('change', function() {
+        if (this.value === 'nodiscount') {
+          discountInput.value = '0';
+          discountInput.disabled = true;
+        } else {
+          discountInput.disabled = false;
+        }
+      });
+      
+      // Initialize discount input state
+      if (discountTypeSelect.value === 'nodiscount') {
+        discountInput.value = '0';
+        discountInput.disabled = true;
+      }
+    });

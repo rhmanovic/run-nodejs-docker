@@ -1,0 +1,76 @@
+
+{
+  "pricingHeader": {
+    "title": "Our Pricing Plans",
+    "subtitle": "Choose the perfect plan for your business needs"
+  },
+  "pricingPlans": [
+    {
+      "name": "Basic",
+      "price": "$29",
+      "period": "per month",
+      "isPopular": false,
+      "features": [
+        "Unlimited number of products",
+        "Unlimited number of orders",
+        "Unlimited number of customers",
+        "Create discount coupons",
+        "Receive customer questions and reviews"
+      ],
+      "disabledFeatures": [],
+      "buttonText": "Get Started",
+      "buttonLink": "#"
+    },
+    {
+      "name": "Professional",
+      "price": "$79",
+      "period": "per month",
+      "isPopular": true,
+      "features": [
+        "All the features of Salla Basic + the following benefits:",
+        "Activate online payment",
+        "Local and international shipping",
+        "Reserve a custom domain (link) for your store",
+        "Add all types of products",
+        "+30 more features"
+      ],
+      "disabledFeatures": [],
+      "buttonText": "Get Started",
+      "buttonLink": "#"
+    },
+    {
+      "name": "Enterprise",
+      "price": "$199",
+      "period": "per month",
+      "isPopular": false,
+      "features": [
+        "Instant activation of VAT",
+        "Add and manage employee accounts",
+        "Customize store design via CSS and JS",
+        "Extensive marketing across different channels",
+        "Integration with comprehensive accounting and financial services",
+        "+50 more features"
+      ],
+      "disabledFeatures": [],
+      "buttonText": "Contact Sales",
+      "buttonLink": "#"
+    }
+  ],
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "questions": [
+      {
+        "question": "Can I upgrade or downgrade my plan later?",
+        "answer": "Yes, you can upgrade or downgrade your plan at any time. Changes to your billing will be prorated."
+      },
+      {
+        "question": "Is there a free trial available?",
+        "answer": "Yes, we offer a 14-day free trial on all our plans. No credit card required."
+      },
+      {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept all major credit cards, PayPal, and bank transfers for annual plans."
+      }
+    ]
+  }
+}

@@ -1,0 +1,113 @@
+// Create or Edit a Subuser
+router.post('/subusers/:id?', async (req, res) => {
+  const { id } = req.params;
+  const { username, name, email, phone, password, role } = req.body;
+  
+  // Convert checkbox values to booleans
+  const permissions = {
+    cash: req.body['permissions[cash]'] === 'on',
+    knet: req.body['permissions[knet]'] === 'on',
+    orders: {
+      edit: req.body['permissions[orders][edit]'] === 'on',
+      create: req.body['permissions[orders][create]'] === 'on'
+    },
+    categories: {
+      edit: req.body['permissions[categories][edit]'] === 'on',
+      create: req.body['permissions[categories][create]'] === 'on'
+    },
+    products: {
+      edit: req.body['permissions[products][edit]'] === 'on',
+      create: req.body['permissions[products][create]'] === 'on',
+      delete: req.body['permissions[products][delete]'] === 'on'
+    },
+    purchaseOrders: {
+      manage: req.body['permissions[purchaseOrders][manage]'] === 'on'
+    }
+  };
+  const isActive = req.body.isActive === 'on';
+
+  console.log(' req.body:', req.body);
+
+  try {
+    if (id) {
+      // Update subuser
+      const updateData = {
+        username,
+        name,
+        email,
+        phone,
+        role,
+        isActive: !!isActive, // Convert checkbox value to boolean
+        permissions: {
+          cash: !!permissions?.cash,
+          knet: !!permissions?.knet,
+          orders: {
+            edit: !!permissions?.orders?.edit,
+            create: !!permissions?.orders?.create
+          },
+          categories: {
+            edit: !!permissions?.categories?.edit,
+            create: !!permissions?.categories?.create
+          },
+          purchaseOrders: {
+            manage: !!permissions?.purchaseOrders?.manage
+          }
+        }
+      };
+
+      if (password) {
+        updateData.password = password; // Password hashing is handled by the model's pre-save middleware
+      }
+
+      await Subuser.findByIdAndUpdate(id, updateData, { 
+        runValidators: true,
+        new: true 
+      });
+    } else {
+      // Create new subuser
+      const subuser = new Subuser({
+        username,
+        name,
+        email,
+        phone,
+        password, // Password hashing is handled by the model's pre-save middleware
+        role,
+        isActive: !!isActive,
+        merchant: req.session.merchant.id,
+      });
+      await subuser.save();
+    }
+
+    res.redirect('/manager/subusers');
+  } catch (error) {
+    console.error(error);
+
+    let errorMessage = 'حدث خطأ أثناء الحفظ. يرجى المحاولة مرة أخرى.';
+    if (error.code === 11000) {
+      // Handle duplicate key errors for phone and email
+      if (error.keyPattern?.phone) {
+        errorMessage = 'رقم الهاتف مستخدم بالفعل لهذا التاجر.';
+      } else if (error.keyPattern?.email) {
+        errorMessage = 'البريد الإلكتروني مستخدم بالفعل لهذا التاجر.';
+      }
+    }
+
+    // Data to pre-fill the form on error
+    const subuserData = { name, email, phone, role, isActive };
+
+    if (id) {
+      // For update (edit) failure
+      res.status(400).render('manager/subuserForm', {
+        subuser: { ...subuserData, _id: id }, // Pass the subuser with the current data
+        error: errorMessage,
+      });
+    } else {
+      // For creation failure
+      res.status(400).render('manager/subuserForm', {
+        subuser: null, // Ensure it's treated as a new creation
+        subuserData, // Pass data to pre-fill the form
+        error: errorMessage,
+      });
+    }
+  }
+});

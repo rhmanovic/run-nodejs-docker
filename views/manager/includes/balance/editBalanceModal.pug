@@ -1,0 +1,22 @@
+
+// editBalanceModal
+.modal.fade#editBalanceModal(tabindex='-1', role='dialog', aria-labelledby='editBalanceModalLabel', aria-hidden='true')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        h5.modal-title#editBalanceModalLabel تعديل الرصيد
+        button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+      .modal-body
+        form#editBalanceForm(onsubmit='handleEditBalanceSubmit(event)')
+          input#editBalanceId(type='hidden', name='balanceId')
+          .mb-3
+            label.form-label(for='editBalanceName') اسم الرصيد
+            input#editBalanceName.form-control(type='text', name='name', required)
+          .mb-3
+            label.form-label(for='editBalanceAmount') قيمة الرصيد
+            .input-group
+              input#editBalanceAmount.form-control(type='number', name='balance', step='0.001', min='0', required)
+              span.input-group-text د.ك
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') إلغاء
+            button.btn.btn-primary(type='submit') حفظ التغييرات

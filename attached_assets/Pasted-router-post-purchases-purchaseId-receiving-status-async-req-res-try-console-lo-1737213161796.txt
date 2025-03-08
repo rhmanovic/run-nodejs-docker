@@ -1,0 +1,71 @@
+router.post('/purchases/:purchaseId/receiving-status', async (req, res) => {
+  try {
+
+    console.log("Reached /purchases/:purchaseId/receiving-status");
+    
+    const { purchaseId } = req.params;
+    const { newStatus } = req.body;
+
+    // Validate status value
+    const validStatuses = ['pending', 'received', 'return'];
+    if (!validStatuses.includes(newStatus)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: `Invalid status. Must be one of: ${validStatuses.join(', ')}` 
+      });
+    }
+    
+    // Find the purchase order
+    const purchase = await Purchase.findById(purchaseId);
+    if (!purchase) {
+      return res.status(404).json({ success: false, message: 'Purchase order not found' });
+    }
+
+    // Only process if status is changing
+    if (purchase.receivingStatus === newStatus) {
+      return res.status(200).json({ success: false, message: 'Status is already set to ' + newStatus });
+    }
+
+    // Handle stock updates based on status
+    for (const item of purchase.items) {
+      const changedQuantity = item.quantity;
+
+      if (item.variantId) {
+        // Handle variant stock update
+        if (newStatus === 'received') {
+          await Product.updateOne(
+            { 'variations._id': item.variantId },
+            { $inc: { 'variations.$.v_available_quantity': changedQuantity } }
+          );
+        } else if (newStatus === 'return') {
+          await Product.updateOne(
+            { 'variations._id': item.variantId },
+            { $inc: { 'variations.$.v_available_quantity': -changedQuantity } }
+          );
+        }
+      } else {
+        // Handle main product stock update
+        const updateValue = newStatus === 'received' ? changedQuantity : -changedQuantity;
+        await Product.findByIdAndUpdate(
+          item.productId,
+          { $inc: { Stock: updateValue } }
+        );
+      }
+    }
+
+    // Update purchase status
+    purchase.receivingStatus = newStatus;
+    purchase.receivingDate = new Date();
+    await purchase.save();
+
+    res.status(200).json({ 
+      success: true, 
+      message: `Purchase order receiving status updated to ${newStatus}`,
+      purchase
+    });
+
+  } catch (error) {
+    console.error('Error updating purchase receiving status:', error);
+    res.status(500).json({ success: false, message: 'Error updating receiving status' });
+  }
+});

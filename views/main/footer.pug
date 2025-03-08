@@ -1,0 +1,28 @@
+
+footer.mt-auto.text-center
+  .container-fluid.py-5.footerbg
+    p(style="color: yellow;").mb-2= mainLanguage.downloadApp
+    h2.display-6.fw-semibold.text-white.mb-4= mainLanguage.footerHeadline
+    p.text-white.mb-4= mainLanguage.footerParagraph
+
+    .d-flex.justify-content-center.gap-3.mb-5
+      a.btn.btn-light.rounded-pill.px-4(href="#")
+        img.me-2(src="/img/main/17.png" alt="Google Play" style="height: 20px;")
+        span= mainLanguage.googlePlay
+      a.btn.btn-light.rounded-pill.px-4(href="#")
+        img.me-2(src="/img/main/18.png" alt="App Store" style="height: 20px;")
+        span= mainLanguage.appStore
+
+  .container.py-4
+    .row.justify-content-between.text-center
+      .col-12.col-md-auto
+        p.text-muted.mb-2.mb-md-0= mainLanguage.copyright
+      .col-12.col-md-auto.d-flex.justify-content-center.gap-2
+        a.text-muted.text-decoration-none(href="/contact")= mainLanguage.contact
+        span.text-muted •
+        a.text-muted.text-decoration-none(href="/prices") Pricing
+        span.text-muted •
+        a.text-muted.text-decoration-none(href="/privacy")= mainLanguage.privacyPolicy
+        span.text-muted •
+        a.text-muted.text-decoration-none(href="/terms")= mainLanguage.termsConditions
+  

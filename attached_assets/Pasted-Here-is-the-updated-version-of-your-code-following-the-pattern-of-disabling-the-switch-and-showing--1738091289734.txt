@@ -1,0 +1,119 @@
+Here is the updated version of your code, following the pattern of disabling the switch and showing opacity while processing:
+
+Updated Code for Payment Methods Table
+pug
+Copy
+Edit
+.row.justify-content-center
+  .col-lg-8.col-md-12
+    h2.text-center.mt-4 وسائل الدفع
+    if paymentMethods && paymentMethods.length > 0
+      table.table.table-bordered.table-striped
+        thead
+          tr.align-middle.text-center
+            th.col-2 اسم وسيلة الدفع
+            th.col-2 نوع الرسوم
+            th.col-2 الرسوم
+            th.col-2 الحساب المرتبط
+            th.col-2 الحالة
+            th.col-2 الإجراءات
+        tbody
+          each method in paymentMethods
+            tr.align-middle.text-center(data-id=method._id)
+              td.col-2= method.name
+              td.col-2= method.feeType === 'fixed' ? 'ثابتة' : 'نسبة مئوية'
+              td.col-2= method.fee + (method.feeType === 'percentage' ? '%' : ' د.ك')
+              td.col-2
+                - const linkedBalance = method.balance ? balances.find(b => b._id.toString() === method.balance.toString()) : null
+                = linkedBalance ? linkedBalance.name : 'غير مرتبط'
+              td
+                label.switch
+                  input(
+                    id=`methodEnabled_${method._id}` 
+                    class='payment-method-switch' 
+                    type='checkbox' 
+                    checked=method.enabled 
+                    data-id=method._id 
+                    onchange=`togglePaymentMethod('${method._id}', this.checked)`
+                  )
+                  span.switch-slider.round
+                  span.checkmark.fas.fa-check(style='display: none;')
+              td.col-2
+                button.btn.btn-warning.btn-sm.mx-1(onclick=`editPaymentMethod('${method._id}', '${method.name}', '${method.feeType}', '${method.fee}', '${method.balance}')`) تعديل
+                button.btn.btn-danger.btn-sm.mx-1(onclick=`deletePaymentMethod('${method._id}', '${method.name}')`) حذف
+    else
+      p.text-center.text-muted لا توجد وسائل دفع متاحة حاليًا
+Updated Event Listener for Switch Behavior
+javascript
+Copy
+Edit
+// Add event listener for all payment method switches
+document.addEventListener('change', async (event) => {
+  if (event.target.classList.contains('payment-method-switch')) {
+    const methodId = event.target.dataset.id;
+    const newStatus = event.target.checked;
+
+    try {
+      // Disable the switch and add opacity
+      event.target.disabled = true;
+      const labelElement = event.target.closest('label');
+      labelElement.classList.add('disabled-opacity');
+
+      // Send request to update status
+      const response = await fetch('/manager/cash/payment-method/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: methodId, enabled: newStatus })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showToast('تم تحديث حالة وسيلة الدفع بنجاح', 'success');
+      } else {
+        showToast(data.message || 'حدث خطأ في تحديث الحالة', 'danger');
+        // Revert the toggle if there was an error
+        event.target.checked = !newStatus;
+      }
+    } catch (error) {
+      console.error('Error toggling payment method:', error);
+      showToast('حدث خطأ في الشبكة', 'danger');
+      event.target.checked = !newStatus; // Revert the toggle if there's a network error
+    } finally {
+      // Re-enable the switch and remove opacity
+      event.target.disabled = false;
+      const labelElement = event.target.closest('label');
+      labelElement.classList.remove('disabled-opacity');
+    }
+  }
+});
+CSS for Disabled Opacity
+css
+Copy
+Edit
+label.switch.disabled-opacity {
+  opacity: 0.5;
+  pointer-events: none;
+}
+Key Updates
+Switch Behavior: The switch is disabled and opacity is added while processing.
+Error Handling: If there's an error during the toggle operation, the switch state is reverted.
+Visual Feedback: Added a .disabled-opacity class for visual indication during processing.
+Toast Notifications: Provide feedback for success or error.
+This implementation ensures a smooth user experience by preventing multiple toggles while a request is being processed and giving visual feedback.
+
+
+
+
+
+
+
+4o
+
+
+
+
+
+
+
+ChatGPT can make mistakes. Check important info.

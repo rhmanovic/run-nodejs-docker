@@ -1,0 +1,255 @@
+
+.lazy-bg {
+  background-size: 70% auto;
+  background-position: calc(120% + 80px) center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, background-position 0.8s ease-out;
+}
+
+.lazy-bg.loaded {
+  opacity: 1;
+  background-position: calc(100% + 80px) center;
+}
+
+
+/* Import centralized variables */
+@import url('../main/variables.css');
+
+.ltr{
+  direction: ltr;
+}
+.rtl{
+  direction: rtl;
+}
+
+/* Layout */
+.container-fluid {
+ 
+  margin: 0 auto;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: #333;
+  font-family: 'Alexfontnormal', sans-serif;
+}
+
+.display-4 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.display-5 {
+  font-size: 3.5rem;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.lead {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin-bottom: 2.5rem;
+  color: #666;
+  font-weight: 400;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  padding: 0.75rem 2rem;
+  border-radius: 25px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Client logos */
+.client-logo {
+  max-height: 60px;
+  width: auto;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.client-logo:hover {
+  opacity: 1;
+}
+
+.btn-primary:hover {
+  background-color: #6DBFAF;
+  border-color: #6DBFAF;
+  transform: translateY(-2px);
+}
+
+/* Feature badges */
+.feature-badge {
+  font-size: 0.9rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.feature-badge:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive images */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .container-fluid {
+   
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+}
+/* Animations */
+.fade-in {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+}
+
+.slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.slide-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-left {
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: all 0.8s ease-out;
+  /* Ensure content doesn't spill outside container during animation */
+  max-width: 100%;
+  position: relative;
+}
+
+.slide-right {
+  opacity: 0;
+  transform: translateX(100px);
+  transition: all 0.8s ease-out;
+  /* Ensure content doesn't spill outside container during animation */
+  max-width: 100%;
+  position: relative;
+}
+
+.slide-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Add container overflow control to prevent layout shifts */
+.container-fluid {
+  overflow-x: hidden;
+}
+
+/* Lazy loading placeholder */
+.lazy {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  
+  background: transparent;
+}
+
+.lazy {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  object-fit: fill;
+  background: transparent;
+}
+
+.first-image-size {
+  min-height: 300px;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 9/10;
+}
+
+.first-image-square {
+  min-height: 300px;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1/1;
+  opacity: 0.1;
+}
+
+.second-image-size {
+  min-height: 300px;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 6/10;
+}
+
+.lazy.loaded {
+  opacity: 1;
+  transform: translateY(0);
+  min-height: auto;
+}
+
+.square{
+  min-height: 300px;
+  
+  max-width: 500px;
+  aspect-ratio: 1/1;
+}
+
+.client-logo.lazy {
+  min-height: 80px;
+  aspect-ratio: 3/2;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transition-delay: var(--delay, 0s);
+}
+
+.client-logo.lazy.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.footerbg {
+  background-color: var(--primary-color);
+}
+
+.border-primary{
+  border-color: var(--primary-color);
+}
+
+
+
+.badge {
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 500;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}

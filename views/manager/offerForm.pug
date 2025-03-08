@@ -1,0 +1,96 @@
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+     
+
+      .col.background-main
+        .row
+          #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+            if offer
+              h1.page-header.text-overflow.col-md-8.text-primary.font-weight-bold تعديل العرض
+            else
+              h1.page-header.text-overflow.col-md-8.text-primary.font-weight-bold اضافة عرض جديد
+
+        .row.px-4
+          .col-12
+            .card.shadow-lg.rounded.border-0
+              .card-body.px-4
+                form#bigform(method='POST', action= offer ? `/manager/edit-offer/${offer._id}` : '/manager/add-offer', enctype='multipart/form-data')
+                  
+                  // Product selection dropdown
+                  .row
+                    .col-md-6.mb-4
+                      label.form-label(for='product') اختر المنتج
+                      select.form-control#product(name='product', required)
+                        option(value='') -- اختر المنتج --
+                        each product in products
+                          option(value=product._id, selected=(offer && offer.product.equals(product._id))) #{product.product_number} - #{product.product_name_ar} - #{product.product_name_en}
+
+                  // Multi-category selection with category number, Arabic and English names
+                  .row
+                    .col-md-6.mb-4
+                      label.form-label(for='categories') اختر الفئات
+                      select.form-control#categories(name='categories' multiple)
+                        each category in categories
+                          option(value=category._id, selected=(offer && offer.categories && offer.categories.includes(category._id)))
+                            | [#{category.category_number}] - #{category.ArabicName} - #{category.EnglishName}
+
+                  .row
+                    .col-md-6.mb-4
+                      label.form-label(for='offerNameAr') الاسم بالعربية
+                      input.form-control.form-control-lg(type='text', id='offerNameAr', name='offerNameAr', value=offer ? offer.offer_name_ar : '', required, placeholder='ادخل الاسم بالعربي')
+                      span.spanLocalError.bg-danger.text-white.hidden.mt-1.small *إجباري
+                    .col-md-6.mb-4
+                      label.form-label(for='offerNameEn') الاسم بالإنجليزي
+                      input.form-control.form-control-lg(type='text', id='offerNameEn', name='offerNameEn', value=offer ? offer.offer_name_en : '', required, placeholder='ادخل الاسم بالإنجليزي')
+                      span.spanLocalError.bg-danger.text-white.hidden.mt-1.small *إجباري
+
+                  .row
+                    .col-md-6.mb-4
+                      label.form-label(for='offerImage') صورة العرض (PNG/JPG/GIF)
+                      .position-relative
+                        label.custom-file-upload.btn.btn-outline-primary.d-flex.justify-content-center.align-items-center.mb-3
+                          input#offer_image(type='file', name='offer_image', accept='image/*', hidden, onchange='previewImage(event)')
+                          i.fas.fa-plus-circle.fa-2x.me-2
+                          span= "اختيار صورة"
+                      img#imagePreview.border.border-3.shadow-sm.mt-3(src=offer ? offer.offer_image : 'https://via.placeholder.com/150', alt='Offer image', style='height: 150px;')
+                    .col-md-6.mb-4
+                      label.form-label(for='originalPrice') السعر قبل الخصم
+                      input.form-control.form-control-lg(type='number', id='originalPrice', name='originalPrice', value=offer ? offer.original_price : '', step="0.005", required, placeholder='ادخل السعر قبل الخصم')
+                      span.spanLocalError.bg-danger.text-white.hidden.mt-1.small *إجباري
+
+                  .row
+                    .col-md-6.mb-4
+                      label.form-label(for='discountedPrice') السعر بعد الخصم
+                      input.form-control.form-control-lg(type='number', id='discountedPrice', name='discountedPrice', value=offer ? offer.discounted_price : '', step="0.005", required, placeholder='ادخل السعر بعد الخصم')
+                      span.spanLocalError.bg-danger.text-white.hidden.mt-1.small *إجباري
+                    .col-md-6.mb-4
+                      label.form-label(for='availableQuantity') الكمية المتاحة
+                      input.form-control.form-control-lg(type='number', id='offerQuantity', name='offerQuantity', value=offer ? offer.offer_quantity : '', required, placeholder='ادخل الكمية المتاحة')
+                      span.spanLocalError.bg-danger.text-white.hidden.mt-1.small *إجباري
+
+                  .row
+                    .col-md-6.mb-4
+                      label.form-label(for='descriptionAr') الوصف بالعربي
+                      textarea.form-control#descriptionAr(name='descriptionAr', rows='4', placeholder='ادخل الوصف بالعربي')= offer ? offer.description_ar : ''
+                    .col-md-6.mb-4
+                      label.form-label(for='descriptionEn') الوصف بالإنجليزي
+                      textarea.form-control#descriptionEn(name='descriptionEn', rows='4', placeholder='ادخل الوصف بالإنجليزي')= offer ? offer.description_en : ''
+
+                  .row.justify-content-end
+                    .col-auto
+                      span.text-danger#textValidationError.hidden
+
+                  .row.mt-4.justify-content-center
+                    .col-6.d-grid
+                      button.btn.btn-primary.btn-lg.shadow-lg(type='submit')
+                        .fa.fa-save.me-2
+                        span= offer ? " تعديل العرض " : " اضافة العرض "
+
+    // Embed products data into JavaScript
+    script.
+      const products = !{JSON.stringify(products)};
+
+    script(src='/js/offerForm.js')

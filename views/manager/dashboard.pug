@@ -1,0 +1,254 @@
+
+extends layout
+
+block content
+  .main.p-3.p-md-4
+    .container-fluid
+      // Welcome section with overview
+      .row.mb-4
+        .col-12
+          .card.border-0.shadow-sm
+            .card-body.p-4
+              .d-flex.justify-content-between.align-items-center.flex-wrap
+                div
+                  h2.fw-bold.text-primary مرحباً بك, 
+                    if nameNow
+                      span #{nameNow}
+                    else 
+                      span المدير
+                  p.text-muted.mb-0 هذا هو ملخص نشاط متجرك اليوم
+                .d-flex.mt-3.mt-md-0
+                  button.btn.btn-primary.me-2
+                    i.fa.fa-plus.me-2
+                    | منتج جديد
+                  button.btn.btn-outline-primary
+                    i.fa.fa-download.me-2
+                    | تقرير المبيعات
+      
+      // Stats cards row
+      .row.mb-4
+        // Total Sales Card
+        .col-sm-6.col-md-6.col-lg-3.mb-3
+          .card.border-0.shadow-sm.h-100
+            .card-body
+              .d-flex.justify-content-between.align-items-start
+                div
+                  p.text-muted.mb-1 إجمالي المبيعات
+                  h3.mb-0.fw-bold 23,500 د.ك
+                  small.text-success
+                    i.fa.fa-arrow-up.me-1
+                    | 12% منذ أمس
+                .rounded-circle.p-3.bg-primary.bg-opacity-10.text-primary
+                  i.fa.fa-money-bill-wave.fa-fw.fa-lg
+        
+        // Orders Card
+        .col-sm-6.col-md-6.col-lg-3.mb-3
+          .card.border-0.shadow-sm.h-100
+            .card-body
+              .d-flex.justify-content-between.align-items-start
+                div
+                  p.text-muted.mb-1 الطلبات
+                  h3.mb-0.fw-bold 156
+                  small.text-danger
+                    i.fa.fa-arrow-down.me-1
+                    | 3% منذ أمس
+                .rounded-circle.p-3.bg-warning.bg-opacity-10.text-warning
+                  i.fa.fa-shopping-cart.fa-fw.fa-lg
+      
+        // Customers Card
+        .col-sm-6.col-md-6.col-lg-3.mb-3
+          .card.border-0.shadow-sm.h-100
+            .card-body
+              .d-flex.justify-content-between.align-items-start
+                div
+                  p.text-muted.mb-1 العملاء
+                  h3.mb-0.fw-bold 1,290
+                  small.text-success
+                    i.fa.fa-arrow-up.me-1
+                    | 5% منذ أمس
+                .rounded-circle.p-3.bg-success.bg-opacity-10.text-success
+                  i.fa.fa-users.fa-fw.fa-lg
+      
+        // Products Card
+        .col-sm-6.col-md-6.col-lg-3.mb-3
+          .card.border-0.shadow-sm.h-100
+            .card-body
+              .d-flex.justify-content-between.align-items-start
+                div
+                  p.text-muted.mb-1 المنتجات
+                  h3.mb-0.fw-bold 842
+                  small.text-muted
+                    i.fa.fa-minus.me-1
+                    | لا تغيير
+                .rounded-circle.p-3.bg-info.bg-opacity-10.text-info
+                  i.fa.fa-box.fa-fw.fa-lg
+      
+      // Charts Row
+      .row.mb-4
+        // Sales Chart
+        .col-md-8.mb-3
+          .card.border-0.shadow-sm
+            .card-header.bg-transparent.border-0.py-3
+              .d-flex.justify-content-between.align-items-center
+                h5.mb-0 معدل المبيعات
+                .dropdown
+                  button.btn.btn-sm.btn-outline-secondary.dropdown-toggle(type="button" data-bs-toggle="dropdown") هذا الشهر
+                  ul.dropdown-menu
+                    li
+                      a.dropdown-item(href="#") اليوم
+                    li
+                      a.dropdown-item(href="#") هذا الأسبوع
+                    li
+                      a.dropdown-item(href="#") هذا الشهر
+                    li
+                      a.dropdown-item(href="#") هذا العام
+            .card-body
+              .chart-container(style="height: 300px;")
+                // Placeholder for chart
+                .text-center.py-5.my-5.bg-light.rounded
+                  i.fa.fa-chart-line.fa-3x.text-muted.mb-3.d-block
+                  p.text-muted سيتم عرض الرسم البياني للمبيعات هنا
+      
+        // Traffic Sources
+        .col-md-4.mb-3
+          .card.border-0.shadow-sm
+            .card-header.bg-transparent.border-0.py-3
+              h5.mb-0 مصادر الطلبات
+            .card-body
+              .chart-container(style="height: 300px;")
+                // Placeholder for chart
+                .text-center.py-5.my-5.bg-light.rounded
+                  i.fa.fa-chart-pie.fa-3x.text-muted.mb-3.d-block
+                  p.text-muted سيتم عرض مخطط مصادر الطلبات هنا
+      
+      .row
+        // Recent Orders
+        .col-md-8.mb-3
+          .card.border-0.shadow-sm
+            .card-header.bg-transparent.border-0.py-3
+              .d-flex.justify-content-between.align-items-center
+                h5.mb-0 أحدث الطلبات
+                a.btn.btn-sm.btn-link.text-primary(href="/manager/orders") عرض الكل
+            .card-body.p-0
+              .table-responsive
+                table.table.table-hover.mb-0
+                  thead.bg-light
+                    tr
+                      th رقم الطلب
+                      th العميل
+                      th التاريخ
+                      th المبلغ
+                      th الحالة
+                      th(style="width: 120px;") إجراءات
+                  tbody
+                    - var statuses = ['new', 'processing', 'completed', 'canceled']
+                    - var statusClasses = {'new': 'info', 'processing': 'warning', 'completed': 'success', 'canceled': 'danger'}
+                    - var statusLabels = {'new': 'جديد', 'processing': 'قيد التجهيز', 'completed': 'مكتمل', 'canceled': 'ملغي'}
+                    
+                    - for (var i = 0; i < 5; i++)
+                      - var randomStatus = statuses[Math.floor(Math.random() * statuses.length)]
+                      - var randomAmount = (Math.random() * 100 + 10).toFixed(2)
+                      tr
+                        td ##{10024 + i}
+                        td محمد 
+                          span.text-muted عبدالله
+                        td #{new Date().toISOString().split('T')[0]}
+                        td #{randomAmount} د.ك
+                        td
+                          span(class=`badge bg-${statusClasses[randomStatus]} bg-opacity-25 text-${statusClasses[randomStatus]} px-2 py-1 rounded-pill`) #{statusLabels[randomStatus]}
+                        td
+                          .btn-group
+                            a.btn.btn-sm.btn-outline-secondary(href="#")
+                              i.fa.fa-eye
+                            button.btn.btn-sm.btn-outline-primary
+                              i.fa.fa-edit
+        
+        // Right side panels
+        .col-md-4
+          // Top Products
+          .card.border-0.shadow-sm.mb-3
+            .card-header.bg-transparent.border-0.py-3
+              .d-flex.justify-content-between.align-items-center
+                h5.mb-0 أفضل المنتجات مبيعاً
+                a.btn.btn-sm.btn-link.text-primary(href="/manager/products") عرض الكل
+            .card-body.p-0
+              ul.list-group.list-group-flush
+                - for (var i = 0; i < 5; i++)
+                  - var randomSales = Math.floor(Math.random() * 30 + 5)
+                  li.list-group-item.px-3.py-3
+                    .d-flex.align-items-center
+                      .flex-shrink-0.bg-light.rounded(style="width: 40px; height: 40px;")
+                        .d-flex.justify-content-center.align-items-center.h-100.text-muted
+                          i.fa.fa-box-open
+                      .ms-3.flex-grow-1
+                        p.mb-0.fw-medium منتج إلكتروني #{i+1}
+                        p.mb-0.small.text-muted ##{1000 + i} - #{randomSales} وحدة
+                      .flex-shrink-0.text-end
+                        span.text-primary.fw-bold #{(randomSales * 9.99).toFixed(2)} د.ك
+          
+          // Low Stock
+          .card.border-0.shadow-sm
+            .card-header.bg-transparent.border-0.py-3
+              h5.mb-0
+                i.fa.fa-exclamation-triangle.text-warning.me-2
+                | منتجات منخفضة المخزون
+            .card-body.p-0
+              ul.list-group.list-group-flush
+                - for (var i = 0; i < 3; i++)
+                  - var stock = Math.floor(Math.random() * 5 + 1)
+                  li.list-group-item.px-3.py-3
+                    .d-flex.align-items-center
+                      .flex-shrink-0.me-3.text-danger.text-center(style="width: 30px;")
+                        strong #{stock}
+                      .flex-grow-1
+                        p.mb-0 هاتف ذكي #{i+1}
+                        .progress.mt-2(style="height: 5px;")
+                          .progress-bar.bg-danger(role="progressbar" style=`width: ${stock * 10}%` aria-valuenow=`${stock}` aria-valuemin="0" aria-valuemax="100")
+                      .flex-shrink-0.ms-2
+                        button.btn.btn-sm.btn-outline-primary
+                          i.fa.fa-sync-alt.me-1
+                          | تعبئة
+
+      // Quick Actions
+      .row.mt-4
+        .col-12
+          .card.border-0.shadow-sm
+            .card-header.bg-transparent.border-0.py-3
+              h5.mb-0 إجراءات سريعة
+            .card-body
+              .row.g-3
+                .col-sm-6.col-md-4.col-lg-2
+                  a.card.border-0.shadow-sm.text-center.p-3.h-100.text-decoration-none(href="/manager/products")
+                    .py-3
+                      i.fa.fa-boxes.fa-2x.mb-3.text-primary
+                      h6.mb-0.text-body المنتجات
+                
+                .col-sm-6.col-md-4.col-lg-2
+                  a.card.border-0.shadow-sm.text-center.p-3.h-100.text-decoration-none(href="/manager/orders")
+                    .py-3
+                      i.fa.fa-shopping-bag.fa-2x.mb-3.text-primary
+                      h6.mb-0.text-body الطلبات
+                
+                .col-sm-6.col-md-4.col-lg-2
+                  a.card.border-0.shadow-sm.text-center.p-3.h-100.text-decoration-none(href="/manager/customers")
+                    .py-3
+                      i.fa.fa-users.fa-2x.mb-3.text-primary
+                      h6.mb-0.text-body العملاء
+                
+                .col-sm-6.col-md-4.col-lg-2
+                  a.card.border-0.shadow-sm.text-center.p-3.h-100.text-decoration-none(href="/manager/coupon")
+                    .py-3
+                      i.fa.fa-tag.fa-2x.mb-3.text-primary
+                      h6.mb-0.text-body الخصومات
+                
+                .col-sm-6.col-md-4.col-lg-2
+                  a.card.border-0.shadow-sm.text-center.p-3.h-100.text-decoration-none(href="/manager/cash/balance")
+                    .py-3
+                      i.fa.fa-wallet.fa-2x.mb-3.text-primary
+                      h6.mb-0.text-body الرصيد
+                
+                .col-sm-6.col-md-4.col-lg-2
+                  a.card.border-0.shadow-sm.text-center.p-3.h-100.text-decoration-none(href="/manager/settings")
+                    .py-3
+                      i.fa.fa-cog.fa-2x.mb-3.text-primary
+                      h6.mb-0.text-body الإعدادات

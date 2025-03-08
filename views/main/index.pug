@@ -1,0 +1,112 @@
+
+extends layout
+
+block content
+  .container-fluid.py-2
+    .row.align-items-center.mt-5.px-0.px-sm-5.mt-sm-1.lazy-bg.ltr(data-bg="/img/main/logo-square.png")
+
+      .col-lg-6.fade-in.px-3.px-sm-5
+        .py-4
+          p.lead.slide-up #{mainLanguage.homeLead}
+          h2.display-6.fw-semibold.slide-up #{mainLanguage.homeTitle}
+          p.lead.slide-up #{mainLanguage.homeSubtitle}
+          a.btn.btn-account.rounded-pill.btn-lg.slide-up(href="#") #{mainLanguage.getStarted}
+    //.row.align-items-center.mt-5.px-4.mt-sm-1
+      .col-lg-6.pe-lg-5.fade-in
+        .text-start.py-4
+          p.lead.slide-up #{mainLanguage.homeLead}
+          h2.display-6.fw-semibold.slide-up #{mainLanguage.homeTitle}
+          p.lead.slide-up #{mainLanguage.homeSubtitle}
+          a.btn.btn-account.rounded-pill.btn-lg.slide-up(href="#") #{mainLanguage.getStarted}
+      .col-lg-6.position-relative.fade-in
+        img.img-fluid.position-relative.lazy.first-image-size(data-src="/img/main/laptop-poses.png", alt="Dashboard Preview" style="z-index: 1")
+        img.img-fluid.position-absolute.top-0.start-0.lazy.first-image-size(data-src="/img/main/window.png", alt="Dashboard Preview" style="z-index: 2")
+        img.img-fluid.position-absolute.top-0.start-0.lazy.first-image-size(data-src="/img/main/window2.png", alt="Dashboard Preview" style="z-index: 2")
+
+    .row.text-center.py-5(style="background: #f7f7f5;")
+      .col-12
+        p.lead(style="color: red;") #{mainLanguage.topClients}
+        h2.display-6.fw-semibold.mb-5 #{mainLanguage.exclusivePartner}
+      .col-12
+        .row.align-items-center.justify-content-center.g-4
+          
+          .col-6.col-md-3
+            img.img-fluid.client-logo.lazy(data-src="/img/main/2.png", alt="Placeholder")
+          .col-6.col-md-3
+            img.img-fluid.client-logo.lazy(data-src="/img/main/3.png", alt="Placeholder")
+          .col-6.col-md-3
+            img.img-fluid.client-logo.lazy(data-src="/img/main/4.png", alt="Placeholder")
+          
+
+
+    .row.align-items-center.px-0.px-sm-5
+      .col-lg-6.slide-left.px-3.px-sm-5
+        .py-4
+          h2.display-6.fw-semibold #{mainLanguage.powerLinkTitle}
+          p.lead #{mainLanguage.powerLinkDesc}
+          p.lead #{mainLanguage.powerLinkDesc2}
+          a.btn.btn-account.rounded-pill.btn-lg(href="#") #{mainLanguage.knowMore}
+      .col-lg-6.d-flex.justify-content-center.slide-right
+        img.img-fluid.lazy.second-image-size(data-src="/img/main/5.png", alt="Dashboard Preview")
+    
+    
+
+
+
+
+    .row.mt-5.py-5(style="background: #36363f;")
+      .col-12.mb-4.text-center
+        h2.display-6.fw-semibold.text-white #{mainLanguage.strategyTitle}
+       
+      
+      .row.justify-content-center.g-4.mx-auto
+        .col-6.col-md-3
+          img.img-fluid.mb-2.lazy.square(data-src="/img/main/6.png", alt="Smart Growth" style="width: 45px;")
+          p.text-white.mb-1 #{mainLanguage.smartGrowthTitle}
+          p.text-white #{mainLanguage.smartGrowthDesc}
+    
+        .col-6.col-md-3
+          img.img-fluid.mb-2.lazy.square(data-src="/img/main/7.png", alt="Business Flexibility" style="width: 45px;")
+          p.text-white.mb-1 #{mainLanguage.businessFlexTitle}
+          p.text-white #{mainLanguage.businessFlexDesc}
+    
+        .col-6.col-md-3
+          img.img-fluid.mb-2.lazy.square(data-src="/img/main/8.png", alt="Market Expansion" style="width: 45px;")
+          p.text-white.mb-1 #{mainLanguage.marketExpansionTitle}
+          p.text-white #{mainLanguage.marketExpansionDesc}
+    
+        .col-6.col-md-3
+          img.img-fluid.mb-2.lazy.square(data-src="/img/main/9.png", alt="Continuous Support" style="width: 45px;")
+          p.text-white.mb-1 #{mainLanguage.continuousSupportTitle}
+          p.text-white #{mainLanguage.continuousSupportDesc}
+
+        
+
+    .row.my-5.px-4.bg-white
+      .col-lg-6.pe-lg-5.py-4
+        h2.display-6.fw-semibold #{mainLanguage.featuresTitle}
+        p.lead #{mainLanguage.featuresDesc}
+        p.lead #{mainLanguage.featuresDesc2}
+        a.btn.btn-account.rounded-pill.btn-lg(href="#") #{mainLanguage.seeAllFeatures}
+      .col-lg-6
+        .row.g-4
+          .col-md-6
+            .card.h-100.border-0.bg-light.p-4.align-items-center
+              img.mb-3.lazy(data-src="/img/main/icon/16.png" alt="Multiple Social Media" style="width: 75px; height: 75px;")
+              h5.fw-semibold #{mainLanguage.multiSocialTitle}
+              p.text-center #{mainLanguage.multiSocialDesc}
+          .col-md-6
+            .card.h-100.border-0.bg-light.p-4.align-items-center
+              img.mb-3.lazy(data-src="/img/main/icon/15.png" alt="Quality Leads" style="width: 75px; height: 75px;")
+              h5.fw-semibold #{mainLanguage.qualityLeadsTitle}
+              p.text-center #{mainLanguage.qualityLeadsDesc}
+          .col-md-6
+            .card.h-100.border-0.bg-light.p-4.align-items-center
+              img.mb-3.lazy(data-src="/img/main/icon/4.png" alt="Respond Fast" style="width: 75px; height: 75px;")
+              h5.fw-semibold #{mainLanguage.respondFastTitle}
+              p.text-center #{mainLanguage.respondFastDesc}
+          .col-md-6
+            .card.h-100.border-0.bg-light.p-4.align-items-center
+              img.mb-3.lazy(data-src="/img/main/icon/8.png" alt="Save Money" style="width: 75px; height: 75px;")
+              h5.fw-semibold #{mainLanguage.saveMoneyTitle}
+              p.text-center #{mainLanguage.saveMoneyDesc}

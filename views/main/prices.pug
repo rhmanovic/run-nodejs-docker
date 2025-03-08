@@ -1,0 +1,61 @@
+
+extends layout
+
+block content
+  // Header Section with Animation
+  .container-fluid.py-5.bg-light
+    .row.justify-content-center.fade-in
+      .col-lg-8.text-center
+        h1.display-4.mb-4.slide-up= pricesData.pricingHeader.title
+        p.lead.mb-5.slide-up= pricesData.pricingHeader.subtitle
+
+  // Pricing Plans Section
+  .container-fluid.py-5
+    .row.justify-content-center.mb-5
+      each plan, index in pricesData.pricingPlans
+        .col-md-4.mb-4.slide-up(style=`animation-delay: ${index * 0.2}s`)
+          .card.shadow.h-100(class=plan.isPopular ? 'border-primary' : '')
+            .card-header.py-4(class=plan.isPopular ? 'footerbg text-white' : 'bg-white').border-0.text-center
+              if plan.isPopular
+                span.badge.bg-white.text-danger.position-absolute.start-50.translate-middle(style="top: 0;") Popular
+              h3.fw-bold= plan.name
+              h2.display-5.fw-bold= plan.price
+              p(class=plan.isPopular ? 'text-white-50' : 'text-muted')= plan.period
+            .card-body
+              ul.list-unstyled.text-start
+                each feature in plan.features
+                  li.mb-3
+                    i.fa.fa-check.text-success.me-2
+                    span= feature
+                each feature in plan.disabledFeatures
+                  li.mb-3.text-muted
+                    i.fa.fa-times.me-2
+                    span= feature
+            .card-footer.border-0.bg-white.pb-4.text-center
+              a.btn.btn-lg.rounded-pill.px-4(class=plan.isPopular ? 'btn-primary' : 'btn-outline-primary', href=plan.buttonLink)= plan.buttonText
+
+  // FAQ Section with Background
+  .container-fluid.py-5.mt-4(style="background: #f7f7f5;")
+    .row.justify-content-center.mt-4.fade-in
+      .col-lg-8.text-center
+        h2.display-6.mb-5.slide-up= pricesData.faq.title
+
+    .row.justify-content-center.mb-5
+      .col-lg-8.slide-up
+        .accordion#pricingFAQ
+          each question, index in pricesData.faq.questions
+            .accordion-item.mb-3.border.rounded.shadow-sm
+              h2.accordion-header(id=`heading${index}`)
+                button.accordion-button.collapsed(type="button" data-bs-toggle="collapse" data-bs-target=`#collapse${index}` aria-expanded="false" aria-controls=`collapse${index}`)
+                  = question.question
+              div(id=`collapse${index}`).accordion-collapse.collapse(aria-labelledby=`heading${index}` data-bs-parent="#pricingFAQ")
+                .accordion-body
+                  = question.answer
+
+  // CTA Section
+  .container-fluid.py-5
+    .row.justify-content-center.align-items-center.fade-in
+      .col-lg-6.text-center.py-4
+        h2.display-5.mb-4.slide-up Choose the Perfect Plan for Your Business
+        p.lead.mb-4.slide-up Get started today and experience the power of our e-commerce platform.
+        a.btn.btn-light.btn-lg.rounded-pill.px-5.py-3.slide-up(href="#" style="animation-delay: 0.3s") Contact Sales

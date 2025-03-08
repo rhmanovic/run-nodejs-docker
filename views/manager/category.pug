@@ -1,0 +1,136 @@
+
+extends layout
+
+block content
+  .main.p-3.p-md-4
+    .container-fluid
+      // Page header with actions
+      .row.mb-4
+        .col-12
+          .card.border-0.shadow-sm
+            .card-body.p-4
+              .d-flex.justify-content-between.align-items-center.flex-wrap
+                div
+                  h2.fw-bold.text-primary إدارة التصنيفات
+                  p.text-muted.mb-0 قم بإضافة وتعديل وحذف تصنيفات المتجر
+                .d-flex.mt-3.mt-md-0
+                  a.btn.btn-primary(href='/manager/category/form').mx-2
+                    i.fa.fa-plus-circle
+                    span.mx-1 إضافة تصنيف جديد
+                  a.btn.btn-outline-secondary(href='/manager/exportcategories')
+                    i.fa.fa-file-excel.mx-2
+                    span.mx-1 تصدير إلى Excel
+
+      // Spinner centered with CSS class (displayed during loading)
+      .position-fixed.top-50.start-50.translate-middle.spinner-container.d-none
+        .spinner-grow.text-primary(role='status')
+          span.visually-hidden تحميل...
+
+      // Main content
+      if categories && categories.length > 0
+        .row
+          .col-12
+            .card.border-0.shadow-sm
+              .card-body
+                // Search bar
+                .row.mb-3
+                  .col-md-4.ms-auto
+                    .input-group
+                      span.input-group-text.bg-light.border-end-0
+                        i.fa.fa-search.text-muted
+                      input.form-control.border-start-0.ps-0(type="text" id="categorySearch" placeholder="بحث في التصنيفات...")
+
+                // Table
+                .table-responsive
+                  table.table.table-hover.align-middle
+                    thead.bg-light
+                      tr
+                        th.py-3 #
+                        th.py-3 صورة
+                        th.py-3 الإسم (EN)
+                        th.py-3 الإسم (AR)
+                        th.py-3 الخصم
+                        th.py-3 الترتيب
+                        th.py-3 الحالة
+                        th.py-3.text-center إجراءات
+                    tbody
+                      each category, index in categories
+                        tr
+                          td= category.category_number
+                          td
+                            if category.imgsrc
+                              img.rounded.category-image(src=category.imgsrc, alt='صورة التصنيف', style='height: 50px; width: 50px; object-fit: cover;')
+                            else
+                              .bg-light.rounded.d-flex.justify-content-center.align-items-center(style='height: 50px; width: 50px;')
+                                i.fa.fa-folder.text-muted
+                          td= category.EnglishName
+                          td= category.ArabicName
+                          td 
+                            if category.discountPerc > 0
+                              span.badge.rounded-pill.bg-success.bg-opacity-10.text-success= category.discountPerc + '%'
+                            else
+                              span.text-muted -
+                          td= category.sort
+                          
+                          td
+                            label.switch
+                              input(id='pub_' + category._id, class='category-switch', type='checkbox', data-id=category._id, checked=category.status)
+                              span.switch-slider.round
+                              span.checkmark.fas.fa-check(style=category.status ? '' : 'display: none;')
+                          td
+                            .d-flex.justify-content-end
+                              a.btn.btn-sm.btn-outline-primary.mx-1(href=`/manager/category/form/${category._id}`)
+                                i.fa.fa-edit.me-1
+                                span.mx-1 تعديل
+                              button.btn.btn-sm.btn-outline-danger(onclick=`DeleteModalTrigger('${category._id}', '${category.EnglishName}')`)
+                                i.fa.fa-trash.me-1
+                                span.mx-1 حذف
+      else
+        .row.mb-4
+          .col-12
+            .card.border-0.shadow-sm.text-center.py-5
+              .card-body
+                i.fa.fa-folder-open.fa-4x.text-muted.mb-3
+                h3.text-muted لا توجد تصنيفات حالياً
+                p.text-muted.mb-4 يمكنك إضافة تصنيفات جديدة لتنظيم منتجاتك
+                a.btn.btn-primary(href='/manager/category/form')
+                  i.fa.fa-plus-circle
+                  span.mx-1 إضافة تصنيف جديد
+
+    // Deletion confirmation modal
+    .modal.fade#deleteConfirmationModal(tabindex='-1', aria-labelledby='deleteConfirmationModalLabel', aria-hidden='true')
+      .modal-dialog.modal-dialog-centered
+        .modal-content
+          .modal-header
+            h5#deleteConfirmationModalLabel.modal-title تأكيد الحذف
+            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+          .modal-body
+            p هل أنت متأكد من أنك تريد حذف التصنيف؟
+            p.text-center.mb-0
+              span.fw-bold.text-danger#categoryToDelete
+          .modal-footer
+            button.btn.btn-outline-secondary(data-bs-dismiss='modal') إلغاء
+            form#deleteForm(method='POST', action='/manager/categories/delete')
+              input#categoryToDeleteID(type='hidden', name='categoryToDeleteID')
+              button.btn.btn-danger#confirmDeleteButton(type='submit')
+                i.fa.fa-trash.me-1
+                | حذف
+
+    // Status update toast notification
+    .toast-container.position-fixed.bottom-0.end-0.p-3
+      #statusToast.toast.align-items-center.text-white.bg-success(role='alert', aria-live='assertive', aria-atomic='true', data-bs-delay='3000')
+        .d-flex
+          .toast-body
+            i.fa.fa-check-circle.me-2
+            | تم تحديث حالة التصنيف بنجاح
+          button.btn-close.btn-close-white.me-2.m-auto(type='button', data-bs-dismiss='toast', aria-label='Close')
+
+    // JavaScript for category page functionality
+    script(src='/js/category.js')
+    style.
+      .category-image {
+        transition: transform 0.2s;
+      }
+      .category-image:hover {
+        transform: scale(1.1);
+      }

@@ -1,0 +1,117 @@
+
+extends layout
+
+block content
+  .container.mt-4
+    h1.mb-4 Admin Dashboard
+    .card
+      .card-header
+        h3 Merchants List
+       
+      .card-body
+        script.
+          async function changePassword(merchantId) {
+            const newPassword = prompt('Enter new password:');
+            if (!newPassword) return;
+            
+            try {
+              const response = await fetch(`/admin/change-password/${merchantId}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ newPassword })
+              });
+              
+              const data = await response.json();
+              if (data.success) {
+                alert('Password changed successfully');
+              } else {
+                alert('Failed to change password');
+              }
+            } catch (error) {
+              alert('Error changing password');
+            }
+          }
+        
+        .table-responsive
+          table.table.table-striped
+            thead
+              tr
+                th Project Name
+                th Owner Name
+                th Email
+                th Phone
+                th Subscription End
+                th Actions
+            tbody
+              each merchant in merchants
+                tr
+                  td= merchant.projectName
+                  td= merchant.name
+                  td= merchant.email
+                  td= merchant.phoneNumber
+                  td
+                    div POS: #{merchant.subscription && merchant.subscription.posEndDate ? new Date(merchant.subscription.posEndDate).toISOString().split('T')[0] : 'Not Set'}
+                    div Web: #{merchant.subscription && merchant.subscription.websiteEndDate ? new Date(merchant.subscription.websiteEndDate).toISOString().split('T')[0] : 'Not Set'}
+                  td
+                    button.btn.btn-warning.btn-sm.me-2(onclick=`changePassword('${merchant._id}')`) Change Password
+                    button.btn.btn-info.btn-sm.me-2(onclick=`changePOSDate('${merchant._id}')`) Change POS Date
+                    button.btn.btn-info.btn-sm(onclick=`changeWebDate('${merchant._id}')`) Change Web Date
+        script.
+          async function changePOSDate(merchantId) {
+            const newDate = prompt('Enter new POS subscription end date (YYYY-MM-DD):');
+            if (!newDate) return;
+            updateSubscriptionDate(merchantId, 'pos', newDate);
+          }
+          
+          async function changeWebDate(merchantId) {
+            const newDate = prompt('Enter new website subscription end date (YYYY-MM-DD):');
+            if (!newDate) return;
+            updateSubscriptionDate(merchantId, 'web', newDate);
+          }
+          
+          async function updateSubscriptionDate(merchantId, type, newDate) {
+            try {
+              const response = await fetch(`/admin/change-subscription/${merchantId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type, newDate })
+              });
+              
+              const data = await response.json();
+              if (data.success) {
+                alert('Subscription date updated successfully');
+                location.reload();
+              } else {
+                alert('Failed to update subscription date');
+              }
+            } catch (error) {
+              alert('Error updating subscription date');
+            }
+          }
+        script.
+          async function changeSubscriptionDate(merchantId) {
+            const newDate = prompt('Enter new subscription end date (YYYY-MM-DD):');
+            if (!newDate) return;
+            
+            try {
+              const response = await fetch(`/admin/change-subscription/${merchantId}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ newDate })
+              });
+              
+              const data = await response.json();
+              if (data.success) {
+                alert('Subscription date updated successfully');
+                location.reload();
+              } else {
+                alert('Failed to update subscription date');
+              }
+            } catch (error) {
+              alert('Error updating subscription date');
+            }
+          }

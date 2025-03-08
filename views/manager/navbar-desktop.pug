@@ -1,0 +1,52 @@
+
+nav.navbar.navbar-expand-lg.bg-white.custom-navbar-shadow.border-bottom.border-5.hidden-mobile(class='rtl')
+  .container-fluid
+    // Left side - Brand and toggle
+    .d-flex.align-items-center
+      button.btn-menu.me-3#sidebarToggler(type="button")
+        i.fa-solid.fa-bars(aria-hidden='true')
+        
+      a.navbar-brand(href='/manager')
+        img(
+          src='/img/web/arabat-log-banner.png', 
+          alt='ARABAT', 
+          style='height: 45px;', 
+          onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', 'ARABAT');"
+        )
+    
+    // Center - Project name
+    .navbar-center
+      if projectNameNow
+        h5.mb-0.fw-bold.text-primary #{projectNameNow}
+      else
+        h5.mb-0.fw-bold.text-primary Control Panel
+  
+    // Right side - Notifications and user controls
+    .d-flex.align-items-center
+      // Notifications
+      .nav-item.me-3
+        a.btn-account.rounded-pill.px-2.mx-2.py-2(href='/manager')
+          i.fa.fa-bell(aria-hidden='true')
+          span.badge.bg-danger.rounded-circle.position-absolute.top-0.end-0 3
+      
+      // Settings dropdown
+      .nav-item.dropdown
+        a.btn-account.rounded-pill.px-1.py-2.dropdown-toggle(href='#', id='navbarDropdown', role='button', data-bs-toggle='dropdown', aria-expanded='false')
+          i.fa.fa-cog.mx-1(aria-hidden='true')
+            
+        ul.dropdown-menu.dropdown-menu-end.mt-2.shadow-sm(aria-labelledby='navbarDropdown')
+          if nameNow
+            li.dropdown-item.text-end.fw-bold.text-primary #{nameNow}
+          li
+            a.dropdown-item.text-end(href='/manager/profile')
+              i.fa.fa-user.me-2
+              | الملف الشخصي
+          li
+            a.dropdown-item.text-end(href='/manager/settings')
+              i.fa.fa-gear.me-2
+              | الإعدادات
+          li.dropdown-divider
+          li
+            a.dropdown-item.text-end(href='/manager/logout')
+              i.fa.fa-sign-out.me-2
+              | تسجيل خروج

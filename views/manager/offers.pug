@@ -1,0 +1,94 @@
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+     
+      
+      .col.background-main
+        .row
+          #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+            h1.page-header.text-overflow.col-md-8 إدارة العروض
+            
+            .col.d-flex.justify-content-end
+              a.btn.btn-primary.btn-labeled.mx-2(href='/manager/offer/form')
+                .fa.fa-plus-circle
+                span= " اضافة عرض جديد"
+              a.btn.btn-primary.btn-labeled.mx-2(href='/manager/exportoffers')
+                .fa.fa-file-excel-o
+                span= " تصدير إلى Excel"
+
+        .row.px-2
+          
+          .card
+            .card-body.px-0
+              .row.d-flex.justify-content-end
+                .col
+                  input.form-control(placeholder="بحث عن العروض")
+              .row.mt-2
+                .container.px-0
+                  .table-responsive
+                    table.table.table-bordered.table-striped.table-hover
+                      thead
+                        tr
+                          th.align-middle.col-1(scope="col") #
+                          th.align-middle.col-1(scope="col") صورة
+                          th.align-middle(scope="col") الإسم (AR)
+                          th.align-middle.hidden-mobile(scope="col") الإسم (EN)
+                          th.align-middle.col(scope="col") السعر قبل الخصم
+                          th.align-middle.col(scope="col") السعر بعد الخصم
+                          th.align-middle.hidden-mobile.col(scope="col") الكمية المتاحة
+                          th.align-middle.col-2(scope="col") إجراءات
+                      tbody
+                        if myOffers && myOffers.length > 0
+                          each offer in myOffers
+                            tr.align-middle.text-center(data-offer-id=offer._id)
+                              td= offer.offer_number
+                              td
+                                img(src=offer.offer_image || 'https://via.placeholder.com/150', alt='Offer image', style='height: 50px;')
+                              td= offer.offer_name_ar
+                              td.hidden-mobile= offer.offer_name_en
+                              td.original_price= offer.original_price
+                              td.discounted_price= offer.discounted_price
+                              td.hidden-mobile= offer.offer_quantity
+                              td.text-end
+                                span.badge.bg-primary.mx-1.mb-1.position-relative
+                                  i.fas.fa-pencil= " تعديل"
+                                  a.stretched-link(href=`/manager/offer/form/${offer._id}`)
+                                span.badge.bg-info.mx-1.mb-1.position-relative
+                                  i.fas.fa-eye= " مشاهدة"
+                                  a.stretched-link(href=`/manager/offer/view/${offer._id}`)
+                                button.btn-light.span.badge.bg-danger.mx-1.mb-1.border-0(onclick=`DeleteModalTrigger('${offer._id}', '${offer.offer_name_ar}')`)
+                                  i.fas.fa-trash= " حذف"
+                        else
+                          tr
+                            td(colspan="8").text-center
+                              span.text-muted لا توجد عروض متاحة في الوقت الحالي
+
+    // Modal for delete confirmation
+    .modal.fade#deleteConfirmationModal(tabindex='-1', role='dialog', aria-labelledby='deleteConfirmationModalLabel', aria-hidden='true')
+      .modal-dialog.modal-dialog-centered(role='document')
+        .modal-content
+          .modal-header
+            h5#deleteConfirmationModalLabel.modal-title تأكيد الحذف
+            button.close(type='button', data-bs-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            span هل أنت متأكد من أنك تريد حذف العرض 
+            span.text-danger#offerToDelete
+
+          .modal-footer
+            button.btn.btn-secondary(data-bs-dismiss='modal') إلغاء
+            form#deleteOfferForm(method='POST', action='/manager/offer/delete')
+              input#offerToDeleteID(name="offerToDeleteID" type='hidden')
+              button.btn.btn-danger#confirmDeleteButton(type='submit') حذف
+
+    .toast-container.position-fixed.bottom-0.start-0.p-3
+      .toast.hide(role='alert', aria-live='assertive', aria-atomic='true', data-bs-delay='5000')
+        .toast-header
+          strong.toast-title.ms-auto تم التحديث بنجاح
+          button.btn-close(type='button', data-bs-dismiss='toast', aria-label='Close')
+        .toast-body#toastBody
+
+    // Include JavaScript for handling delete confirmation
+    script(src='/js/offer.js')

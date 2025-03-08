@@ -1,0 +1,165 @@
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+      
+      .col.background-main
+        .row
+          #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+            if subuser
+              h1.page-header.text-overflow.col-md-8 تعديل مستخدم فرعي
+              p= subuser
+            else
+              h1.page-header.text-overflow.col-md-8 إضافة مستخدم فرعي جديد
+            .col.d-flex.justify-content-end
+              a.btn.btn-secondary(href="/manager/subusers")
+                .fa.fa-arrow-left
+                span العودة إلى قائمة المستخدمين الفرعيين
+
+        if error
+          .alert.alert-danger.text-center.mt-3= error
+
+        .row.mt-4
+          .col-md-8.offset-md-2
+            .card
+              .card-body
+                form#bigform(
+                  action=subuser ? `/manager/subusers/${subuser._id}` : "/manager/subusers",
+                  method="POST"
+                )
+                  input(type="hidden", name="_csrf", value=csrfToken)
+
+                  table.table.table-bordered.table-striped.table-hover
+                    tbody
+                      tr.align-middle
+                        td.col-4 اسم المستخدم
+                        td.col-8
+                          input.form-control(
+                            type="text",
+                            name="username",
+                            placeholder="اسم المستخدم",
+                            required=true,
+                            value=(subuser ? subuser.username : subuserData ? subuserData.username : "")
+                          )
+                          span.spanLocalError.bg-danger.text-white.hidden *إجباري
+                      tr.align-middle
+                        td.col-4 الإسم
+                        td.col-8
+                          input.form-control(
+                            type="text",
+                            name="name",
+                            placeholder="الإسم",
+                            required=true,
+                            value=(subuser ? subuser.name : subuserData ? subuserData.name : "")
+                          )
+                          span.spanLocalError.bg-danger.text-white.hidden *إجباري
+                      tr.align-middle
+                        td البريد الإلكتروني
+                        td.col-8
+                          input.form-control(
+                            type="email",
+                            name="email",
+                            placeholder="البريد الإلكتروني",
+                            required=true,
+                            value=(subuser ? subuser.email : subuserData ? subuserData.email : "")
+                          )
+                          span.spanLocalError.bg-danger.text-white.hidden *إجباري
+                      tr.align-middle
+                        td رقم الهاتف
+                        td.col-8
+                          input.form-control(
+                            type="text",
+                            name="phone",
+                            placeholder="رقم الهاتف",
+                            required=true,
+                            pattern="^[0-9]{8}$",
+                            value=(subuser ? subuser.phone : subuserData ? subuserData.phone : "")
+                          )
+                          span.spanLocalError.bg-danger.text-white.hidden رقم الهاتف يجب أن يتكون من 8 أرقام
+                      tr.align-middle
+                        td كلمة المرور
+                        td.col-8
+                          input.form-control(
+                            type="password",
+                            name="password",
+                            placeholder="كلمة المرور",
+                            required=!(subuser)
+                          )
+                          if !subuser
+                            span.spanLocalError.bg-danger.text-white.hidden *إجباري
+                          else
+                            small.text-muted كلمة المرور الجديدة (اختياري عند التعديل)
+                      tr.align-middle
+                        td الصلاحيات
+                        td.col-8
+                          .mb-3
+                            label.d-block صلاحيات الدفع
+                            .form-check.text-end
+                              label.form-check-label.ms-2 تعديل الدفع النقدي
+                              input.form-check-input.float-end(type="checkbox", name="permissions[cash]", checked=(subuser && subuser.permissions.cash))
+                            .form-check.text-end
+                              label.form-check-label.ms-2 تعديل الدفع الإلكتروني
+                              input.form-check-input.float-end(type="checkbox", name="permissions[knet]", checked=(subuser && subuser.permissions.knet))
+
+                          .mb-3
+                            label.d-block صلاحيات الطلبات
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[orders][edit]", checked=(subuser && subuser.permissions.orders.edit))
+                              label.form-check-label تعديل الطلبات
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[orders][create]", checked=(subuser && subuser.permissions.orders.create))
+                              label.form-check-label إنشاء طلبات جديدة
+
+                          .mb-3
+                            label.d-block صلاحيات التصنيفات
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[categories][edit]", checked=(subuser && subuser.permissions.categories.edit))
+                              label.form-check-label تعديل التصنيفات
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[categories][create]", checked=(subuser && subuser.permissions.categories.create))
+                              label.form-check-label إنشاء تصنيفات جديدة
+
+                          .mb-3
+                            label.d-block صلاحيات المنتجات
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[products][edit]", checked=(subuser && subuser.permissions.products.edit))
+                              label.form-check-label تعديل المنتجات
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[products][create]", checked=(subuser && subuser.permissions.products.create))
+                              label.form-check-label إنشاء منتجات جديدة
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[products][delete]", checked=(subuser && subuser.permissions.products.delete))
+                              label.form-check-label حذف المنتجات
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[products][seeCostPrice]", checked=(subuser && subuser.permissions.products.seeCostPrice))
+                              label.form-check-label  رؤية سعر التكلفة
+
+
+                          .mb-3
+                            label.d-block صلاحيات المشتريات
+                            .form-check
+                              input.form-check-input(type="checkbox", name="permissions[purchaseOrders][manage]", checked=(subuser && subuser.permissions.purchaseOrders.manage))
+                              label.form-check-label إدارة طلبات الشراء
+
+                          select.form-control.mt-3(name="role", required=true)
+                            option(value="viewer", selected=(subuser && subuser.role === "viewer")) عارض
+                            option(value="editor", selected=(subuser && subuser.role === "editor")) محرر
+                            option(value="admin", selected=(subuser && subuser.role === "admin")) مدير
+
+                      tr.align-middle
+                        td الحالة
+                        td.col-8
+                          label.switch
+                            input#statusSwitch(
+                              type="checkbox",
+                              name="isActive",
+                              checked=(subuser && subuser.isActive) ? "checked" : false
+                            )
+                            span.switch-slider.round
+                          span.checkmark.fas.fa-check(style="display: none;")
+
+                  .row.justify-content-end
+                    button.btn.btn-primary.btn-labeled(type="submit")
+                      .fa.fa-save
+                      span= subuser ? "تحديث" : "حفظ"

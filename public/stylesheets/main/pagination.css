@@ -1,0 +1,45 @@
+
+/* Responsive pagination styles */
+.pagination {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pagination .page-item {
+  margin-bottom: 0.5rem;
+}
+
+/* Go to page input styles */
+.page-item.go-to-page {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+.page-item.go-to-page form {
+  display: flex;
+  align-items: center;
+}
+
+.page-input {
+  width: 70px;
+  height: 32px;
+}
+
+@media (max-width: 576px) {
+  .pagination .page-link {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .page-input {
+    width: 50px;
+    height: 30px;
+    font-size: 0.875rem;
+  }
+  
+  .page-item.go-to-page button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}

@@ -1,0 +1,3 @@
+.height100vh {
+  min-height: 100vh; /* Use min-height to ensure full viewport height */
+}

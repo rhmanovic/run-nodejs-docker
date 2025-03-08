@@ -1,0 +1,406 @@
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+      include includes/SideBar
+
+      .col.background-main
+        .row
+          #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+            h1.page-header.text-overflow.col-md-8 عرض الأرصدة
+            .col.d-flex.justify-content-end
+              a.btn.btn-primary.btn-labeled.mx-2(href='/manager/dashboard')
+                .fa.fa-home
+                span الرئيسية
+
+        .row.px-2
+          .card
+            .card-body
+              if balances && balances.length > 0
+                .row.justify-content-center
+                  .col-lg-8.col-md-10
+                    table.table.table-bordered.table-striped.text-center
+                      thead
+                        tr.align-middle
+                          th.col-4 المصدر
+                          th.col-4 الرصيد
+                          th.col-4 الإجراءات
+                      tbody
+                        each balanceItem in balances
+                          tr.align-middle(data-id=balanceItem._id)
+                            td.col-4= balanceItem.name
+                            td.col-4= balanceItem.balance.toFixed(2) + ' د.ك'
+                            td.col-4
+                              button.btn.btn-warning.btn-sm.mx-1(onclick=`editBalanceForm('${balanceItem._id}', '${balanceItem.name}')`) تعديل
+                              button.btn.btn-danger.btn-sm.mx-1(onclick=`deleteBalance('${balanceItem._id}', '${balanceItem.name}')`) حذف
+              else
+                .row.justify-content-center
+                  .col-lg-8.col-md-10.text-center
+                    p.text-muted لا يوجد أرصدة متاحة حاليًا
+
+              .row.justify-content-center
+                .col-lg-8.col-md-10
+                  h2.text-center.mt-4 وسائل الدفع
+                  if paymentMethods && paymentMethods.length > 0
+                    table.table.table-bordered.table-striped
+                      thead
+                        tr.align-middle.text-center
+                          th.col-3 اسم وسيلة الدفع
+                          th.col-3 نوع الرسوم
+                          th.col-2 الرسوم
+                          th.col-2 الحساب المرتبط
+                          th.col-2 الإجراءات
+                      tbody
+                        each method in paymentMethods
+                          tr.align-middle.text-center(data-id=method._id)
+                            td.col-3= method.name
+                            td.col-3= method.feeType === 'fixed' ? 'ثابتة' : 'نسبة مئوية'
+                            td.col-2= method.fee + (method.feeType === 'percentage' ? '%' : ' د.ك')
+                            td.col-2
+                              - const linkedBalance = balances.find(b => b._id.toString() === method.balance.toString())
+                              = linkedBalance ? linkedBalance.name : 'غير مرتبط'
+                            td.col-2
+                              button.btn.btn-warning.btn-sm.mx-1(onclick=`editPaymentMethodForm('${method._id}', '${method.name}', '${method.fee}', '${method.feeType}', '${method.balance}')`) تعديل
+                              button.btn.btn-danger.btn-sm.mx-1(onclick=`deletePaymentMethod('${method._id}', '${method.name}')`) حذف
+                  else
+                    p.text-center.text-muted لا توجد وسائل دفع متاحة حاليًا
+
+              // Buttons for adding balances and payment methods
+              .row
+                .col-12.text-center
+                  button.btn.btn-primary(onclick="createBalanceForm()") إضافة رصيد جديد
+              .row
+                .col-12.text-center
+                  button.btn.btn-primary(onclick="createPaymentMethodForm()") إضافة وسيلة دفع جديدة
+
+          // Modal Form for Adding New Balance
+          .modal.fade#balanceModal(tabindex='-1', role='dialog', aria-labelledby='balanceModalLabel', aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+                  h5.modal-title#balanceModalLabel إضافة رصيد جديد
+                .modal-body
+                  form#balanceForm(onsubmit='handleBalanceSubmit(event)')
+                    .mb-3
+                      label(for='balanceName') اسم الرصيد
+                      input.form-control(type='text', id='balanceName', name='name', placeholder='مثال: "صندوق نقدي"', required)
+                    button.btn.btn-primary(type='submit') إضافة رصيد
+
+          // Modal Form for Adding New Payment Method
+          .modal.fade#paymentMethodModal(tabindex='-1', role='dialog', aria-labelledby='paymentMethodModalLabel', aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+                  h5.modal-title#paymentMethodModalLabel إضافة وسيلة دفع جديدة
+                .modal-body
+                  form#paymentMethodForm(onsubmit='handlePaymentMethodSubmit(event)')
+                    .mb-3
+                      label(for='paymentMethodName') اسم وسيلة الدفع
+                      input.form-control(type='text', id='paymentMethodName', name='name', placeholder='مثال: "كاش"، "كي نت"', required)
+                    .mb-3
+                      label(for='paymentMethodFee') الرسوم
+                      input.form-control(type='number', id='paymentMethodFee', name='fee', placeholder='الرسوم', required)
+                    .mb-3
+                      label(for='feeType') نوع الرسوم
+                      select.form-control(name='feeType', id='feeType', required)
+                        option(value='fixed') رسوم ثابتة
+                        option(value='percentage') نسبة مئوية
+                    .mb-3
+                      label(for='linkedBalance') اختيار الرصيد
+                      select.form-control(name='balance', required)
+                        each balanceItem in balances
+                          option(value=balanceItem._id)= balanceItem.name
+                    button.btn.btn-primary(type='submit') إضافة وسيلة دفع
+
+          // Edit Balance Modal
+          .modal.fade#editBalanceModal(tabindex='-1', role='dialog', aria-labelledby='editBalanceModalLabel', aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+                  h5.modal-title#editBalanceModalLabel تعديل رصيد
+                .modal-body
+                  form#editBalanceForm(method='POST', action='/manager/cash/balance/edit')
+                    input(type='hidden', name='balanceId', id='editBalanceId')
+                    .mb-3
+                      label(for='editBalanceName') اسم الرصيد
+                      input.form-control(type='text', id='editBalanceName', name='name', required)
+                    button.btn.btn-primary(type='submit') حفظ التغييرات
+
+          // Edit Payment Method Modal
+          .modal.fade#editPaymentMethodModal(tabindex='-1', role='dialog', aria-labelledby='editPaymentMethodModalLabel', aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+                  h5.modal-title#editPaymentMethodModalLabel تعديل وسيلة دفع
+                .modal-body
+                  form#editPaymentMethodForm(method='POST', action='/manager/cash/payment-method/edit')
+                    input(type='hidden', name='paymentMethodId', id='editPaymentMethodId')
+                    .mb-3
+                      label(for='editPaymentMethodName') اسم وسيلة الدفع
+                      input.form-control(type='text', id='editPaymentMethodName', name='name', required)
+                    .mb-3
+                      label(for='editPaymentMethodFee') الرسوم
+                      input.form-control(type='number', id='editPaymentMethodFee', name='fee', required)
+                    .mb-3
+                      label(for='editFeeType') نوع الرسوم
+                      select.form-control(name='feeType', id='editFeeType', required)
+                        option(value='fixed') رسوم ثابتة
+                        option(value='percentage') نسبة مئوية
+                    .mb-3
+                      label(for='editLinkedBalance') اختيار الرصيد
+                      select.form-control(name='balance', id='editLinkedBalance', required)
+                        each balanceItem in balances
+                          option(value=balanceItem._id)= balanceItem.name
+                    button.btn.btn-primary(type='submit') حفظ التغييرات
+
+      // Delete Confirmation Modal
+      #deleteConfirmModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='deleteConfirmModalLabel', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+          .modal-content
+            .modal-header
+              h5#deleteConfirmModalLabel.modal-title تأكيد الحذف
+              button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+            .modal-body
+              p هل أنت متأكد من حذف الرصيد: 
+                span#balanceToDelete
+            .modal-footer
+              button.btn.btn-secondary(type='button', data-bs-dismiss='modal') إلغاء
+              button#confirmDeleteBtn.btn.btn-danger(type='button') حذف
+
+      // Payment Method Delete Confirmation Modal
+      #deletePaymentMethodModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='deletePaymentMethodModalLabel', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+          .modal-content
+            .modal-header
+              h5#deletePaymentMethodModalLabel.modal-title تأكيد الحذف
+              button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+            .modal-body
+              p هل أنت متأكد من حذف وسيلة الدفع: 
+                span#paymentMethodToDelete
+            .modal-footer
+              button.btn.btn-secondary(type='button', data-bs-dismiss='modal') إلغاء
+              button#confirmDeletePaymentMethodBtn.btn.btn-danger(type='button') حذف
+
+      // Toast Notifications
+      .position-fixed.bottom-0.end-0.p-3#toastContainer(style='z-index: 1055')
+
+  script.
+    // Function to show a toast notification
+    function showToast(message, isSuccess = true) {
+      const toastId = `toast-${Date.now()}`;
+      const toastHtml = `
+        <div id="${toastId}" class="toast align-items-center ${isSuccess ? 'text-bg-success' : 'text-bg-danger'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      `;
+      const toastContainer = document.getElementById('toastContainer');
+      toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+
+      const toastElement = document.getElementById(toastId);
+      const toast = new bootstrap.Toast(toastElement);
+      toast.show();
+      setTimeout(() => toastElement.remove(), 5000);
+    }
+
+    // Show the form for creating a balance
+    function createBalanceForm() {
+      const modal = new bootstrap.Modal(document.getElementById('balanceModal'));
+      modal.show();
+    }
+
+    // Handle balance form submission
+    function handleBalanceSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const name = formData.get('name');
+
+      fetch('/manager/cash/balance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: name })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Update the balances table
+          const tbody = document.querySelector('table tbody');
+          tbody.innerHTML = data.balances.map(balance => `
+            <tr class="align-middle" data-id="${balance._id}">
+              <td class="col-4">${balance.name}</td>
+              <td class="col-4">${balance.balance.toFixed(2)} د.ك</td>
+              <td class="col-4">
+                <button class="btn btn-warning btn-sm mx-1" onclick="editBalanceForm('${balance._id}', '${balance.name}')">تعديل</button>
+                <button class="btn btn-danger btn-sm mx-1" onclick="deleteBalance('${balance._id}')">حذف</button>
+              </td>
+            </tr>
+          `).join('');
+
+          // Close modal and show success message
+          bootstrap.Modal.getInstance(document.getElementById('balanceModal')).hide();
+          form.reset();
+          showToast('تم إضافة الرصيد بنجاح', true);
+        } else {
+          showToast(data.message || 'حدث خطأ أثناء إضافة الرصيد', false);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showToast('حدث خطأ أثناء إضافة الرصيد', false);
+      });
+    }
+
+    // Show the form for creating a payment method
+    function createPaymentMethodForm() {
+      const modal = new bootstrap.Modal(document.getElementById('paymentMethodModal'));
+      modal.show();
+    }
+
+    // Show the form for editing a balance
+    function editBalanceForm(id, name) {
+      document.getElementById('editBalanceId').value = id;
+      document.getElementById('editBalanceName').value = name;
+      const modal = new bootstrap.Modal(document.getElementById('editBalanceModal'));
+      modal.show();
+    }
+
+    // Show the form for editing a payment method
+    function editPaymentMethodForm(id, name, fee, feeType, balance) {
+      document.getElementById('editPaymentMethodId').value = id;
+      document.getElementById('editPaymentMethodName').value = name;
+      document.getElementById('editPaymentMethodFee').value = fee;
+      document.getElementById('editFeeType').value = feeType;
+      document.getElementById('editLinkedBalance').value = balance;
+      const modal = new bootstrap.Modal(document.getElementById('editPaymentMethodModal'));
+      modal.show();
+    }
+
+    // Delete a balance
+    function deleteBalance(id, name) {
+      document.getElementById('balanceToDelete').textContent = name;
+      document.getElementById('confirmDeleteBtn').onclick = function() {
+        fetch(`/manager/cash/balance/${id}`, {
+          method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.querySelector(`tr[data-id="${id}"]`).remove();
+            showToast('تم حذف الرصيد بنجاح', true);
+            bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal')).hide();
+          } else {
+            showToast(data.message || 'حدث خطأ أثناء حذف الرصيد', false);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showToast('حدث خطأ أثناء حذف الرصيد', false);
+        });
+      };
+      const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+      deleteModal.show();
+    }
+
+    // Handle payment method form submission
+    function handlePaymentMethodSubmit(event) {
+      event.preventDefault();
+      console.log('Payment method form submission started');
+      
+      const form = event.target;
+      const formData = new FormData(form);
+      
+      const data = {
+        name: formData.get('name'),
+        fee: parseFloat(formData.get('fee')) || 0,
+        feeType: formData.get('feeType'),
+        balance: formData.get('balance')
+      };
+      
+      console.log('Form data:', data);
+
+      fetch('/manager/cash/payment-method', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(async response => {
+        console.log('Server response received:', response.status);
+        const contentType = response.headers.get("content-type");
+        console.log('Content type:', contentType);
+        
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const jsonResponse = await response.json();
+          console.log('Response data:', jsonResponse);
+          return jsonResponse;
+        }
+        throw new Error('Server response was not JSON');
+      })
+      .then(data => {
+        if (data.success) {
+          // Add the new payment method to the table
+          const paymentMethodsTable = document.querySelector('table tbody');
+          const linkedBalance = balances.find(b => b._id === data.paymentMethod.balance);
+          const newRow = `
+            <tr class="align-middle text-center" data-id="${data.paymentMethod._id}">
+              <td class="col-3">${data.paymentMethod.name}</td>
+              <td class="col-3">${data.paymentMethod.feeType === 'fixed' ? 'ثابتة' : 'نسبة مئوية'}</td>
+              <td class="col-2">${data.paymentMethod.fee}${data.paymentMethod.feeType === 'percentage' ? '%' : ' د.ك'}</td>
+              <td class="col-2">${linkedBalance ? linkedBalance.name : 'غير مرتبط'}</td>
+              <td class="col-2">
+                <button class="btn btn-warning btn-sm mx-1" onclick="editPaymentMethodForm('${data.paymentMethod._id}', '${data.paymentMethod.name}', '${data.paymentMethod.fee}', '${data.paymentMethod.feeType}', '${data.paymentMethod.balance}')">تعديل</button>
+                <button class="btn btn-danger btn-sm mx-1" onclick="deletePaymentMethod('${data.paymentMethod._id}', '${data.paymentMethod.name}')">حذف</button>
+              </td>
+            </tr>`;
+          paymentMethodsTable.insertAdjacentHTML('beforeend', newRow);
+          
+          // Close modal and show success message
+          bootstrap.Modal.getInstance(document.getElementById('paymentMethodModal')).hide();
+          form.reset();
+          showToast('تم إضافة وسيلة الدفع بنجاح', true);
+        } else {
+          showToast(data.message || 'حدث خطأ أثناء إضافة وسيلة الدفع', false);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showToast('حدث خطأ أثناء إضافة وسيلة الدفع', false);
+      });
+    }
+
+    // Delete a payment method
+    function deletePaymentMethod(id, name) {
+      document.getElementById('paymentMethodToDelete').textContent = name;
+      document.getElementById('confirmDeletePaymentMethodBtn').onclick = function() {
+        fetch(`/manager/cash/payment-method/${id}`, {
+          method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.querySelector(`tr[data-id="${id}"]`).remove();
+            showToast('تم حذف وسيلة الدفع بنجاح', true);
+            bootstrap.Modal.getInstance(document.getElementById('deletePaymentMethodModal')).hide();
+          } else {
+            showToast(data.message || 'حدث خطأ أثناء حذف وسيلة الدفع', false);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showToast('حدث خطأ أثناء حذف وسيلة الدفع', false);
+        });
+      };
+      const deletePaymentMethodModal = new bootstrap.Modal(document.getElementById('deletePaymentMethodModal'));
+      deletePaymentMethodModal.show();
+    }

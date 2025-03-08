@@ -1,0 +1,92 @@
+.row
+  #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+    h1.page-header.text-overflow.col-md-8 صور المتجر
+
+form#bigform(method='POST', action='/manager/overview', enctype='multipart/form-data')
+  table.table.table-bordered.table-striped.table-hover
+    tbody
+      tr.align-middle
+        td.col-4
+          p (ICO)
+          p الأيقونة
+          p.text-secondary (العرض والطول الموصى بهما: - 71px:71px*)
+        td.col-8
+          .col.col-md-4.align-middle
+            img.border.border-4.my-4(src=merchant.images.ico || 'https://via.placeholder.com/350', alt='Store Icon (ICO)', style='height: 71px;')
+          input.form-control(type='file', name='ico', accept='image/png, image/jpeg')
+          button.btn.btn-primary.btn-labeled(type='submit')
+            .fa.fa-save
+            span.mx-1 حفظ
+
+      tr.align-middle
+        td.col-4
+          p الشعار (JPG/PNG)
+          p.text-secondary (العرض والطول الموصى بهما: - 350px:350px*)
+        td.col-8
+          .col.col-md-4.align-middle
+            img.border.border-4.my-4(src=merchant.images.logo || 'https://via.placeholder.com/350', alt='Store Logo (JPG/PNG)', style='height: 350px;')
+          input.form-control(type='file', name='logo', accept='image/png, image/jpeg')
+          button.btn.btn-primary.btn-labeled(type='submit')
+            .fa.fa-save
+            span.mx-1 حفظ
+
+      tr.align-middle
+        td.col-4
+          p الشعار (JPG/PNG)
+          p.text-secondary (العرض والطول الموصى بهما: - 350px:350px*)
+        td.col-8
+          .col.col-md-4.align-middle
+            img.border.border-4.my-4(src=merchant.images.logoAdditional || 'https://via.placeholder.com/1920x1080', alt='Additional Store Logo (JPG/PNG)', style='height: 300px;')
+          input.form-control(type='file', name='logo_additional', accept='image/png, image/jpeg')
+          button.btn.btn-primary.btn-labeled(type='submit')
+            .fa.fa-save
+            span.mx-1 حفظ
+          button.btn.btn-primary.btn-labeled.mx-2(type='button', onclick='addMoreImages()')
+            .fa.fa-save
+            span.mx-1 اضف المزيد
+
+      tr.align-middle
+        td.col-4
+          p خلفية قائمة المنتجات (JPG/PNG)
+          p.text-secondary (العرض والطول الموصى بهما: - 533px:1080px*)
+        td.col-8
+          .col.col-md-4.align-middle
+            img.border.border-4.my-4(src=merchant.images.background || 'https://via.placeholder.com/533x1080', alt='Product List Background (JPG/PNG)', style='height: 300px;')
+          input.form-control(type='file', name='background', accept='image/png, image/jpeg')
+          button.btn.btn-primary.btn-labeled(type='submit')
+            .fa.fa-save
+            span.mx-1 حفظ
+
+      tr.align-middle
+        td.col-4
+          p (ICO)
+          p الأيقونة
+          p.text-secondary (العرض والطول الموصى بهما: - 71px:71px*)
+        td.col-8
+          .col.col-md-4.align-middle
+            img.border.border-4.my-4(src=merchant.images.icoSecondary || 'https://via.placeholder.com/150', alt='Secondary Store Icon (ICO)', style='height: 150px;')
+          input.form-control(type='file', name='ico_secondary', accept='image/png, image/jpeg')
+          button.btn.btn-primary.btn-labeled(type='submit')
+            .fa.fa-save
+            span.mx-1 حفظ
+
+.row
+  #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+
+.col.d-flex.justify-content-end
+  button.btn.btn-primary.btn-labeled.mx-2(type='submit')
+    .fa.fa-save
+    span= " حفظ "
+
+script.
+  document.getElementById('bigform').addEventListener('submit', function (event) {
+    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+    const inputs = this.querySelectorAll('input[type="file"]');
+    for (let input of inputs) {
+      if (input.files[0] && input.files[0].size > maxSize) {
+        alert(`The file "${input.files[0].name}" exceeds the 2 MB size limit.`);
+        event.preventDefault(); // Prevent form submission
+        return;
+      }
+    }
+  });

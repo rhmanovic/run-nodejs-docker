@@ -1,0 +1,119 @@
+
+/* Import centralized variables */
+@import url('../main/variables.css');
+
+/* General Navbar Styling */
+.navbar {
+  padding: 1rem 0;
+  border-bottom: 1px solid #eef0f2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+/* Navbar Links */
+.nav-link {
+  color: #666;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+}
+
+.nav-link:hover,
+.active-link {
+  color: var(--primary-color) !important;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+/* Buttons */
+.btn-account {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.75rem 2rem;
+  font-weight: 500;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-account:hover {
+  background-color: var(--secondary-color);
+}
+
+.btn-outline-secondary {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Offcanvas Menu (Mobile) */
+.offcanvas {
+  transition: transform 0.3s ease-in-out;
+}
+
+.offcanvas-header {
+  padding: 0.75rem 1rem;
+}
+
+.offcanvas-body {
+  padding: 1rem;
+}
+
+.offcanvas .nav-link {
+  padding: 0.5rem 0;
+  margin: 0.25rem 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+  .offcanvas-end {
+    width: 75% !important;
+    max-width: 300px;
+  }
+
+  #navbarNav {
+    display: none !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-toggler {
+    display: none;
+  }
+
+  #navbarNav {
+    display: flex !important;
+  }
+}
+
+
+.custom-navbar-shadow {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+
+
+.navbar-nav {
+  gap: 2rem;
+  height: 100%;
+  align-items: center;
+}
+
+.navbar-brand img {
+  height: 50px;
+  width: auto;
+}
+
+
+
+
+
+
+
+.active-link {
+  color: var(--primary-color) !important;
+  border-bottom: 2px solid var(--primary-color);
+}

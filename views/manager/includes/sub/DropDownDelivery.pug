@@ -1,0 +1,78 @@
+style.
+  .dropdown-custom {
+    position: relative;
+    font-size: 0.9rem;
+  }
+  .dropdown-custom .dropdown-menu {
+    padding: 0;
+    border-radius: 0.25rem;
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    background-color: #FFFFFF;
+  }
+  .dropdown-custom .dropdown-item {
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #495057;
+    transition: background-color 0.2s ease;
+  }
+  .dropdown-custom .dropdown-item:hover, .dropdown-custom .dropdown-item:focus {
+    background-color: #E3F2FD;
+    color: #0056b3;
+  }
+  .dropdown-custom .dropdown-item.active {
+    background-color: #0056b3;
+    color: #FFFFFF;
+  }
+  .dropdown-toggle::after {
+    display: none;
+  }
+
+.container
+  .dropdown.dropdown-custom
+    // Apply dynamic styles based on the order status for button colors
+    button#dropdownMenuButton1.btn.dropdown-toggle.w-100(type='button' data-bs-toggle='dropdown' aria-expanded='false' 
+      style=(order.status === 'new' ? 'border-color: blue; color: blue' : 
+      order.status === 'processing' ? 'border-color: blue; color: blue' : 
+      order.status === 'completed' ? 'border-color: green; color: green' : 
+      order.status === 'canceled' ? 'border-color: orange; color: orange' : 
+      order.status === 'returned' ? 'border-color: red; color: red' : 
+      'border-color: gray; color: gray'))
+      // Display status text based on order.status with appropriate colors
+      case order.status
+        when 'new'
+          | جديد
+        when 'processing'
+          | قيد التحضير
+        when 'completed'
+          | تم الشحن
+        when 'canceled'
+          | ملغي
+        when 'returned'
+          | تم الارجاع
+        default
+          | غير معروف
+
+    ul.dropdown-menu(aria-labelledby='dropdownMenuButton1')
+      li
+        a.dropdown-item#new(href="#", class=(order.status === 'new' ? 'active' : ''), style="background-color: blue; color: white;")
+          i.fas.fa-exchange-alt.me-2
+          | جديد
+      li
+        a.dropdown-item#processing(href="#", class=(order.status === 'processing' ? 'active' : ''), style="background-color: blue; color: black;")
+          i.fas.fa-list-ul.me-2
+          | قيد التحضير
+      li
+        a.dropdown-item#completed(href="#", class=(order.status === 'completed' ? 'active' : ''), style="background-color: green; color: white;")
+          i.fas.fa-check.me-2
+          | تم الشحن
+      li
+        a.dropdown-item#returned(href="#", class=(order.status === 'returned' ? 'active' : ''), style="background-color: red; color: white;")
+          i.fas.fa-check.me-2
+          | تم الارجاع
+      li
+        a.dropdown-item#canceled(href="#", class=(order.status === 'canceled' ? 'active' : ''), style="background-color: orange; color: white;")
+          i.fas.fa-times.me-2
+          | ملغي

@@ -1,0 +1,69 @@
+router.get('/reports/daily/:merchantId', async (req, res) => {
+  try {
+    const { merchantId } = req.params;
+    const { date } = req.query;
+
+    if (!merchantId) {
+      return res.status(400).json({ success: false, message: 'Merchant ID is required' });
+    }
+
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    // ✅ 1️⃣ Fetch Orders
+    const orders = await Order.find({
+      merchant: merchantId,
+      createdAt: { $gte: startOfDay, $lte: endOfDay },
+      status: 'completed',
+    }).select('_id order_number totalCost createdAt items');
+
+    const totalSales = orders.reduce((sum, order) => sum + order.totalCost, 0);
+    const orderCount = orders.length;
+    const averageOrderValue = orderCount > 0 ? totalSales / orderCount : 0;
+
+    // ✅ 2️⃣ Get Top Selling Products
+    const productSales = await Order.aggregate([
+      { $match: { merchant: new mongoose.Types.ObjectId(merchantId), createdAt: { $gte: startOfDay, $lte: endOfDay }, status: 'completed' } },
+      { $unwind: "$items" },
+      {
+        $group: {
+          _id: "$items.product",
+          name: { $first: "$items.productName" },
+          quantity: { $sum: "$items.quantity" },
+          revenue: { $sum: { $multiply: ["$items.quantity", "$items.salePrice"] } }
+        }
+      },
+      { $sort: { revenue: -1 } },
+      { $limit: 5 }
+    ]);
+
+    // ✅ 3️⃣ Get Recent Transactions
+    const transactions = await CashTransaction.find({
+      merchant: merchantId,
+      date: { $gte: startOfDay, $lte: endOfDay }
+    })
+      .sort({ date: -1 })
+      .limit(5)
+      .select('_id purchase purchase_number amount method_name balance_name type status balanceBefore balanceAfter description transaction_number date');
+
+    // ✅ 4️⃣ Send Response with Orders
+    res.json({
+      success: true,
+      reports: {
+        totalSales,
+        orderCount,
+        averageOrderValue,
+        orders, // ✅ Now includes all today's orders
+        topProducts: productSales,
+        transactions
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching daily reports:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});

@@ -1,0 +1,148 @@
+extends layout
+
+block content
+
+  .main
+    .row.min-vh-100.m-0
+     
+
+      .col.background-main
+        .row
+          #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+            h1.page-header.text-overflow.col-md-8 عرض المعاملات النقدية
+            .col.d-flex.justify-content-end
+              a.btn.btn-primary.btn-labeled.mx-2(href='/manager/dashboard')
+                .fa.fa-home
+                span الرئيسية
+
+        .row.px-2
+          .card
+            .card-body
+              // Display Balance
+              if balance
+                .row.mb-4
+                  .col-6
+                    table.table.table-bordered.table-striped
+                      thead
+                        tr.align-middle.text-center
+                          th.col-6 المصدر
+                          th.col-6 الرصيد
+                      tbody
+                        tr.align-middle.text-center
+                          td.col-6 المتجر
+                          td.col-6
+                            = balance.shopBalance.toFixed(2) + ' د.ك'
+                            button.btn.btn-warning.btn-sm.ms-2(data-bs-toggle="modal", data-bs-target="#editShopBalanceModal") تعديل
+                        tr.align-middle.text-center
+                          td.col-6 البنك
+                          td.col-6
+                            = balance.bankBalance.toFixed(2) + ' د.ك'
+                            button.btn.btn-warning.btn-sm.ms-2(data-bs-toggle="modal", data-bs-target="#editBankBalanceModal") تعديل
+              else
+                .row.mb-4
+                  .col-12.text-center
+                    p.text-muted لا يوجد رصيد متاح حاليًا
+
+              // Filter and Display Transactions
+              .row.mb-3
+                .col-6.d-flex.align-items-center
+                  label.form-label.me-2 اختيار طريقة الدفع:
+                  select.form-select#methodFilter(onchange="filterTransactions()")
+                    option(value="all") الكل
+                    option(value="cash") نقداً
+                    option(value="link") رابط
+                    option(value="knet") كي نت
+                    option(value="online") أونلاين
+                .col-6.d-flex.align-items-center
+                  label.form-label.me-2 اختيار المصدر:
+                  select.form-select#sourceFilter(onchange="filterTransactions()")
+                    option(value="all") الكل
+                    option(value="shop") المتجر
+                    option(value="bank") البنك
+
+              .row
+                .col-12
+                  .table-responsive
+                    table.table.table-bordered.table-striped.table-hover#transactionsTable
+                      thead
+                        tr.align-middle.text-center
+                          th.col-1 رقم الطلب
+                          th.col-1 رقم المعاملة
+                          th.col-1 الرقم الخاص
+                          th.col-1 نوع المعاملة
+                          th.col-2 المبلغ
+                          th.col-1 العمولة
+                          th.col-2 طريقة الدفع
+                          th.col-1 المصدر
+                          th.col-2 الرصيد قبل المتجر
+                          th.col-2 الرصيد بعد المتجر
+                          th.col-2 الرصيد قبل البنك
+                          th.col-2 الرصيد بعد البنك
+                          th.col-2 الحالة
+                          th.col-2 التاريخ
+                      tbody
+                        if cashTransactions.length > 0
+                          each transaction in cashTransactions
+                            tr.align-middle.text-center.transaction-row(data-method=transaction.method, data-source=transaction.source)
+                              td.col-1= transaction.order_number != null ? transaction.order_number : '' 
+                              td.col-1= transaction.transaction_sr_number
+                              td.col-1= transaction.transaction_number
+                              td.col-1(style=`color: ${transaction.type === 'inflow' ? 'green' : 'red'};`) 
+                                = transaction.type === 'inflow' ? 'إيراد' : 'مصروف'
+                              td.col-2(style=`color: ${transaction.type === 'inflow' ? 'green' : 'red'};`) 
+                                = transaction.amount.toFixed(2) + ' د.ك'
+                              td.col-1= transaction.fee > 0 ? transaction.fee.toFixed(2) + ' د.ك' : '-'
+                              td.col-2= { cash: 'نقداً', link: 'رابط', knet: 'كي نت', online: 'أونلاين', admin: 'مسؤول', manager: 'مدير' }[transaction.method]
+                              td.col-1= transaction.source === 'shop' ? 'المتجر' : 'البنك'
+                              td.col-2= transaction.shopBalanceBefore != null ? transaction.shopBalanceBefore.toFixed(2) + ' د.ك' : ''
+                              td.col-2(style=`color: ${transaction.shopBalanceAfter > transaction.shopBalanceBefore ? 'green' : transaction.shopBalanceAfter < transaction.shopBalanceBefore ? 'red' : 'black'};`)
+                                = transaction.shopBalanceAfter != null ? transaction.shopBalanceAfter.toFixed(2) + ' د.ك' : ''
+                              td.col-2= transaction.bankBalanceBefore != null ? transaction.bankBalanceBefore.toFixed(2) + ' د.ك' : ''
+                              td.col-2(style=`color: ${transaction.bankBalanceAfter > transaction.bankBalanceBefore ? 'green' : transaction.bankBalanceAfter < transaction.bankBalanceBefore ? 'red' : 'black'};`)
+                                = transaction.bankBalanceAfter != null ? transaction.bankBalanceAfter.toFixed(2) + ' د.ك' : ''
+                              td.col-2= transaction.status === 'completed' ? 'مكتمل' : transaction.status === 'pending' ? 'قيد الانتظار' : 'ملغي'
+                              td.col-2= new Date(transaction.date).toLocaleString('ar-KW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Kuwait' })
+                        else
+                          tr.align-middle.text-center
+                            td.col-12.text-center.no-data(colspan='14') لا توجد معاملات
+
+    // Modals for Editing Balances
+    // Edit Shop Balance Modal
+    .modal.fade#editShopBalanceModal(tabindex="-1", aria-labelledby="editShopBalanceModalLabel", aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-header
+            h5.modal-title#editShopBalanceModalLabel تعديل رصيد المتجر
+            button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+          .modal-body
+            form#editShopBalanceForm(action="/manager/update-balance/shop", method="POST")
+              .mb-3
+                label.form-label(for="shopBalance") الرصيد الجديد للمتجر
+                input#shopBalance.form-control(type="number", step="0.01", name="shopBalance", required)
+              button.btn.btn-primary(type="submit") حفظ
+
+    // Edit Bank Balance Modal
+    .modal.fade#editBankBalanceModal(tabindex="-1", aria-labelledby="editBankBalanceModalLabel", aria-hidden="true")
+      .modal-dialog
+        .modal-content
+          .modal-header
+            h5.modal-title#editBankBalanceModalLabel تعديل رصيد البنك
+            button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+          .modal-body
+            form#editBankBalanceForm(action="/manager/update-balance/bank", method="POST")
+              .mb-3
+                label.form-label(for="bankBalance") الرصيد الجديد للبنك
+                input#bankBalance.form-control(type="number", step="0.01", name="bankBalance", required)
+              button.btn.btn-primary(type="submit") حفظ
+
+  script.
+    function filterTransactions() {
+      const methodFilterValue = document.getElementById('methodFilter').value;
+      const sourceFilterValue = document.getElementById('sourceFilter').value;
+      const rows = document.querySelectorAll('.transaction-row');
+      rows.forEach(row => {
+        const matchesMethod = methodFilterValue === 'all' || row.dataset.method === methodFilterValue;
+        const matchesSource = sourceFilterValue === 'all' || row.dataset.source === sourceFilterValue;
+        row.style.display = matchesMethod && matchesSource ? '' : 'none';
+      });
+    }

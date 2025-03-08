@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+     
+
+      .col.background-main
+        include includes/balance/mainContent
+        include includes/balance/balanceTable
+        include includes/balance/paymentMethodsTable
+        include includes/balance/actionButtons
+        include includes/balance/modals
+
+      // Toast Notifications
+      .position-fixed.bottom-0.end-0.p-3#toastContainer(style='z-index: 1055')
+
+  style.
+    .switch.disabled-opacity {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  script(src='/js/balance.js')

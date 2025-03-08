@@ -1,0 +1,13 @@
+// deleteConfirmModalLabel
+.modal.fade#deleteConfirmModal(tabindex='-1', role='dialog', aria-labelledby='deleteConfirmModalLabel', aria-hidden='true')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        h5.modal-title#deleteConfirmModalLabel تأكيد الحذف
+        button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+      .modal-body
+        p هل أنت متأكد من حذف هذا الرصيد؟
+      .modal-footer
+        button.btn.btn-secondary(type='button', data-bs-dismiss='modal') إلغاء
+        button#confirmDeleteBtn.btn.btn-danger(type='button', onclick='confirmDelete()') حذف
+        input#deleteBalanceId(type='hidden')

@@ -1,0 +1,187 @@
+
+
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+      
+
+      .col
+        // Page header with improved styling
+        .row.mb-4
+          .col-12.p-4.bg-white.rounded.shadow-sm
+            .d-flex.justify-content-between.align-items-center
+              h1.page-header.mb-0
+                i.fas.fa-box-open.text-primary.me-2
+                | إدارة المنتجات
+            
+              .d-flex.align-items-center
+                // Category filter with better styling
+                form.me-2.pt-3(action='/manager/products' method='get')
+                  select.form-select.rounded-pill.border-primary(name='categoryNumber' onchange='this.form.submit()')
+                    option(value='') كل التصنيفات
+                    each category in categories
+                      option(
+                        value=category.category_number 
+                        selected=(category.category_number.toString() === selectedCategoryNumber)
+                      )= category.ArabicName
+
+                // Action buttons with consistent styling
+                a.btn.btn-primary.rounded-pill.text-white.mx-2(href='/manager/product/form/new')
+                  i.fas.fa-plus-circle.me-1
+                  span.mx-1 إضافة منتج
+                a.btn.btn-info.rounded-pill.text-white(href='/manager/exportproducts')
+                  i.fas.fa-file-export.me-1
+                  span.mx-1 تصدير Excel
+
+        // Search and table container
+        .card.rounded.shadow-sm.mb-4
+          .card-body
+            // Search bar with improved styling
+            .row.mb-4
+              .col-lg-4
+                .input-group
+                  span.input-group-text.bg-primary.text-white
+                    i.fas.fa-search
+                  input#productSearch.form-control.border-start-0(placeholder="بحث عن منتج...")
+
+            // Products table with better styling
+            .table-responsive
+              table.table.table-hover.align-middle
+                thead.bg-light
+                  tr.text-center
+                    th.align-middle(scope="col") صورة
+                    th.align-middle(scope="col") الإسم (AR)
+                    th.align-middle.hidden-mobile(scope="col") الإسم (EN)
+                    th.align-middle.hidden-mobile(scope="col") التصنيف
+                    th.align-middle(scope="col") السعر
+                    th.align-middle.hidden-mobile(scope="col") المخزون
+                    th.align-middle.hidden-mobile(scope="col") الترتيب
+                    th.align-middle.hidden-mobile(scope="col") عرض
+                    th.align-middle(scope="col") إجراءات
+                tbody
+                  each product in products
+                    tr.text-center.product-row(data-product-id=product._id)
+                      // Product image with better styling
+                      td
+                        .product-img-wrapper.mx-auto.rounded.border.overflow-hidden(style='width: 50px; height: 50px;')
+                          img.img-fluid(src=`${product.product_image || 'https://via.placeholder.com/150'}` alt=product.product_name_ar style='object-fit: cover; width: 100%; height: 100%;')
+                      
+                      // Product names
+                      td= product.product_name_ar
+                      td.hidden-mobile= product.product_name_en
+                      
+                      // Category
+                      td.hidden-mobile
+                        each category in categories
+                          if product.category_number
+                            if category.category_number == product.category_number
+                              span.badge.bg-light.text-dark.p-2.rounded-pill= category.ArabicName || "غير متوفر"
+                      
+                      // Price (editable)
+                      td.sale_price.position-relative(style="width: 120px;")
+                        .spinner1.spinner-grow.spinner-grow-sm.text-primary.position-absolute.top-50.start-50.translate-middle.hidden(role='status')
+                          span.visually-hidden Loading...
+                        span.price-span.clickable.badge.bg-light.text-dark.py-2.px-3.rounded-pill#sale_price= product.sale_price
+                        form.form1.update-price-form.inline-form.hidden.ltr(action='/manager/update-price' method='post' onsubmit='submitForm(event)')
+                          .input-group
+                            input.form-control.no-arrows.rounded-start(type='number' name='value' value=product.sale_price placeholder='السعر' autocomplete="off")
+                            input(type='hidden' name='type' value='sale_price')
+                            input(type='hidden' name='productId' value=product._id)
+                            button.btn.btn-primary.rounded-end(type='submit')
+                              i.fas.fa-check
+                      
+                      // Stock (editable)
+                      td.hidden-mobile.stock.position-relative(style="width: 120px;")
+                        .spinner1.spinner-grow.spinner-grow-sm.text-primary.position-absolute.top-50.start-50.translate-middle.hidden(role='status')
+                          span.visually-hidden Loading...
+                        span.stock-span.clickable.badge.bg-light.text-dark.py-2.px-3.rounded-pill= product.Stock
+                        form.form1.update-price-form.inline-form.hidden.ltr(action='/manager/update-stock' method='post' onsubmit='submitForm(event)')
+                          .input-group
+                            input.form-control.no-arrows.rounded-start(type='number' name='value' value=product.Stock placeholder='المخزون' autocomplete="off")
+                            input(type='hidden' name='productId' value=product._id)
+                            button.btn.btn-primary.rounded-end(type='submit')
+                              i.fas.fa-check
+                      
+                      // Order command
+                      td.hidden-mobile
+                        span.badge.bg-secondary.py-2.px-3.rounded-pill= product.order_command
+                      
+                      // Status toggle (keep as is)
+                      td.hidden-mobile
+                        label.switch
+                          input(id='pub_' + product._id, class='product-switch', type='checkbox', data-id=product._id, checked=product.status)
+                          span.switch-slider.round
+                          span.checkmark.fas.fa-check(style='display: none;')
+                      
+                      // Actions with better styling
+                      td
+                        .btn-group
+                          a.btn.btn-sm.btn-outline-primary.rounded-pill.me-1(href=`/manager/product/form/${product.product_number}`, title='تعديل')
+                            i.fas.fa-edit
+                          a.btn.btn-sm.btn-outline-info.rounded-pill.me-1(href=`/manager/product/view/${product.product_number}`, title='مشاهدة')
+                            i.fas.fa-eye
+                          a.btn.btn-sm.btn-outline-success.rounded-pill.me-1(href='#', title='تعبئة المخزون')
+                            i.fas.fa-plus
+                          button.btn.btn-sm.btn-outline-danger.rounded-pill.me-1(onclick=`DeleteModalTrigger('${product._id}', '${product.product_name_ar}')`, title='حذف')
+                            i.fas.fa-trash
+
+    // Delete confirmation modal with improved styling
+    .modal.fade#deleteConfirmationModal(tabindex='-1', role='dialog', aria-labelledby='deleteConfirmationModalLabel', aria-hidden='true')
+      .modal-dialog.modal-dialog-centered(role='document')
+        .modal-content
+          .modal-header.bg-danger.text-white
+            h5#deleteConfirmationModalLabel.modal-title
+              i.fas.fa-exclamation-triangle.me-2
+              | تأكيد الحذف
+            button.btn-close.btn-close-white(type='button', data-bs-dismiss='modal', aria-label='Close')
+          .modal-body
+            p.text-center.mb-0
+              | هل أنت متأكد من أنك تريد حذف المنتج: 
+              span#productToDelete.fw-bold.text-danger
+          .modal-footer
+            button.btn.btn-secondary.rounded-pill(data-bs-dismiss='modal')
+              i.fas.fa-times.me-1
+              | إلغاء
+            form#cart(method='POST' action='/manager/product/delete')
+              input#productToDeleteID(name="productToDeleteID" style='display: none;')
+              button.btn.btn-danger.rounded-pill#confirmDeleteButton(type='submit')
+                i.fas.fa-trash.me-1
+                | حذف
+
+    // Toast notification with improved styling
+    .toast-container.position-fixed.bottom-0.start-0.p-3
+      .toast.hide(role='alert', aria-live='assertive', aria-atomic='true', data-bs-delay='5000')
+        .toast-header.bg-success.text-white
+          i.fas.fa-check-circle.me-2
+          strong.toast-title.ms-auto تم بنجاح
+          button.btn-close.btn-close-white(type='button', data-bs-dismiss='toast', aria-label='Close')
+        .toast-body#toastBody
+    
+    // Keep the original scripts
+    script(src='/js/product.js')
+    script(src='/js/product2.js')
+    
+    // Add search functionality script
+    script.
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('productSearch');
+        if (searchInput) {
+          searchInput.addEventListener('keyup', function() {
+            const searchValue = this.value.toLowerCase();
+            const productRows = document.querySelectorAll('.product-row');
+            
+            productRows.forEach(row => {
+              const productNameAr = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+              const productNameEn = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+              
+              if (productNameAr.includes(searchValue) || productNameEn.includes(searchValue)) {
+                row.style.display = '';
+              } else {
+                row.style.display = 'none';
+              }
+            });
+          });
+        }
+      });

@@ -1,0 +1,21 @@
+
+.footer.bg-primary.text-white.py-3.mt-auto
+  .container-fluid
+    .row.align-items-center
+      .col-md-4.text-center.text-md-start.mb-3.mb-md-0
+        .d-flex.align-items-center.justify-content-center.justify-content-md-start
+          img.me-2(src='/img/web/arabat-log-banner.png', alt='ARABAT', style='height: 30px;')
+          span.fw-bold.ms-2 ARABAT Control Panel
+      
+      .col-md-4.text-center.mb-3.mb-md-0
+        .footer-links
+          a.text-white.mx-2(href="/manager/settings")
+            i.fas.fa-cog.me-1
+            | الإعدادات
+          a.text-white.mx-2(href="/manager")
+            i.fas.fa-home.me-1
+            | الرئيسية
+      
+      .col-md-4.text-center.text-md-end
+        p.mb-0
+          small Copyright © #{new Date().getFullYear()} arabat. All Rights Reserved.

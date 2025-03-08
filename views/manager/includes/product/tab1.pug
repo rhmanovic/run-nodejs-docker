@@ -1,0 +1,443 @@
+link(href='https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css' rel='stylesheet')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js')
+script(src='https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js')
+link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css')
+script(src='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js')
+link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css')
+
+style.
+  .ql-editor {
+    background-color: white; /* Set your desired color */
+    height: 200px;
+  }
+
+.table-responsive
+  table.table.table-hover.align-middle.border
+    tbody
+
+      tr.align-middle.border.border-secondary.border-end-0.border-start-0(style='background-color: #dee2e6')
+        th.py-3(colspan="2")
+          .d-flex.align-items-center
+            i.fa.fa-info-circle.text-primary.me-2.fa-lg
+            h5.mb-0.mx-1 معلومات المنتج الأساسية
+
+      tr.align-middle
+        td.fw-bold.bg-light.text-nowrap(width="30%") اسم المنتج (العربية)
+        td
+          .form-floating.mb-0
+            input.form-control#product_name_ar(name='product_name_ar', placeholder='اسم المنتج بالعربية', required, itsTab='tab1', value=product ? product.product_name_ar : '')
+            label(for='product_name_ar') أدخل اسم المنتج بالعربية
+            span.spanLocalError.badge.bg-danger.text-white.hidden.mt-1 هذا الحقل إجباري
+
+      tr.align-middle
+        td.fw-bold.bg-light اسم المنتج (EN)
+        td
+          .form-floating.mb-0
+            input.form-control#product_name_en(name='product_name_en', placeholder='اسم المنتج بالإنجليزية', required, itsTab='tab1', value=product ? product.product_name_en : '')
+            label(for='product_name_en') أدخل اسم المنتج بالإنجليزية
+            span.spanLocalError.badge.bg-danger.text-white.hidden.mt-1 هذا الحقل إجباري
+
+      tr.align-middle
+        td.fw-bold.bg-light التصنيف
+        td
+          .form-floating.mb-0
+            select.form-select#category_number(name='category_number', required, placeholderselect="اختر التصنيف", itsTab='tab1')
+              option(value='', disabled, selected, hidden) اختر التصنيف
+              if categories
+                each category in categories
+                  if product && product.category_number == category.category_number
+                    option(value=category.category_number, selected) #{category.ArabicName}
+                  else
+                    option(value=category.category_number) #{category.ArabicName}
+            label(for='category_number') اختر تصنيف المنتج
+            span.spanLocalError.badge.bg-danger.text-white.hidden.mt-1 هذا الحقل إجباري
+
+      tr.align-middle
+        td.fw-bold.bg-light اسم العلامة التجارية
+        td
+          .form-floating.mb-0
+            input.form-control#brand(name='brand', placeholder='اسم العلامة التجارية', itsTab='tab1', value=product ? product.brand : '')
+            label(for='brand') أدخل اسم العلامة التجارية
+
+      tr.align-middle
+        td.fw-bold.bg-light الضمان
+        td
+          .form-floating.mb-0
+            input.form-control#warranty(name='warranty', placeholder='الضمان', itsTab='tab1', value=product ? product.warranty : '')
+            label(for='warranty') فترة الضمان
+
+      tr.align-middle.border.border-secondary.border-end-0.border-start-0(style='background-color: #dee2e6')
+        th.py-3(colspan="2")
+          .d-flex.align-items-center
+            i.fa.fa-cogs.text-primary.me-2.fa-lg
+            h5.mb-0.mx-1 إعدادات المنتج
+
+      tr.align-middle
+        td.fw-bold.bg-light امر ترتيب
+        td
+          .form-floating.mb-0
+            input.form-control#order_command(type='number', name='order_command', placeholder='0', step='0.1', value=product ? product.order_command : '0')
+            label(for='order_command') ترتيب المنتج
+
+      tr.align-middle
+        td.fw-bold.bg-light وزن (Kg)
+        td
+          .form-floating.mb-0
+            input.form-control#weight(name='weight', placeholder='0', value=product ? product.weight : '')
+            label(for='weight') وزن المنتج بالكيلوجرام
+
+      tr.align-middle
+        td.fw-bold.bg-light الكلمات المفتاحية
+        td
+          .form-floating.mb-0
+            input.form-control#keywords(name='keywords', placeholder='الكلمات المفتاحية مفصولة بفاصلة', value=product ? product.keywords : '')
+            label(for='keywords') كلمات مفتاحية مفصولة بفاصلة للبحث
+
+      
+
+      tr.align-middle
+        td.fw-bold.bg-light رابط فيديو يوتيوب
+        td
+          .form-floating.mb-0
+            input.form-control#youtube_video_id(name='youtube_video_id', placeholder='معرف رابط فيديو يوتيوب', value=product ? product.youtube_video_id : '')
+            label(for='youtube_video_id') معرف رابط فيديو يوتيوب (اختياري)
+            small.text-muted مثال: dQw4w9WgXcQ (فقط معرف الفيديو، وليس الرابط كاملاً)
+
+      tr.align-middle
+        td.fw-bold.bg-light تفعيل الخيارات
+        td
+          .d-flex.align-items-center
+            label.switch
+              input#options(type='checkbox', name='options', checked=product ? product.options : false, style='min-width: 100px;')
+              span.switch-slider.round
+              span.checkmark.fas.fa-check
+
+            span.ms-2 تفعيل خيارات المنتج المتعددة (الألوان، المقاسات، إلخ)
+
+      tr.align-middle
+        td.fw-bold.bg-light المقاسات القياسية
+        td
+          .d-flex.align-items-center
+            label.switch
+              input#standard_sizes(type='checkbox', name='standard_sizes', checked=product ? product.standard_sizes : false, style='min-width: 100px;')
+              span.switch-slider.round
+              span.checkmark.fas.fa-check
+            span.ms-2 استخدام المقاسات القياسية للملابس (S, M, L, XL)
+
+
+      tr.align-middle.border.border-secondary.border-end-0.border-start-0(style='background-color: #dee2e6')
+        th.py-3(colspan="2")
+          .d-flex.align-items-center
+            i.fa.fa-images.text-primary.me-2.fa-lg
+            h5.mb-0.mx-1 صور المنتج
+      tr.align-middle
+        td.fw-bold.bg-light الصورة الرئيسية
+        td
+          .row
+            .col-md-6.mb-3.mb-md-0
+              .card.border-0.shadow-sm.h-100
+                .card-body.text-center
+                  h6.text-muted.mb-3 صورة المنتج الرئيسية
+                
+
+                  .custom-file-upload
+                    label.btn.btn-outline-primary.rounded-3.d-block.py-3(for='category_img')
+                      i.fas.fa-upload.me-2
+                      | اختيار صورة
+                      small.d-block.text-muted.mt-2 (العرض والطول الموصى بهما: 500px*500px)
+                    input#category_img.d-none(type='file', name='category_img', accept='image/png, image/jpeg, image/jpg, image/gif', onchange='previewImage(event)')
+
+            .col-md-6.text-center
+              .card.border-0.shadow-sm.h-100
+                .card-body.d-flex.justify-content-center.align-items-center
+                  img#imagePreview.img-thumbnail.rounded.border-0.shadow-sm(src=`${product && product.product_image ? product.product_image : 'https://via.placeholder.com/150'}` , alt='صورة المنتج', style='max-height: 150px; max-width: 100%;')
+                  
+      tr.align-middle
+        td(colspan="2")
+          .row
+            
+            .col-md-6.mb-3
+              .card.border-0.shadow-sm.h-100
+                .card-body
+                  h6.text-muted.mb-3
+                    i.fas.fa-upload.me-2
+                    | رفع صور المنتج (PNG/JPG/GIF)
+
+                  label.btn.btn-outline-primary.btn-upload-img.d-flex.flex-column.align-items-center.justify-content-center.py-4.w-100.rounded-3
+                    input#product_images(type='file', name='product_images', accept='image/png, image/jpeg, image/jpg, image/gif', multiple, hidden)
+                    i.fas.fa-cloud-upload-alt.fa-2x.text-primary.mb-2
+                    span.text-primary أضغط هنا لإختيار الصور
+                    small.text-muted.mt-2 يمكنك رفع أكثر من صورة
+
+            .col-md-6.mb-3
+              .card.border-0.shadow-sm.h-100
+                .card-header.bg-white.border-0.pt-3
+                  h6.mb-0 معاينة الصور المختارة
+                .card-body.pt-0
+                  ul#image-preview-list.uploaded-images-list.list-unstyled.d-flex.flex-wrap.gap-2
+
+          .card.border-0.shadow-sm.mt-3
+            .card-header.bg-white.py-3.border-0
+              h6.mb-0
+                i.fas.fa-photo-video.text-primary.me-2
+                | الصور الحالية
+            input(type="hidden" name="productId" value=product ? product._id : '')
+            .card-body
+              if product && product.product_images && product.product_images.length > 0
+                .row.g-3#current-images-container
+                  each image, index in product.product_images
+                    .col-6.col-sm-4.col-md-3.col-xl-2(data-image-index=index)
+                      .card.h-100.border.product-image-card
+                        img.card-img-top(src=`${image || 'https://via.placeholder.com/150'}`, alt='صورة المنتج', style='height: 150px; object-fit: cover;')
+                        .card-footer.bg-white.p-2.text-center
+                          button.btn.btn-sm.btn-outline-danger.rounded-circle.delete-image-btn(type='button', title='حذف الصورة', data-image-path=image)
+                            i.fas.fa-trash
+              else
+                .text-center.py-4
+                  i.fa.fa-image.fa-3x.text-muted.mb-3.d-block
+                  p.text-muted لا توجد صور متاحة للمنتج
+
+
+      tr.align-middle.border.border-secondary.border-end-0.border-start-0(style='background-color: #dee2e6')
+        th.py-3(colspan="2")
+          .d-flex.align-items-center
+            i.fa.fa-align-left.text-primary.me-2.fa-lg
+            h5.mb-0.mx-1 وصف المنتج
+
+      tr.align-middle
+        td.bg-light.p-0(colspan="2")
+          .p-3
+            label.fw-bold.mb-2 الوصف (العربية)
+            #toolbar-container32.bg-light.mb-2.border
+              span.ql-formats.border.bg-white
+                select.ql-font.border
+                select.ql-size.border
+                button.ql-bold.border
+                button.ql-italic.border
+                button.ql-underline.border
+                button.ql-strike.border
+              span.ql-formats.border.bg-white
+                select.ql-color.border
+                select.ql-background.border
+              span.ql-formats.border.bg-white
+                button.ql-header(value='1').border
+                button.ql-header(value='2').border
+                button.ql-list(value='ordered').border
+                button.ql-list(value='bullet').border
+              span.ql-formats.border.bg-white
+                button.ql-indent(value='-1').border
+                button.ql-indent(value='+1').border
+                button.ql-direction(value='rtl').border
+                select.ql-align.border
+            input(type="hidden" name='description_ar' id='hiddenDescriptionAr', value=product ? product.description_ar : '')
+            #editor32.border.rounded.bg-white(style="min-height: 150px;")
+
+            script.
+              var quill32 = new Quill('#editor32', {
+                theme: 'snow',
+                modules: {
+                  toolbar: '#toolbar-container32'
+                }
+              });
+
+              // Retrieve the description from the hidden input
+              var descriptionAr = document.getElementById('hiddenDescriptionAr').value;
+              // Set the editor's content using dangerouslyPasteHTML
+              quill32.clipboard.dangerouslyPasteHTML(descriptionAr);
+
+              // Update hidden input when editor content changes
+              quill32.on('text-change', function() {
+                document.getElementById('hiddenDescriptionAr').value = quill32.root.innerHTML;
+              });
+
+      tr.align-middle
+        td.bg-light.p-0(colspan="2")
+          .p-3
+            label.fw-bold.mb-2 الوصف (الانجليزية)
+            #toolbar-container33.bg-light.mb-2.border
+              span.ql-formats.border.bg-white
+                select.ql-font.border
+                select.ql-size.border
+                button.ql-bold.border
+                button.ql-italic.border
+                button.ql-underline.border
+                button.ql-strike.border
+              span.ql-formats.border.bg-white
+                select.ql-color.border
+                select.ql-background.border
+              span.ql-formats.border.bg-white
+                button.ql-header(value='1').border
+                button.ql-header(value='2').border
+                button.ql-list(value='ordered').border
+                button.ql-list(value='bullet').border
+              span.ql-formats.border.bg-white
+                button.ql-indent(value='-1').border
+                button.ql-indent(value='+1').border
+                button.ql-direction(value='rtl').border
+                select.ql-align.border
+            input(type="hidden" name='description_en' id='hiddenDescriptionEn', value=product ? product.description_en : '')
+            #editor33.border.rounded.bg-white(style="min-height: 150px;")
+
+            script.
+              var quill33 = new Quill('#editor33', {
+                theme: 'snow',
+                modules: {
+                  toolbar: '#toolbar-container33'
+                }
+              });
+              // Retrieve the description from the hidden input
+              var descriptionEn = document.getElementById('hiddenDescriptionEn').value;
+              // Set the editor's content using dangerouslyPasteHTML
+              quill33.clipboard.dangerouslyPasteHTML(descriptionEn);
+
+              // Update hidden input when editor content changes
+              quill33.on('text-change', function() {
+                document.getElementById('hiddenDescriptionEn').value = quill33.root.innerHTML;
+              });
+
+  // Image preview handler
+  script.
+    // Function to handle image preview
+    function previewImage(event) {
+      const imagePreview = document.getElementById('imagePreview');
+      const file = event.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imagePreview.src = e.target.result;
+          imagePreview.classList.remove('d-none');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Only handle image deletions
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize for external code to use
+      const multipleImagesInput = document.getElementById('product_images');
+      const previewList = document.getElementById('image-preview-list');
+      
+      // Note: Multi-image selection code removed as it's handled by external code
+
+      // Toggle switch checkmarks
+      const toggleSwitches = document.querySelectorAll('.switch input[type="checkbox"]');
+      toggleSwitches.forEach(function(switchEl) {
+        const checkmark = switchEl.nextElementSibling.nextElementSibling;
+        checkmark.style.display = switchEl.checked ? 'inline-block' : 'none';
+
+        switchEl.addEventListener('change', function() {
+          checkmark.style.display = this.checked ? 'inline-block' : 'none';
+        });
+      });
+
+      // Handle image deletion
+      const imageDeleteButtons = document.querySelectorAll('.delete-image-btn');
+      const deletedImages = [];
+
+      // Add a hidden input to track deleted images
+      const form = document.querySelector('form');
+      const deletedImagesInput = document.createElement('input');
+      deletedImagesInput.type = 'hidden';
+      deletedImagesInput.name = 'deleted_images';
+      deletedImagesInput.id = 'deleted_images';
+      deletedImagesInput.value = JSON.stringify(deletedImages);
+      form.appendChild(deletedImagesInput);
+
+      imageDeleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          const imagePath = this.getAttribute('data-image-path');
+          const productId = document.querySelector('input[name="productId"]').value;
+          const confirmDelete = confirm('هل أنت متأكد من حذف هذه الصورة؟');
+
+          if (confirmDelete) {
+            // Send AJAX request to delete the image directly from the database
+            fetch('/manager/product/image/delete', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                productId: productId,
+                imagePath: imagePath
+              })
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Remove the image card from UI
+                const imageCol = this.closest('.col-6');
+                if (imageCol) {
+                  imageCol.remove();
+
+                  // Show a toast notification
+                  const toastContainer = document.createElement('div');
+                  toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                  toastContainer.innerHTML = `
+                    <div id="deleteToast" class="toast align-items-center text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+                      <div class="d-flex">
+                        <div class="toast-body">
+                          <i class="fa fa-check-circle me-2"></i>
+                          تم حذف الصورة بنجاح
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                      </div>
+                    </div>
+                  `;
+
+                  document.body.appendChild(toastContainer);
+                  const toast = new bootstrap.Toast(document.getElementById('deleteToast'));
+                  toast.show();
+
+                  // Remove toast container after toast is hidden
+                  const deleteToast = document.getElementById('deleteToast');
+                  deleteToast.addEventListener('hidden.bs.toast', function() {
+                    toastContainer.remove();
+                  });
+                }
+              } else {
+                // Show error toast
+                const toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                toastContainer.innerHTML = `
+                  <div id="errorToast" class="toast align-items-center text-white bg-danger" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+                    <div class="d-flex">
+                      <div class="toast-body">
+                        <i class="fa fa-exclamation-circle me-2"></i>
+                        فشل في حذف الصورة: ${data.message}
+                      </div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                  </div>
+                `;
+
+                document.body.appendChild(toastContainer);
+                const toast = new bootstrap.Toast(document.getElementById('errorToast'));
+                toast.show();
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              // Show error toast
+              const toastContainer = document.createElement('div');
+              toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+              toastContainer.innerHTML = `
+                <div id="errorToast" class="toast align-items-center text-white bg-danger" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+                  <div class="d-flex">
+                    <div class="toast-body">
+                      <i class="fa fa-exclamation-circle me-2"></i>
+                      حدث خطأ أثناء حذف الصورة
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                </div>
+              `;
+
+              document.body.appendChild(toastContainer);
+              const toast = new bootstrap.Toast(document.getElementById('errorToast'));
+              toast.show();
+            });
+          }
+        });
+      });
+    });

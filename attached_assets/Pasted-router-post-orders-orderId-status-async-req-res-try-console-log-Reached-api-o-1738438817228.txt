@@ -1,0 +1,172 @@
+router.post('/orders/:orderId/status', async (req, res) => {
+  try {
+    console.log("Reached /api/orders/:orderId/status");
+    console.log("req.params: ", req.params);
+    console.log("req.body: ", req.body);
+
+    const { orderId } = req.params;
+    const { status, paymentMethod, merchant_id } = req.body;
+    let paymentMethodName = "";
+    let balance_id = null;
+    let balance_name = "";
+
+    // ✅ Define valid statuses
+    const validStatuses = ['new', 'processing', 'completed', 'canceled', 'returned'];
+    if (!validStatuses.includes(status)) {
+      return res.status(601).json({ success: false, message: 'Invalid status' });
+    }
+
+    // ✅ Fetch the merchant and ensure the payment method exists
+    const merchant = await Merchant.findOne(
+      { _id: merchant_id, "paymentMethods._id": paymentMethod },
+      { "paymentMethods.$": 1, balances: 1 }
+    );
+
+    if (!merchant || !merchant.paymentMethods.length) {
+      return res.status(602).json({ success: false, message: "Invalid payment method ID for this merchant." });
+    }
+
+    // ✅ Get selected payment method details
+    const selectedPaymentMethod = merchant.paymentMethods[0];
+    const matchingBalanceIndex = merchant.balances.findIndex(
+      (b) => b._id.toString() === selectedPaymentMethod.balance.toString()
+    );
+
+    if (matchingBalanceIndex === -1) {
+      return res.status(603).json({ success: false, message: "No matching balance found for the payment method." });
+    }
+
+    // ✅ Get the correct balance entry
+    const matchingBalance = merchant.balances[matchingBalanceIndex];
+    paymentMethodName = selectedPaymentMethod.name;
+    balance_id = matchingBalance._id;
+    balance_name = matchingBalance.name;
+
+    // ✅ Fetch order details
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    // ✅ Status change validations
+    if (status === 'canceled' && !['new', 'processing'].includes(order.status)) {
+      return res.status(604).json({ success: false, message: 'Only new or processing orders can be canceled' });
+    }
+
+    if (order.status === 'completed' && status === 'completed') {
+      return res.status(605).json({ success: false, message: 'Order is already completed' });
+    }
+
+    if (order.status === 'completed' && status === 'returned') {
+      return res.status(606).json({ success: false, message: 'Completed order cannot be returned' });
+    }
+
+    if (order.status === 'returned' && status === 'returned') {
+      return res.status(607).json({ success: false, message: 'Order is already returned' });
+    }
+
+    if (order.status === 'returned' && status === 'completed') {
+      return res.status(608).json({ success: false, message: 'Returned order cannot be completed' });
+    }
+
+    // ✅ Capture balance before updating
+    const balanceBefore = matchingBalance.balance;
+
+    let newBalance = balanceBefore;
+
+    // ✅ If status is 'completed', adjust the balance
+    if (status === 'completed' && order.status !== 'completed') {
+      newBalance += order.total; // ✅ Increase balance when order is completed
+    } else if (status === 'returned' && order.status !== 'returned') {
+      newBalance -= order.total; // ✅ Decrease balance when order is returned
+    }
+
+    // ✅ Update balance inside merchant schema
+    merchant.balances[matchingBalanceIndex].balance = newBalance;
+    await merchant.save();
+
+    // ✅ Define change source and context
+    const changeSource = status === 'completed' ? 'Sell Order Completed / إتمام طلب بيع' : 'Sell Order Return / ارجاع طلب بيع';
+    const context = {
+      orderId: orderId,
+      orderNumber: order.order_number,
+      adjustedBy: 'POS / نقطة مبيعات',
+      reason: changeSource,
+    };
+
+    // ✅ Update stock quantities for each order item
+    for (let item of order.items) {
+      let changedQuantity = item.quantity;
+      if (item.offerId) {
+        changedQuantity *= item.offer_quantity;
+      }
+
+      if (item.variantId) {
+        // ✅ Update variant stock and set tempLog
+        await Product.updateOne(
+          { 'variations._id': item.variantId },
+          {
+            $inc: { 'variations.$.v_available_quantity': status === 'completed' ? -changedQuantity : changedQuantity },
+            $set: {
+              tempLog: {
+                changeSource: changeSource,
+                context: {
+                  ...context,
+                  variantId: item.variantId,
+                },
+              },
+            },
+          }
+        );
+      } else {
+        // ✅ Update product stock and set tempLog
+        await Product.findByIdAndUpdate(item.productId, {
+          $inc: { Stock: status === 'completed' ? -changedQuantity : changedQuantity },
+          $set: {
+            tempLog: {
+              changeSource: changeSource,
+              context: {
+                ...context,
+                productId: item.productId,
+              },
+            },
+          },
+        });
+      }
+    }
+
+    // ✅ Create a cash transaction for the completed order
+    const cashTransaction = new CashTransaction({
+      merchant: order.merchant,
+      order: order._id,
+      order_number: order.order_number,
+      amount: order.total,
+      method_id: paymentMethod,
+      method_name: paymentMethodName,
+      balance_id: balance_id, // ✅ Store balance ID
+      balance_name: balance_name, // ✅ Store balance name
+      type: status === 'completed' ? 'inflow' : 'outflow',
+      status: 'completed',
+      balanceBefore: balanceBefore, // ✅ Corrected balance before transaction
+      balanceAfter: newBalance, // ✅ Corrected balance after transaction
+      description: `Order #${order.order_number} ${status} and paid by ${paymentMethodName}.`,
+    });
+
+    await cashTransaction.save();
+
+    // ✅ Update order status
+    order.status = status;
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Order status updated successfully',
+      order,
+      updatedBalance: newBalance
+    });
+
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    return res.status(500).json({ success: false, message: 'Error updating order status' });
+  }
+});

@@ -1,0 +1,15 @@
+// balanceModal
+.modal.fade#balanceModal(tabindex='-1', role='dialog', aria-labelledby='balanceModalLabel', aria-hidden='true')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        h5.modal-title#balanceModalLabel إضافة رصيد جديد
+        button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+      .modal-body
+        form#balanceForm(onsubmit='handleBalanceSubmit(event)')
+          .mb-3
+            label.form-label(for='balanceName') اسم الرصيد
+            input#balanceName.form-control(type='text', name='name', required)
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') إلغاء
+            button.btn.btn-primary(type='submit') إضافة

@@ -1,0 +1,257 @@
+
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+      .col.background-main
+        // Order Navigation and Header
+        .d-flex.justify-content-between.align-items-center.my-4
+          .d-flex.align-items-center
+            if nextOrderNo
+              a.btn.btn-outline-primary.ms-2(href=`/manager/orderTools?no=${nextOrderNo}`)
+                | التالي
+                i.fas.fa-chevron-right.ms-1
+            else
+              button.btn.btn-outline-secondary.ms-2.disabled
+                | التالي
+                i.fas.fa-chevron-right.ms-1
+
+          h2.text-primary.fw-bold.mb-0 أدوات الطلب ##{order.order_number}
+
+          .d-flex.align-items-center
+            if previousOrderNo
+              a.btn.btn-outline-primary.ms-2(href=`/manager/orderTools?no=${previousOrderNo}`)
+                i.fas.fa-chevron-left.ms-1
+                | السابق
+            else
+              button.btn.btn-outline-secondary.ms-2.disabled
+                i.fas.fa-chevron-left.ms-1
+                | السابق
+
+        .row.px-2
+          .card
+            .card-body
+              .row
+                .col-lg-8
+                  // تفاصيل الطلب الرئيسية
+                  .card.mb-3
+                    .card-header.bg-primary.text-white
+                      i.fas.fa-info-circle.ms-2
+                      | معلومات الطلب
+                    .card-body
+                      .row.mb-2
+                        .col-md-6
+                          .mb-3
+                            label.form-label.fw-bold رقم الطلب
+                            .input-group
+                              span.input-group-text
+                                i.fas.fa-hashtag
+                              input.form-control(type='text', value=order.order_number, readonly)
+                        .col-md-6
+                          .mb-3
+                            label.form-label.fw-bold تاريخ الطلب
+                            .input-group
+                              span.input-group-text
+                                i.fas.fa-calendar
+                              input.form-control(type='text', value=new Date(order.time).toLocaleString('ar-AE'), readonly)
+                      .row.mb-2
+                        .col-md-6
+                          .mb-3
+                            label.form-label.fw-bold اسم العميل
+                            .input-group
+                              span.input-group-text
+                                i.fas.fa-user
+                              input.form-control(type='text', value=order.customerName, readonly)
+                        .col-md-6
+                          .mb-3
+                            label.form-label.fw-bold رقم الهاتف
+                            .input-group
+                              span.input-group-text
+                                i.fas.fa-phone
+                              input.form-control(type='text', value=order.phone, readonly)
+                      .row.mb-2
+                        .col-12
+                          .mb-3
+                            label.form-label.fw-bold العنوان
+                            .input-group
+                              span.input-group-text
+                                i.fas.fa-map-marker-alt
+                              input.form-control(type='text', value=order.address, readonly)
+                      .row
+                        .col-md-6
+                          .mb-3
+                            label.form-label.fw-bold حالة الطلب
+                            .input-group
+                              span.input-group-text
+                                i.fas.fa-check-circle
+                              input.form-control(type='text', value=order.status, readonly, class=order.status === 'completed' ? 'text-success' : (order.status === 'canceled' ? 'text-danger' : 'text-warning'))
+                        .col-md-6
+                          .mb-3
+                            label.form-label.fw-bold طريقة الدفع
+                            .input-group
+                              span.input-group-text
+                                i.fas.fa-credit-card
+                              input.form-control(type='text', value=order.PaymentMethod || 'نقدي', readonly)
+                      .row
+                        .col-md-6
+                          .mb-3
+                            label.form-label.fw-bold حالة الدفع
+                            .input-group
+                              span.input-group-text
+                                i.fas.fa-money-bill-alt
+                              strong
+                                if order.PaymenStatus === 'paid'
+                                  span.text-success مدفوع
+                                else
+                                  span.text-danger غير مدفوع
+
+                  // أدوات ضبط الأسعار
+                  .card.mb-3
+                    .card-header.bg-primary.text-white
+                      i.fas.fa-percentage.ms-2
+                      | أدوات ضبط الأسعار
+                    .card-body
+                      .row
+                        .col-md-6
+                          .form-floating.mb-3
+                            input#percentageInput.form-control(type="number", name="percentage", step="0.005", placeholder="أدخل النسبة المئوية")
+                            label(for="percentageInput") نسبة التعديل
+
+                  // تفاصيل المنتجات
+                  .card.mb-3
+                    .card-header.bg-primary.text-white
+                      i.fas.fa-shopping-cart.ms-2
+                      | منتجات الطلب
+                    .table-responsive
+                      table.table.table-striped.table-hover
+                        thead.bg-light
+                          tr
+                            th المنتج
+                            th التفاصيل
+                            th.text-center السعر (د.ك)
+                            th.text-center الكمية
+                            th.text-center التكلفة (د.ك)
+                            th.text-center الإجمالي (د.ك)
+                            th.text-center الربح/الخسارة
+                        tbody
+                          // Initialize totals
+                          - let totalQuantity = 0
+                          - let totalCostAmount = 0
+                          - let totalPriceAmount = 0
+                          - let totalProfitAmount = 0
+                          
+                          each item, index in order.items
+                            - let itemTotal = (item.price * item.quantity).toFixed(3)
+                            - let itemCost = item.cost ? (item.cost * item.quantity).toFixed(3) : 0
+                            - let itemProfit = item.cost ? (itemTotal - itemCost).toFixed(3) : 'غير متوفر'
+                            
+                            - totalQuantity += item.quantity
+                            - totalCostAmount += item.cost ? item.cost * item.quantity : 0
+                            - totalPriceAmount += item.price * item.quantity
+                            - totalProfitAmount = totalPriceAmount - totalCostAmount
+                            
+                            tr
+                              td
+                                .d-flex.align-items-center
+                                  if item.productImage
+                                    img.rounded.ms-2(src=item.productImage, alt=item.productName, width='40', height='40')
+                              td
+                                .d-flex.flex-column
+                                  a.fw-bold.text-decoration-none(href=`/manager/product/form/${item.productId}`) #{item.product_name_ar}
+                                  if item.v_name_ar
+                                    small.text-muted= item.v_name_ar || item.variantName
+                                  if item.brandName
+                                    .small.text-primary #{item.brandName}
+                              td.text-center
+                                div #{item.price.toFixed(3)}
+                                input.form-control.form-control-sm.mt-2(type="number", name=`price_${index}`, step="0.005", style="width: 80px; margin: 0 auto;")
+                              td.text-center #{item.quantity}
+                              td.text-center
+                                if item.cost
+                                  span #{item.cost.toFixed(3)}
+                                else
+                                  span.text-muted غير متوفر
+                              td.text-center.fw-bold #{itemTotal}
+                              td.text-center
+                                if item.cost
+                                  if parseFloat(itemProfit) < 0
+                                    span.text-danger #{itemProfit}
+                                  else
+                                    span.text-success #{itemProfit}
+                                else
+                                  span.text-muted غير متوفر
+                          
+                          // Totals Row
+                          tr.bg-light.fw-bold
+                            td(colspan="3") ملخص الطلب
+                            td.text-center #{totalQuantity}
+                            td.text-center #{totalCostAmount.toFixed(3)} د.ك
+                            td.text-center #{totalPriceAmount.toFixed(3)} د.ك
+                            td.text-center
+                              if totalProfitAmount < 0
+                                span.text-danger #{totalProfitAmount.toFixed(3)} د.ك
+                              else
+                                span.text-success #{totalProfitAmount.toFixed(3)} د.ك
+                              a.btn.btn-sm.btn-success.me-2(href=`/manager/order/saveTotalCost?orderId=${order._id}&totalCostAmount=${totalCostAmount.toFixed(3)}`)
+                                i.fas.fa-save.ms-1
+                                | حفظ
+
+                // جانب المعلومات المالية
+                .col-lg-4
+                  // ملخص الطلب
+                  .card.mb-3
+                    .card-header.bg-primary.text-white
+                      i.fas.fa-money-bill-wave.ms-2
+                      | ملخص الطلب
+                    .card-body
+                      ul.list-group.list-group-flush
+                        li.list-group-item.d-flex.justify-content-between.align-items-center
+                          span إجمالي المنتجات
+                          span.fw-bold= (order.total - order.deliveryFee + order.discount).toFixed(3) + ' ' + (order.currency || 'د.ك')
+                        li.list-group-item.d-flex.justify-content-between.align-items-center
+                          span رسوم التوصيل
+                          span.fw-bold= order.deliveryFee.toFixed(3) + ' ' + (order.currency || 'د.ك')
+                        if order.discount && order.discount > 0
+                          li.list-group-item.d-flex.justify-content-between.align-items-center
+                            span الخصم
+                            span.fw-bold.text-danger -#{order.discount.toFixed(3)} #{order.currency || 'د.ك'}
+                        li.list-group-item.d-flex.justify-content-between.align-items-center.bg-light
+                          span.fw-bold المجموع الكلي
+                          span.fw-bold.fs-5= order.total.toFixed(3) + ' ' + (order.currency || 'د.ك')
+
+                        if order.totalCost
+                          li.list-group-item.d-flex.justify-content-between.align-items-center.text-success
+                            span.fw-bold الربح
+                            span.fw-bold= (order.total - order.totalCost).toFixed(3) + ' ' + (order.currency || 'د.ك')
+
+                  // أزرار التنقل
+                  .card.mb-3
+                    .card-header.bg-primary.text-white
+                      i.fas.fa-tasks.ms-2
+                      | إجراءات الطلب
+                    .card-body
+                      .d-grid.gap-2
+                        if order.status !== 'canceled'
+                          button.btn.btn-danger.mb-2(onclick=`updateOrderStatus('${order._id}', 'canceled')`)
+                            i.fas.fa-times.ms-2
+                            | إلغاء الطلب
+                        
+                        if order.status === 'new'
+                          button.btn.btn-success.mb-2(onclick=`updateOrderStatus('${order._id}', 'completed')`)
+                            i.fas.fa-check.ms-2
+                            | تمييز كمكتمل
+                        
+                        a.btn.btn-info.mb-2(href=`/manager/order?no=${order.order_number}`)
+                          i.fas.fa-eye.ms-2
+                          | عرض الطلب
+                        
+                        a.btn.btn-primary.mb-2(href=`/manager/order/print?no=${order.order_number}`, target="_blank")
+                          i.fas.fa-print.ms-2
+                          | طباعة الفاتورة
+
+          // Action Buttons Section
+          .d-flex.justify-content-end.my-4
+            a.btn.btn-outline-secondary(href="/manager/orders")
+              i.fas.fa-arrow-right.ms-2
+              | الرجوع للطلبات

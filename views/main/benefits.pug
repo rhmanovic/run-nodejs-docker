@@ -1,0 +1,82 @@
+extends layout
+
+block content
+  .container-fluid
+    .row.align-items-center.mt-5.px-0.px-sm-5.mt-sm-1.lazy-bg.ltr(data-bg="/img/main/logo-square.png")
+
+      .col-lg-6.fade-in.px-3.px-sm-5
+        .text-start.py-4
+          p.lead.slide-up Simplify Your Business with E-Commerce & POS Solutions
+          h2.display-6.fw-semibold.slide-up Sell Online & In-Store with One Powerful System
+          p.lead.slide-up We provide a complete solution for businesses looking to sell online and in-store with an easy-to-use e-commerce website and POS system.
+          a.btn.btn-account.rounded-pill.btn-lg.slide-up(href="#") #{mainLanguage.getStarted}
+
+    .row.text-center.py-5(style="background: #f7f7f5;")
+      .col-12
+        p.lead Key Benefits
+        h2.display-6.fw-semibold.mb-5 Why Choose Our Solution
+
+
+    .row.mb-2.bg-white.px-0.px-sm-5.mt-sm-1
+      .col-lg-6.slide-left.px-3.px-sm-5
+        .text-start.pt-4
+          h2.fw-semibold Launch a beautiful and fully functional online store where customers can browse, buy, and pay effortlessly.
+
+    .row.mb-5.bg-white.px-0.px-sm-5.mt-sm-1
+      .col-lg-12.px-3.px-sm-5
+        .row.g-4
+          .col-6.col-md-4
+            .card.h-100.border-0.bg-light.align-items-center.p-2
+              img.mb-3.lazy(data-src="/img/main/icon/1.png" alt="Start Selling Online" style="width: 75px; height: 75px;")
+              h5.fw-semibold.text-center Start Selling Online Instantly
+              p.text-center Get a Professional E-Commerce Website that allows customers to browse, buy, and pay effortlessly.
+
+          .col-6.col-md-4
+            .card.h-100.border-0.bg-light.align-items-center.p-2
+              img.mb-3.lazy(data-src="/img/main/icon/2.png" alt="Manage Sales" style="width: 75px; height: 75px;")
+              h5.fw-semibold.text-center Manage Physical & Online Sales
+              p.text-center Sync your in-store and online inventory, track sales in real-time with one integrated solution.
+
+          .col-6.col-md-4
+            .card.h-100.border-0.bg-light.align-items-center.p-2
+              img.mb-3.lazy(data-src="/img/main/icon/3.png" alt="Multiple Channels" style="width: 75px; height: 75px;")
+              h5.fw-semibold.text-center Increase Sales Across Channels
+              p.text-center Sell on Your Website, WhatsApp, and Social Media all managed from one dashboard.
+
+          .col-6.col-md-4
+            .card.h-100.border-0.bg-light.align-items-center.p-2
+              img.mb-3.lazy(data-src="/img/main/icon/4.png" alt="Accept Payments" style="width: 75px; height: 75px;")
+              h5.fw-semibold.text-center Multiple Payment Gateways
+              p.text-center Accept payments with KNET, MyFatoorah, Hesabe, UPayment, and cash transactions.
+
+          .col-6.col-md-4
+            .card.h-100.border-0.bg-light.align-items-center.p-2
+              img.mb-3.lazy(data-src="/img/main/icon/5.png" alt="Inventory Management" style="width: 75px; height: 75px;")
+              h5.fw-semibold.text-center Smart Inventory Management
+              p.text-center Automatically update stock levels, manage orders, and reduce errors with a fully integrated system.
+
+          .col-6.col-md-4
+            .card.h-100.border-0.bg-light.align-items-center.p-2
+              img.mb-3.lazy(data-src="/img/main/icon/6.png" alt="Fast Checkout" style="width: 75px; height: 75px;")
+              h5.fw-semibold.text-center Fast Checkout & Transactions
+              p.text-center Process orders quickly, issue receipts, and track payments without delays.
+
+    .row.align-items-center.px-0.px-sm-5
+      .col-lg-6.slide-left.px-3.px-sm-5
+        .text-start.py-4
+          h2.display-6.fw-semibold #{mainLanguage.powerLinkTitle}
+          p.lead #{mainLanguage.powerLinkDesc}
+          p.lead #{mainLanguage.powerLinkDesc2}
+          a.btn.btn-account.rounded-pill.btn-lg(href="#") #{mainLanguage.knowMore}
+      .col-lg-6.d-flex.justify-content-center.slide-right
+        img.img-fluid.lazy.second-image-size(data-src="/img/main/5.png", alt="Dashboard Preview")
+
+    .row.align-items-center.px-0.px-sm-5.flex-row-reverse
+      .col-lg-6.slide-right.px-3.px-sm-5
+        .text-start.py-4
+          h2.display-6.fw-semibold #{mainLanguage.powerLinkTitle}
+          p.lead #{mainLanguage.powerLinkDesc}
+          p.lead #{mainLanguage.powerLinkDesc2}
+          a.btn.btn-account.rounded-pill.btn-lg(href="#") #{mainLanguage.knowMore}
+      .col-lg-6.d-flex.justify-content-center.slide-left
+        img.img-fluid.lazy.second-image-size(data-src="/img/main/5.png", alt="Dashboard Preview")

@@ -1,0 +1,28 @@
+    .row.my-5.px-4.bg-white
+      .col-lg-6.pe-lg-5.py-4
+        h2.display-6.fw-semibold Packed With Never-before Features
+        p.lead AI Octopus is a galaxy of features; we have left nothing out to be desired. Whether your team is a start up or groups of top-class professionals, you will find our features unique and indispensable for meeting challenges and forging ahead beating competitors.
+        p.lead We made it for businesses that want a 24/7/365 superstar market watchdog that will never tire.
+        a.btn.btn-account.rounded-pill.btn-lg(href="#") See All Features
+      .col-lg-6
+        .row.g-4
+          .col-md-6
+            .card.h-100.border-0.bg-light.p-4
+              img.mb-3(src="https://placehold.co/75" alt="Multiple Social Media")
+              h5.fw-semibold Multiple Social Media
+              p Keep track of all your social media presence under a single roof and respond at breakneck speed when someone mentions your business.
+          .col-md-6
+            .card.h-100.border-0.bg-light.p-4
+              img.mb-3(src="https://placehold.co/75" alt="Quality Leads")
+              h5.fw-semibold Quality Leads
+              p Get quality leads that have a high conversion ratio and foray into virgin territories that hold a high potential for your products and services.
+          .col-md-6
+            .card.h-100.border-0.bg-light.p-4
+              img.mb-3(src="https://placehold.co/75" alt="Respond Fast")
+              h5.fw-semibold Respond Fast
+              p Give your business a new dimension by responding to customers' queries regarding deliveries, qualities, specification and customized product information.
+          .col-md-6
+            .card.h-100.border-0.bg-light.p-4
+              img.mb-3(src="https://placehold.co/75" alt="Save Money")
+              h5.fw-semibold Save Money 
+              p Optimize your investment and maximize ROI. You can bring down operational expenses and deploy resources smartly to give your customers a superb experience.

@@ -1,0 +1,14 @@
+
+/* Central CSS Variables */
+:root {
+  --primary-color: #339a96;
+  --secondary-color: #d45858;
+  --third-color: #207cbb;
+  --fourth-color: #f07434;
+  --fifth-color: #1f9cb2;
+  --seventh-color: #4e57a4;
+  --eighty-color: #4e57a4;
+  --text-color: #4a4a4a;
+  --background-color: #f8f9fa;
+  --white: #fff;
+}

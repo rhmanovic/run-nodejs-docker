@@ -1,0 +1,188 @@
+
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+     
+
+      .col.background-main
+        // Page header with improved styling
+        .row.mb-4
+          .col-12.p-4.bg-white.rounded.shadow-sm
+            .d-flex.justify-content-between.align-items-center
+              h1.page-header.mb-0
+                i.fas.fa-upload.text-primary.ms-2
+                | تحميل المنتجات بكميات كبيرة
+              
+              a.btn.btn-outline-primary.rounded-pill(href='/manager/exportproducts')
+                i.fas.fa-download.ms-1
+                | تنزيل نموذج Excel
+
+        // Main content area
+        .row
+          .col-lg-8.offset-lg-2
+            .card.shadow-sm.border-0.mb-4
+              .card-header.bg-white.border-0.pt-4
+                h5.card-title.fw-bold
+                  i.fas.fa-file-excel.text-success.ms-2
+                  | رفع ملف Excel للمنتجات
+
+              .card-body.p-4
+                // Step indicators
+                .row.mb-4
+                  .col-md-4.text-center.mb-3.mb-md-0
+                    .step.active
+                      .step-icon.bg-primary.text-white.rounded-circle.mb-2
+                        i.fas.fa-download.mt-2
+                      h6.step-title تنزيل النموذج
+                      p.small.text-muted ابدأ بتنزيل نموذج Excel
+
+                  .col-md-4.text-center.mb-3.mb-md-0
+                    .step
+                      .step-icon.bg-light.text-dark.rounded-circle.mb-2
+                        i.fas.fa-edit.mt-2
+                      h6.step-title تعبئة البيانات
+                      p.small.text-muted أدخل بيانات المنتجات في الملف
+
+                  .col-md-4.text-center
+                    .step
+                      .step-icon.bg-light.text-dark.rounded-circle.mb-2
+                        i.fas.fa-upload.mt-2
+                      h6.step-title رفع الملف
+                      p.small.text-muted قم برفع الملف بعد تعبئته
+
+                .alert.alert-info.mb-4
+                  h6
+                    i.fas.fa-info-circle.ms-2
+                    | ملاحظات هامة
+                  ul.mb-0.small.ps-3
+                    li تأكد من استخدام النموذج المعتمد للتحميل.
+                    li يجب تعبئة الحقول الإلزامية (الاسم بالعربية، الاسم بالإنجليزية، رقم التصنيف، السعر).
+                    li يمكن إضافة منتجات جديدة أو تحديث منتجات موجودة.
+                    li أقصى عدد للمنتجات المسموح برفعها في المرة الواحدة هو 1000 منتج.
+
+                // Upload form
+                form.mt-4.upload-form(method="POST" action="/manager/bulkProductUpload" enctype="multipart/form-data")
+                  .mb-4
+                    label.form-label.fw-bold(for="file") اختر ملف Excel:
+                    .input-group
+                      input#file.form-control(type="file" name="file" accept=".xlsx" required)
+                      button.btn.btn-primary(type="submit")
+                        i.fas.fa-upload.ms-1
+                        | رفع الملف
+
+                  // Column information
+                  .mt-5
+                    h6.fw-bold.mb-3
+                      i.fas.fa-table.ms-2
+                      | الأعمدة المطلوبة في ملف Excel:
+                    .table-responsive
+                      table.table.table-sm.table-striped
+                        thead.bg-light
+                          tr
+                            th اسم العمود
+                            th الوصف
+                            th إلزامي؟
+                        tbody
+                          tr
+                            td.fw-bold Product Number
+                            td رقم تعريفي فريد للمنتج
+                            td
+                              span.badge.bg-success نعم
+                          tr
+                            td.fw-bold Product Name AR
+                            td اسم المنتج باللغة العربية
+                            td
+                              span.badge.bg-success نعم
+                          tr
+                            td.fw-bold Product Name EN
+                            td اسم المنتج باللغة الإنجليزية
+                            td
+                              span.badge.bg-success نعم
+                          tr
+                            td.fw-bold Category Number
+                            td رقم تصنيف المنتج
+                            td
+                              span.badge.bg-success نعم
+                          tr
+                            td.fw-bold Sale Price
+                            td سعر البيع
+                            td
+                              span.badge.bg-success نعم
+                          tr
+                            td.fw-bold Purchase Price
+                            td سعر الشراء (التكلفة)
+                            td
+                              span.badge.bg-secondary لا
+                          tr
+                            td.fw-bold Stock
+                            td كمية المخزون المتوفرة
+                            td
+                              span.badge.bg-secondary لا
+                          tr
+                            td.fw-bold Variation Name EN/AR
+                            td اسم المتغير باللغة الإنجليزية/العربية
+                            td
+                              span.badge.bg-secondary لا
+
+    // Loading overlay
+    #loadingOverlay.position-fixed.top-0.start-0.end-0.bottom-0.bg-dark.bg-opacity-50.d-flex.justify-content-center.align-items-center.d-none
+      .spinner-border.text-light(role="status")
+        span.visually-hidden جاري التحميل...
+
+    // Success modal
+    #successModal.modal.fade(tabindex="-1")
+      .modal-dialog.modal-dialog-centered
+        .modal-content
+          .modal-header.bg-success.text-white
+            h5.modal-title
+              i.fas.fa-check-circle.ms-2
+              | تم الرفع بنجاح
+            button.btn-close.btn-close-white(type="button" data-bs-dismiss="modal" aria-label="Close")
+          .modal-body
+            p تم رفع وتحديث المنتجات بنجاح.
+          .modal-footer
+            button.btn.btn-primary(type="button" data-bs-dismiss="modal" onclick="window.location.href='/manager/products'") عرض المنتجات
+
+  style.
+    .step-icon {
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      font-size: 20px;
+      display: inline-block;
+    }
+    .step.active .step-icon {
+      background-color: #0d6efd !important;
+      color: white !important;
+    }
+    .upload-form {
+      position: relative;
+    }
+    #loadingOverlay {
+      z-index: 1050;
+    }
+
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      
+      form.addEventListener('submit', function() {
+        const fileInput = document.getElementById('file');
+        if (fileInput.files.length > 0) {
+          loadingOverlay.classList.remove('d-none');
+        }
+      });
+      
+      // This would be updated based on the server response
+      // For demonstration, we're just showing how you would handle success
+      // In a real implementation, you would check the response from the server
+      /*
+      function showSuccessModal() {
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+      }
+      */
+    });

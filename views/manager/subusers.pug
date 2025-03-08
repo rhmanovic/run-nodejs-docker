@@ -1,0 +1,130 @@
+extends layout
+
+block content
+  .main
+    .spinner.spinner-grow.text-primary(role='status')
+      span.visually-hidden Loading...
+
+    .row.min-vh-100.m-0
+     
+
+      .col.background-main
+        .row
+          #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+            h1.page-header.text-overflow.col-md-8 إدارة المستخدمين الفرعيين
+            .col.d-flex.justify-content-end
+              a.btn.btn-primary.btn-labeled.mx-2(href='/manager/subusers/new')
+                .fa.fa-plus-circle
+                span= " إضافة مستخدم فرعي جديد "
+              a.btn.btn-primary.btn-labeled.mx-2(href='/manager/exportsubusers')
+                .fa.fa-file-excel-o
+                span= " تصدير إلى Excel"
+
+        .row.px-2
+          .card
+            .card-body.px-0
+              .row.d-flex.justify-content-end
+                .col-2
+                  input.form-control(placeholder="بحث")
+
+              .row.mt-2
+                .container-fluid
+                  .table-responsive
+                    table.table.table-bordered.table-striped.table-hover
+                      thead
+                        tr
+                          th.align-middle(scope="col") الإسم
+                          th.align-middle(scope="col") البريد الإلكتروني
+                          th.align-middle(scope="col") الهاتف
+                          th.align-middle(scope="col") الصلاحية
+                          th.align-middle(scope="col") الحالة
+                          th.align-middle.col-3(scope="col") الإجراءات
+                      tbody
+                        each subuser, index in subusers
+                          tr.align-middle.text-center(data-id=subuser._id)
+                            td= subuser.name
+                            td= subuser.email
+                            td= subuser.phone || "N/A"
+                            td= subuser.role
+                            td= subuser.isActive ? "نشط" : "غير نشط"
+                            td.text-end
+                              a.badge.bg-primary.mx-1.mb-1(href=`/manager/subusers/edit/${subuser._id}`)
+                                i.fas.fa-edit= " " + "تعديل"
+                              button.btn-light.span.badge.bg-danger.mx-1.mb-1.border-0(
+                                data-id=subuser._id,
+                                data-name=subuser.name,
+                                onclick="handleDelete(event)"
+                              )
+                                i.fas.fa-trash.mr-2= " " + "حذف"
+
+    //- Bootstrap Toast for showing notifications
+    .toast-container.position-fixed.bottom-0.start-0.p-3
+
+    //- JavaScript for handling deletion dynamically
+    script.
+      async function handleDelete(event) {
+        event.preventDefault();
+        const deleteButton = event.currentTarget;
+        const subuserId = deleteButton.dataset.id;
+        const subuserName = deleteButton.dataset.name;
+
+        if (!subuserId) return;
+
+        const confirmed = confirm(`هل أنت متأكد من أنك تريد حذف المستخدم الفرعي (${subuserName})؟`);
+        if (!confirmed) return;
+
+        try {
+          const response = await fetch('/manager/subuser/delete', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ subuserToDeleteID: subuserId }),
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            // Remove the deleted subuser from the DOM
+            const row = document.querySelector(`tr[data-id="${subuserId}"]`);
+            if (row) row.remove();
+
+            // Show success toast
+            showToast('success', result.messages.success.join(', '));
+          } else {
+            // Show error toast
+            showToast('error', result.messages.error.join(', '));
+          }
+        } catch (error) {
+          console.error('Error deleting subuser:', error);
+          showToast('error', 'حدث خطأ أثناء محاولة الحذف.');
+        }
+      }
+
+      function showToast(type, message) {
+        const toastContainer = document.querySelector('.toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast show text-bg-${type === 'success' ? 'success' : 'danger'}`;
+        toast.role = 'alert';
+        toast.ariaLive = 'assertive';
+        toast.ariaAtomic = 'true';
+
+        const toastHeader = document.createElement('div');
+        toastHeader.className = 'toast-header';
+        toastHeader.innerHTML = `
+          <strong class="me-auto">${type === 'success' ? 'نجاح' : 'خطأ'}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        `;
+
+        const toastBody = document.createElement('div');
+        toastBody.className = 'toast-body';
+        toastBody.textContent = message;
+
+        toast.appendChild(toastHeader);
+        toast.appendChild(toastBody);
+        toastContainer.appendChild(toast);
+
+        // Automatically remove the toast after 5 seconds
+        setTimeout(() => {
+          toast.remove();
+        }, 5000);
+      }

@@ -1,0 +1,155 @@
+.row
+  #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+    h1.page-header.text-overflow.col-md-8 اسم الشركة
+
+form#invoiceSettings(method='POST', action='/manager/invoiceSettings')
+  table.table.table-bordered.table-striped.table-hover
+    tbody
+      tr.align-middle
+        td.col-3
+          label.control-label.mx-2(for='showVariantName') خيارات الفاتورة
+        td.col-9
+          .d-flex.flex-column.gap-2
+            .form-check
+              input#showVariantName.form-check-input(
+                type='checkbox', 
+                name='showVariantName',
+                checked=(merchant && merchant.invoiceOptions && merchant.invoiceOptions.showVariantName)
+              )
+              
+            
+              label.form-check-label(for='showVariantName') اظهار النوع
+            .form-check
+              input#showWarranty.form-check-input(
+                type='checkbox', 
+                name='showWarranty',
+                checked=(merchant && merchant.invoiceOptions && merchant.invoiceOptions.showWarranty)
+              )
+              label.form-check-label(for='showWarranty') اظهار الكفالة
+            .form-check
+              input#showBrand.form-check-input(
+                type='checkbox', 
+                name='showBrand',
+                checked=(merchant && merchant.invoiceOptions && merchant.invoiceOptions.showBrand)
+              )
+              label.form-check-label(for='showBrand') اظهار الماركة
+
+      tr.align-middle
+        td.col-3
+          label.control-label.mx-2(for='input_company_name_ar') اسم الشركة (عربي)
+        td.col-9
+          .input-group
+            input#input_company_name_ar.form-control(
+              type='text', 
+              name='company_name_ar', 
+              value=(merchant && merchant.companyName && merchant.companyName.ar) || '', 
+              placeholder='اسم الشركة بالعربية'
+            ).mx-1
+
+      tr.align-middle
+        td.col-3
+          label.control-label.mx-2(for='input_company_name_en') Company Name (English)
+        td.col-9(dir="ltr")
+          .input-group
+            input#input_company_name_en.form-control(
+              type='text', 
+              name='company_name_en', 
+              value=(merchant && merchant.companyName && merchant.companyName.en) || '', 
+              placeholder='Company name in English'
+            ).mx-1
+
+
+
+      tr.align-middle
+        td.col-3
+          label.control-label(for='quill-editor2') نص إضافي (Additional Text - Arabic)
+        td.col-9(dir="rtl").p-4
+          #toolbar-container2.bg-light.p-2
+            span.ql-formats.border.bg-white
+              select.ql-font.border
+              select.ql-size.border
+              button.ql-bold.border
+              button.ql-italic.border
+              button.ql-underline.border
+              button.ql-strike.border
+              select.ql-color.border
+              select.ql-background.border
+              button.ql-header(value='1').border
+              button.ql-header(value='2').border
+              button.ql-list(value='ordered').border
+              button.ql-list(value='bullet').border
+              button.ql-indent(value='-1').border
+              button.ql-indent(value='+1').border
+              button.ql-direction(value='rtl').border
+              select.ql-align.border
+          #editor2.ql-editor
+          input(type='hidden', name='invoice_text_ar', id='hiddenInvoiceTextAr', value=(merchant && merchant.invoiceText && merchant.invoiceText.ar) || '')
+
+
+        tr.align-middle
+          td.col-3
+            label.control-label(for='quill-editor1') نص الفاتورة (Invoice Text - English)
+          td.col-9(dir="ltr").p-4
+            #toolbar-container1.bg-light.p-2
+              span.ql-formats.border.bg-white
+                select.ql-font.border
+                select.ql-size.border
+                button.ql-bold.border
+                button.ql-italic.border
+                button.ql-underline.border
+                button.ql-strike.border
+                select.ql-color.border
+                select.ql-background.border
+                button.ql-header(value='1').border
+                button.ql-header(value='2').border
+                button.ql-list(value='ordered').border
+                button.ql-list(value='bullet').border
+                button.ql-indent(value='-1').border
+                button.ql-indent(value='+1').border
+                button.ql-direction(value='rtl').border
+                select.ql-align.border
+            #editor1.ql-editor
+            input(type='hidden', name='invoice_text_en', id='hiddenInvoiceTextEn', value=(merchant && merchant.invoiceText && merchant.invoiceText.en) || '')
+
+  .row
+    #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+
+  .col.d-flex.justify-content-end
+    button.btn.btn-primary.btn-labeled.mx-2(type='submit')
+      .fa.fa-save
+      span= " حفظ "
+
+script.
+  // Initialize Quill editors
+  var quill1 = new Quill('#editor1', {
+    theme: 'snow',
+    modules: {
+      toolbar: '#toolbar-container1'
+    }
+  });
+
+  var quill2 = new Quill('#editor2', {
+    theme: 'snow',
+    modules: {
+      toolbar: '#toolbar-container2'
+    }
+  });
+
+  // Populate Quill editors with values from hidden inputs
+  function populateQuill(editor, hiddenInputId) {
+    var inputValue = document.getElementById(hiddenInputId).value;
+    if (/<\/?[a-z][\s\S]*>/i.test(inputValue)) {
+      editor.clipboard.dangerouslyPasteHTML(inputValue);
+    } else {
+      editor.setText(inputValue);
+    }
+  }
+
+  populateQuill(quill1, 'hiddenInvoiceTextEn');
+  populateQuill(quill2, 'hiddenInvoiceTextAr');
+
+  // On form submission, copy Quill content to hidden inputs
+  document.getElementById('invoiceSettings').addEventListener('submit', function (e) {
+    document.getElementById('hiddenInvoiceTextEn').value = quill1.root.innerHTML;
+    document.getElementById('hiddenInvoiceTextAr').value = quill2.root.innerHTML;
+  });

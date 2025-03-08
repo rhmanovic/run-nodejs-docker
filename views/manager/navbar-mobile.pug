@@ -1,0 +1,39 @@
+
+nav.navbar.navbar-expand-lg.navbar-light.bg-white.shadow-sm.fs-4.border-bottom.border-primary.border-3.d-lg-none(style="z-index: 1030;")
+  .container-fluid
+    // Brand logo (centered)
+    a.navbar-brand.mx-auto.order-1.flex-grow-1.text-center(href='/manager')
+      img(src='/img/web/arabat-log-banner.png', alt='ARABAT', style='height: 42px;')
+    
+    // Navbar Toggler for Mobile (Hamburger Menu) - left side
+    button.navbar-toggler.border-0.shadow-none.order-0(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    
+    // Settings dropdown - right side  
+    .dropdown.order-2.position-static
+      button.btn.btn-link.text-dark.p-1.nav-link.dropdown-toggle(type='button', id='navbarDropdown', data-bs-toggle='dropdown', aria-expanded='false')
+        i.fa.fa-cog.fa-lg
+      .dropdown-menu.dropdown-menu-start.shadow(aria-labelledby='navbarDropdown' style="left: 1rem; right: auto; position: absolute; max-width: 200px; border-radius: 8px; border: 1px solid #eaeaea;")
+        a.dropdown-item(href='/manager/settings')
+          i.fas.fa-sliders-h.me-2.text-primary
+          | الإعدادات
+        a.dropdown-item(href='/manager/profile')
+          i.fas.fa-user-circle.me-2.text-primary
+          | الملف الشخصي
+        .dropdown-divider
+        a.dropdown-item(href='/manager/logout')
+          i.fas.fa-sign-out-alt.me-2.text-danger
+          | تسجيل الخروج
+
+  // Collapsible part of the navbar
+  .collapse.navbar-collapse.mt-2#navbarNav(style="z-index: 1020;")
+    .bg-light.p-3.rounded-3.shadow-sm
+      // Search bar
+      .mb-3
+        .input-group
+          span.input-group-text.bg-primary.text-white
+            i.fas.fa-search
+          input.form-control(type='text', placeholder='بحث...', aria-label='Search')
+      
+      // Main navigation links
+      include includes/SideBar-content

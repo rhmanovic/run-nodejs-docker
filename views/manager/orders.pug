@@ -1,0 +1,336 @@
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+      // Main content area
+      .col.background-main
+        // Page header with improved styling
+        .row.mb-4
+          .col-12.p-4.bg-white.rounded.shadow-sm
+            .d-flex.justify-content-between.align-items-center
+              h1.page-header.mb-0
+                i.fas.fa-shopping-cart.text-primary.ms-2
+                | إدارة الطلبات
+
+              .d-flex.align-items-center.gap-2
+                // Export button
+                a.btn.btn-info.rounded-pill.text-white.d-flex.align-items-center(href='/manager/exportorders')
+                  i.fas.fa-file-export.ms-1
+                  span تصدير Excel
+
+                // Filter dropdown (optional)
+                .dropdown
+                  button.btn.btn-outline-primary.rounded-pill.dropdown-toggle(type='button', data-bs-toggle='dropdown', aria-expanded='false')
+                    i.fas.fa-filter.ms-1
+                    span تصفية
+                  ul.dropdown-menu.dropdown-menu-end
+                    li
+                      a.dropdown-item(href='?status=new') الطلبات الجديدة
+                    li
+                      a.dropdown-item(href='?status=processing') قيد التنفيذ
+                    li
+                      a.dropdown-item(href='?status=completed') المكتملة
+                    li
+                      a.dropdown-item(href='?status=canceled') الملغاة
+                    li
+                      a.dropdown-item(href='?status=returned') المسترجعة
+                    li.dropdown-divider
+                    li
+                      a.dropdown-item(href='/manager/orders') كل الطلبات
+
+        // Search and filters row
+        .card.rounded.shadow-sm.mb-4
+          .card-body
+            .row.mb-3
+              .col-md-4.mb-3.mb-md-0
+                form.search-form(action='/manager/orderssearch', method='GET')
+                  .input-group
+                    span.input-group-text.bg-primary.text-white
+                      i.fas.fa-search
+                    input#orderSearch.form-control(type='text', name='search', placeholder='بحث برقم الطلب أو رقم الهاتف...', value=searchQuery || '')
+                    button.btn.btn-primary(type='submit') بحث
+
+              .col-md-8
+                .d-flex.justify-content-md-end.gap-2.flex-wrap
+                  a.btn.btn-sm.btn-outline-primary.rounded-pill.mb-2.mb-md-0.order-filter(href='/manager/orders', class=(status === 'all' ? 'active' : ''))
+                    span.d-inline-block.ms-1 الكل
+                    span.badge.bg-primary.rounded-circle #{statusData && statusData.all ? statusData.all : 0}
+
+                  a.btn.btn-sm.btn-outline-success.rounded-pill.mb-2.mb-md-0.order-filter(href='/manager/orders/new', class=(status === 'new' ? 'active' : ''))
+                    span.d-inline-block.ms-1 جديد
+                    span.badge.bg-success.rounded-circle #{statusData && statusData.new ? statusData.new : 0}
+
+                  a.btn.btn-sm.btn-outline-info.rounded-pill.mb-2.mb-md-0.order-filter(href='/manager/orders/processing', class=(status === 'processing' ? 'active' : ''))
+                    span.d-inline-block.ms-1 قيد التحضير
+                    span.badge.bg-info.rounded-circle #{statusData && statusData.processing ? statusData.processing : 0}
+
+                  a.btn.btn-sm.btn-outline-primary.rounded-pill.mb-2.mb-md-0.order-filter(href='/manager/orders/completed', class=(status === 'completed' ? 'active' : ''))
+                    span.d-inline-block.ms-1 مكتمل
+                    span.badge.bg-primary.rounded-circle #{statusData && statusData.completed ? statusData.completed : 0}
+
+                  a.btn.btn-sm.btn-outline-danger.rounded-pill.mb-2.mb-md-0.order-filter(href='/manager/orders/canceled', class=(status === 'canceled' ? 'active' : ''))
+                    span.d-inline-block.ms-1 ملغي
+                    span.badge.bg-danger.rounded-circle #{statusData && statusData.canceled ? statusData.canceled : 0}
+
+                  a.btn.btn-sm.btn-outline-warning.rounded-pill.mb-2.mb-md-0.order-filter(href='/manager/orders/returned', class=(status === 'returned' ? 'active' : ''))
+                    span.d-inline-block.ms-1 مسترجع
+                    span.badge.bg-warning.rounded-circle #{statusData && statusData.returned ? statusData.returned : 0}
+
+
+
+            // Orders table with better styling
+            .table-responsive
+              table.table.table-hover.align-middle
+                thead.bg-light
+                  tr.text-center
+                    th.align-middle #
+                    th.align-middle تاريخ الطلب
+                    th.align-middle العميل
+                    th.align-middle رقم الهاتف
+                    th.align-middle طريقة الدفع
+                    th.align-middle المبلغ
+                    th.align-middle التكلفة
+                    th.align-middle الربح
+                    th.align-middle الحالة
+                    th.align-middle إجراءات
+                tbody
+                  if orders && orders.length > 0
+                    each order in orders
+                      - const orderDate = new Date(order.time).toLocaleDateString('ar-AE');
+
+                      - const orderTime = new Date(order.time).toLocaleTimeString('ar-AE', {hour: '2-digit', minute: '2-digit'})
+                      - const totalCost = order.total_cost || 0
+                      - const profit = order.status === 'canceled' ? 0 : (order.status === 'returned' ? -(order.total - totalCost) : (order.total - totalCost))
+
+                      tr.text-center.order-row(data-order-status=order.status)
+                        td.fw-bold #{order.order_number}
+                        td 
+                          div #{orderDate}
+                          small.text-muted #{orderTime}
+                        td #{order.customerName || 'غير محدد'}
+                        td #{order.phone}
+                        td
+                          if order.PaymentMethod === 'knet'
+                            span.badge.bg-info.py-2.px-3 KNET
+                          else if order.PaymentMethod === 'cash'
+                            span.badge.bg-success.py-2.px-3 كاش
+                          else if order.PaymentMethod === 'credit'
+                            span.badge.bg-warning.py-2.px-3 ائتمان
+                          else
+                            span.badge.bg-secondary.py-2.px-3 #{order.PaymentMethod}
+
+                        td.fw-bold #{order.total ? order.total.toFixed(3) : '0.000'} د.ك
+
+                        td
+                          if totalCost && totalCost > 0
+                            | #{totalCost.toFixed(3)} د.ك
+                          else
+                            span.text-muted غير محدد
+
+                        td
+                          if order.status === 'canceled'
+                            span.text-muted 0.000 د.ك
+                          else if totalCost && totalCost > 0
+                            if profit < 0
+                              span.text-danger #{profit ? profit.toFixed(3) : '0.000'} د.ك
+                            else
+                              span.text-success #{profit ? profit.toFixed(3) : '0.000'} د.ك
+                          else
+                            span.text-muted غير محدد
+
+                        td
+                          case order.status
+                            when 'new'
+                              span.badge.bg-success.py-2.px-3 جديد
+                            when 'processing'
+                              span.badge.bg-info.py-2.px-3 قيد التنفيذ
+                            when 'completed'
+                              span.badge.bg-primary.py-2.px-3 مكتمل
+                            when 'canceled'
+                              span.badge.bg-danger.py-2.px-3 ملغي
+                            when 'returned'
+                              span.badge.bg-warning.py-2.px-3 مسترجع
+                            default
+                              span.badge.bg-secondary.py-2.px-3 #{order.status}
+
+                        td
+                          .btn-group
+                            a.btn.btn-sm.btn-outline-primary.rounded-pill.ms-1(href=`/manager/order?no=${order.order_number}`, title='عرض التفاصيل')
+                              i.fas.fa-eye
+                            a.btn.btn-sm.btn-outline-info.rounded-pill.ms-1(href=`/manager/orderTools?no=${order.order_number}`, title='أدوات الطلب')
+                              i.fas.fa-tools
+                            button.btn.btn-sm.btn-outline-secondary.rounded-pill.order-actions-btn(type='button', title='المزيد', data-bs-toggle='dropdown', aria-expanded='false')
+                              i.fas.fa-ellipsis-v
+                            ul.dropdown-menu.dropdown-menu-end
+                              li
+                                a.dropdown-item(href=`/manager/order/print?no=${order.order_number}`, target='_blank')
+                                  i.fas.fa-print.ms-2
+                                  | طباعة الفاتورة
+                              li
+                                a.dropdown-item(href='#' onclick=`updateOrderStatus('${order._id}', 'completed')`)
+                                  i.fas.fa-check-circle.ms-2.text-success
+                                  | تحديث إلى مكتمل
+                              li
+                                a.dropdown-item(href='#' onclick=`updateOrderStatus('${order._id}', 'canceled')`)
+                                  i.fas.fa-times-circle.ms-2.text-danger
+                                  | تحديث إلى ملغي
+                  else
+                    tr
+                      td.text-center.py-5(colspan='10')
+                        i.fas.fa-inbox.fa-3x.text-muted.mb-3.d-block
+                        p.text-muted لا توجد طلبات متاحة حالياً
+
+            // Modern pagination with enhanced design and accessibility
+            if pages > 1
+              - const baseUrl = searchQuery ? `/manager/orderssearch?search=${searchQuery}` : (status && status !== 'all' ? `/manager/orders/${status}` : '/manager/orders')
+              
+              .pagination-container.mt-4.mb-3
+                nav(aria-label="صفحات الطلبات")
+                  .pagination-wrapper.d-flex.flex-column.flex-md-row.justify-content-center.align-items-center.bg-white.rounded.shadow-sm.p-3
+                    // Pagination controls
+                    .pagination-controls.d-flex.justify-content-center.align-items-center
+                      // Previous page button
+                      a.btn.btn-sm.btn-light.rounded-pill.me-2(class=current === 1 ? 'disabled' : '', href=current === 1 ? '#' : `${baseUrl}?page=${current-1}`, aria-label="الصفحة السابقة")
+                        i.fas.fa-chevron-right.me-1
+                        | السابق
+
+                      // Page numbers - compact for mobile
+                      .d-flex.page-numbers
+                        // First page
+                        if current > 2
+                          a.btn.btn-sm.btn-light.rounded-circle.mx-1.d-flex.justify-content-center.align-items-center(href=`${baseUrl}?page=1`, style="width: 35px; height: 35px;") 1
+
+                        // Ellipsis if needed
+                        if current > 3
+                          span.btn.btn-sm.btn-light.rounded-circle.mx-1.d-flex.justify-content-center.align-items-center.disabled(style="width: 35px; height: 35px;") ...
+
+                        // Current page and neighbors
+                        - for (let i = Math.max(1, current - 1); i <= Math.min(pages, current + 1); i++)
+                          a.btn.btn-sm.rounded-circle.mx-1.d-flex.justify-content-center.align-items-center(
+                            class=current === i ? 'btn-primary text-white' : 'btn-light',
+                            href=current === i ? '#' : `${baseUrl}?page=${i}`,
+                            aria-label=`الصفحة ${i}`,
+                            aria-current=current === i ? 'page' : null,
+                            style="width: 35px; height: 35px;"
+                          ) #{i}
+
+                        // Ellipsis if needed
+                        if current < pages - 2
+                          span.btn.btn-sm.btn-light.rounded-circle.mx-1.d-flex.justify-content-center.align-items-center.disabled(style="width: 35px; height: 35px;") ...
+
+                        // Last page
+                        if current < pages - 1 && pages > 3
+                          a.btn.btn-sm.btn-light.rounded-circle.mx-1.d-flex.justify-content-center.align-items-center(href=`${baseUrl}?page=${pages}`, style="width: 35px; height: 35px;") #{pages}
+
+                      // Next page button
+                      a.btn.btn-sm.btn-light.rounded-pill.ms-2(class=current === pages ? 'disabled' : '', href=current === pages ? '#' : `${baseUrl}?page=${current+1}`, aria-label="الصفحة التالية")
+                        | التالي
+                        i.fas.fa-chevron-left.ms-1
+
+                  // Jump to page form
+                  .jump-to-page.d-flex.justify-content-center.mt-3
+                    form.d-flex.align-items-center(method="get" action=baseUrl)
+                      .input-group.input-group-sm
+                        span.input-group-text.bg-light انتقال للصفحة
+                        input.form-control.form-control-sm(type="number" name="page" min="1" max=pages placeholder="رقم الصفحة" aria-label="رقم الصفحة" style="max-width: 80px")
+                        button.btn.btn-sm.btn-primary(type="submit")
+                          i.fas.fa-arrow-left
+
+
+  // JavaScript for order filtering and search functionality
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      // Order filtering
+      const filterButtons = document.querySelectorAll('.order-filter');
+      const orderRows = document.querySelectorAll('.order-row');
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove active class from all buttons
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+
+          // Add active class to clicked button
+          this.classList.add('active');
+
+          const filter = this.getAttribute('data-filter');
+
+          // Show/hide rows based on filter
+          orderRows.forEach(row => {
+            if (filter === 'all') {
+              row.style.display = '';
+            } else {
+              const status = row.getAttribute('data-order-status');
+              row.style.display = status === filter ? '' : 'none';
+            }
+          });
+        });
+      });
+
+      // Order search - client-side filtering for quick results
+      const searchInput = document.getElementById('orderSearch');
+      if (searchInput) {
+        // Add a small delay to reduce number of requests while typing
+        let searchTimeout;
+
+        searchInput.addEventListener('keyup', function(e) {
+          // Clear previous timeout
+          clearTimeout(searchTimeout);
+
+          const searchTerm = this.value.toLowerCase();
+
+          // If enter is pressed, let the form submission handle it
+          if (e.key === 'Enter') {
+            return;
+          }
+
+          // For empty search or very short terms (< 2 chars), do client-side filtering
+          if (searchTerm === '' || searchTerm.length < 2) {
+            orderRows.forEach(row => {
+              const orderNumber = row.querySelector('td:first-child').textContent.toLowerCase();
+              const phone = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+
+              if (orderNumber.includes(searchTerm) || phone.includes(searchTerm)) {
+                row.style.display = '';
+              } else {
+                row.style.display = 'none';
+              }
+            });
+          } 
+          // For longer search terms, consider server-side search after a delay
+          else {
+            searchTimeout = setTimeout(function() {
+              // Let the form submission happen for more accurate results
+              document.querySelector('.search-form').submit();
+            }, 800); // 800ms delay
+          }
+        });
+      }
+
+      // Function to update order status (placeholder - implement AJAX call)
+      window.updateOrderStatus = function(orderId, status) {
+        if (confirm('هل أنت متأكد من تغيير حالة الطلب؟')) {
+          // Here you'd normally make an AJAX call to update the order status
+          fetch('/manager/updateOrderStatus', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderId, status }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert('تم تحديث حالة الطلب بنجاح');
+              location.reload();
+            } else {
+              alert('حدث خطأ أثناء تحديث حالة الطلب');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء تحديث حالة الطلب');
+          });
+        }
+      };
+    });

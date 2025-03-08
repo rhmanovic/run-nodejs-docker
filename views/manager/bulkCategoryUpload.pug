@@ -1,0 +1,53 @@
+extends layout
+
+block content
+  .main
+    .row.min-vh-100.m-0
+      div(style='width: 18rem;')        
+        
+
+      .col.background-main
+        .row
+          #page-title.d-flex.justify-content-between.align-items-center.px-3.py-2
+            h1.page-header.text-overflow.col-md-8 تحميل التصنيفات بكميات كبيرة
+
+        .row.px-2
+          .card
+            .card-body
+              .row
+                .col-md-8.offset-md-2
+                  form(method="POST" action="/manager/bulkCategoryUpload" enctype="multipart/form-data")
+                    .form-group
+                      label(for="file") اختر ملف Excel:
+                      input#file.form-control(type="file" name="file" accept=".xlsx" required)
+                      .instructions.mt-3.p-3.bg-light.border.rounded
+                        h5.text-primary تعليمات التحميل
+                        
+                        ul
+                          li
+                            strong رقم التصنيف (Category Number): 
+                            ul
+                              li | إذا تم إدخال رقم تصنيف موجود بالفعل، سيتم تحديث التصنيف الحالي بنفس الرقم.
+                              li | إذا لم يتم إدخال رقم أو إذا لم يكن الرقم موجودًا مسبقًا، سيتم إنشاء تصنيف جديد.
+                          li
+                            strong الاسم بالعربية (Arabic Name): 
+                            | حقل إلزامي.
+                            
+                          li
+                            strong الاسم بالإنجليزية (English Name): 
+                            | حقل إلزامي.
+                          
+                          
+                          
+                          li
+                            strong حالة التصنيف (Status): 
+                            | اكتب "TRUE" للتفعيل أو "FALSE" للإلغاء.
+                          li
+                            strong ترتيب التصنيف (Sort Order): 
+                            | اختياري.
+                          li
+                            strong النسبة المئوية للخصم (Discount Percentage): 
+                            | اختياري.
+
+                    .form-group.mt-3
+                      button.btn.btn-primary.btn-block(type="submit") تحميل التصنيفات

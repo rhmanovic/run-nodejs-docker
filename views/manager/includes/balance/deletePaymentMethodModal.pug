@@ -1,0 +1,13 @@
+// deletePaymentMethodModal
+.modal.fade#deletePaymentMethodModal(tabindex='-1', role='dialog', aria-labelledby='deletePaymentMethodModalLabel', aria-hidden='true')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        h5.modal-title#deletePaymentMethodModalLabel تأكيد الحذف
+        button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+      .modal-body
+        p هل أنت متأكد من حذف وسيلة الدفع هذه؟
+      .modal-footer
+        button.btn.btn-secondary(type='button', data-bs-dismiss='modal') إلغاء
+        button#confirmDeletePaymentMethodBtn.btn.btn-danger(type='button', onclick='confirmDeletePaymentMethod()') حذف
+        input#deletePaymentMethodId(type='hidden')

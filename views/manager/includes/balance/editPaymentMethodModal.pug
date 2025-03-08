@@ -1,0 +1,36 @@
+
+// editPaymentMethodModal
+.modal.fade#editPaymentMethodModal(tabindex='-1', role='dialog', aria-labelledby='editPaymentMethodModalLabel', aria-hidden='true')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        h5.modal-title#editPaymentMethodModalLabel تعديل وسيلة الدفع
+        button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+      .modal-body
+        form#editPaymentMethodForm(onsubmit='handleEditPaymentMethodSubmit(event)')
+          input#paymentMethodId(type='hidden', name='paymentMethodId')
+          .mb-3
+            label.form-label(for='editPaymentMethodName') اسم وسيلة الدفع
+            input#editPaymentMethodName.form-control(type='text', name='name', required)
+          .mb-3
+            label.form-label(for='editFeeType') نوع الرسوم
+            select#editFeeType.form-control(name='feeType', required, onchange='toggleEditFeeInput()')
+              option(value='', disabled, selected) اختر نوع الرسوم
+              option(value='fixed') ثابتة
+              option(value='percentage') نسبة مئوية
+              option(value='no_fee') بدون رسوم
+          .mb-3#editFeeInputContainer
+            label.form-label(for='editFee')#editFeeLabel الرسوم
+            .input-group
+              input#editFee.form-control(type='number', name='fee', step='0.001', min='0')
+              span#editFeeSymbol.input-group-text
+          .mb-3
+            label.form-label(for='editBalance') الحساب المرتبط
+            select#editBalance.form-control(name='balance', required)
+              option(value='', disabled, selected) اختر الحساب المرتبط
+              if balances && balances.length > 0
+                each balance in balances
+                  option(value=balance._id)= balance.name
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') إلغاء
+            button.btn.btn-primary(type='submit') حفظ التغييرات

@@ -1,0 +1,176 @@
+
+nav.sidebar-nav
+  ul.nav.flex-column
+    li.nav-item.sidebar-header
+      span.mx-1.nav-link-text.text-muted.small القائمة الرئيسية
+
+    li.nav-item.sidebar-item
+      a.nav-link.d-flex.align-items-center(href='/manager/dashboard')
+        i.fa.fa-home.me-2
+        span.mx-1 لوحة التحكم
+
+    li.nav-item.sidebar-item.has-submenu
+      a.nav-link.d-flex.align-items-center.justify-content-between(href='#collapseCategory' data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCategory")
+        .d-flex.align-items-center
+          i.fa.fa-th-large.me-2
+          span.mx-1 التصنيفات
+        i.fa.fa-chevron-down.sidebar-dropdown-icon
+      ul.sidebar-submenu.collapse#collapseCategory
+        li
+          a.sidebar-submenu-link(href='/manager/category') عرض التصنيفات
+        li
+          a.sidebar-submenu-link(href='/manager/category/form') إضافة تصنيف جديد
+        li
+          a.sidebar-submenu-link(href='/manager/bulkCategoryUpload') تحميل التصنيفات بكميات كبيرة
+
+    li.nav-item.sidebar-item.has-submenu
+      a.nav-link.d-flex.align-items-center.justify-content-between(href='#collapse01' data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse01")
+        .d-flex.align-items-center
+          i.fa.fa-shopping-bag.me-2
+          span.mx-1 المنتجات
+        i.fa.fa-chevron-down.sidebar-dropdown-icon
+      ul.sidebar-submenu.collapse#collapse01
+        li
+          a.sidebar-submenu-link(href='/manager/products') عرض المنتجات
+        li
+          a.sidebar-submenu-link(href='/manager/product/form/new') إضافة منتج
+        li
+          a.sidebar-submenu-link(href='/manager/bulkProductUpload') تحميل المنتجات بكميات كبيرة
+        // li
+          // a.sidebar-submenu-link(href='/') الإضافات
+        li
+          a.sidebar-submenu-link(href='/manager/productsPrint') طباعة المنتجات
+
+    li.nav-item.sidebar-item.has-submenu
+      a.nav-link.d-flex.align-items-center.justify-content-between(href='#collapse02' data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse02")
+        .d-flex.align-items-center
+          i.fa.fa-shopping-cart.me-2
+          span.mx-1 الطلبات
+        i.fa.fa-chevron-down.sidebar-dropdown-icon
+      ul.sidebar-submenu.collapse#collapse02
+        li
+          a.sidebar-submenu-link(href='/manager/orders') كل الطلبات
+        li
+          a.sidebar-submenu-link(href='/manager/orders/new') الطلبات الجديدة
+        li
+          a.sidebar-submenu-link(href='/manager/orders/processing') الطلبات قيد التحضير
+        li
+          a.sidebar-submenu-link(href='/manager/orders/completed') الطلبات المكتملة
+        li
+          a.sidebar-submenu-link(href='/manager/orders/canceled') الطلبات الملغية
+        li
+          a.sidebar-submenu-link(href='/manager/orders/returned') الطلبات المسترجعة
+
+    li.nav-item.sidebar-item
+      a.nav-link.d-flex.align-items-center(href='/manager/branch')
+        i.fa.fa-building.me-2
+        span.mx-1 الأفرع
+
+    li.nav-item.sidebar-item
+      a.nav-link.d-flex.align-items-center(href='/manager/coupon')
+        i.fa.fa-tag.me-2
+        span.mx-1 قسائم الخصومات
+
+    li.nav-item.sidebar-item.has-submenu
+      a.nav-link.d-flex.align-items-center.justify-content-between(href='#collapse03' data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse03")
+        .d-flex.align-items-center
+          i.fa.fa-users.me-2
+          span.mx-1 عملاء المتجر
+        i.fa.fa-chevron-down.sidebar-dropdown-icon
+      ul.sidebar-submenu.collapse#collapse03
+        li
+          a.sidebar-submenu-link(href='/manager/customers') عرض العملاء
+        li
+          a.sidebar-submenu-link(href='/') تاريخ الزائرين
+        li
+          a.sidebar-submenu-link(href='/') الرصيد
+
+    li.nav-item.sidebar-header
+      span.mx-1.nav-link-text.text-muted.small الإدارة
+
+    li.nav-item.sidebar-item
+      a.nav-link.d-flex.align-items-center(href='/manager/subusers')
+        i.fa.fa-user-cog.me-2
+        span.mx-1 المستخدمين
+
+    li.nav-item.sidebar-item.has-submenu
+      a.nav-link.d-flex.align-items-center.justify-content-between(href='#collapse04' data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse04")
+        .d-flex.align-items-center
+          i.fa.fa-truck.me-2
+          span.mx-1 السائقين
+        i.fa.fa-chevron-down.sidebar-dropdown-icon
+      ul.sidebar-submenu.collapse#collapse04
+        li
+          a.sidebar-submenu-link(href='/') السائقين
+        li
+          a.sidebar-submenu-link(href='/') تقرير
+
+    li.nav-item.sidebar-item
+      a.nav-link.d-flex.align-items-center(href='/manager/settings')
+        i.fa.fa-cog.me-2
+        span.mx-1 الإعدادات
+
+    li.nav-item.sidebar-item
+      a.nav-link.d-flex.align-items-center(href='/manager/notifications')
+        i.fa.fa-bell.me-2
+        span.mx-1 إرسال الاشعارات
+
+    li.nav-item.sidebar-header
+      span.mx-1.nav-link-text.text-muted.small التقارير والاشتراكات
+
+    li.nav-item.sidebar-item.has-submenu
+      a.nav-link.d-flex.align-items-center.justify-content-between(href='#collapse05' data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse05")
+        .d-flex.align-items-center
+          i.fa.fa-crown.me-2
+          span.mx-1 باقات الإشتراك
+        i.fa.fa-chevron-down.sidebar-dropdown-icon
+      ul.sidebar-submenu.collapse#collapse05
+        li
+          a.sidebar-submenu-link(href='/') باقات الإشتراك
+        li
+          a.sidebar-submenu-link(href='/') اشتراكات
+
+    li.nav-item.sidebar-item.has-submenu
+      a.nav-link.d-flex.align-items-center.justify-content-between(href='#collapse06' data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse06")
+        .d-flex.align-items-center
+          i.fa.fa-chart-line.me-2
+          span.mx-1 تقارير
+        i.fa.fa-chevron-down.sidebar-dropdown-icon
+      ul.sidebar-submenu.collapse#collapse06
+        li
+          a.sidebar-submenu-link(href='/') تقارير المبيعات
+        li
+          a.sidebar-submenu-link(href='/') الإحصائيات
+        li
+          a.sidebar-submenu-link(href='/') التحميلات
+        li
+          a.sidebar-submenu-link(href='/') الجلسات
+
+    li.nav-item.sidebar-item.has-submenu
+      a.nav-link.d-flex.align-items-center.justify-content-between(href='#collapse07' data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse07")
+        .d-flex.align-items-center
+          i.fa.fa-percentage.me-2
+          span.mx-1 العروض
+        i.fa.fa-chevron-down.sidebar-dropdown-icon
+      ul.sidebar-submenu.collapse#collapse07
+        li
+          a.sidebar-submenu-link(href='/manager/offers') كل العروض
+        li
+          a.sidebar-submenu-link(href='/') عروض جديدة
+        li
+          a.sidebar-submenu-link(href='/') عروض قيد التجهيز
+        li
+          a.sidebar-submenu-link(href='/') العروض المنتهية
+
+    li.nav-item.sidebar-header
+      span.mx-1.nav-link-text.text-muted.small إدارة الأموال
+
+    li.nav-item.sidebar-item
+      a.nav-link.d-flex.align-items-center(href='/manager/cash/balance')
+        i.fa.fa-wallet.me-2
+        span.mx-1 الرصيد (المتجر والبنك)
+        
+    li.nav-item.sidebar-item
+      a.nav-link.d-flex.align-items-center(href='/manager/cash/transactions')
+        i.fa.fa-exchange-alt.me-2
+        span.mx-1 المعاملات

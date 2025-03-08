@@ -1,0 +1,44 @@
+nav.navbar.navbar-expand-lg.bg-white.custom-navbar-shadow(class='ltr')
+  .container
+    a.navbar-brand(href='/')
+      img(src='/img/logoArabat.png' alt='Logo' height='32')
+
+    // Mobile toggle button (only visible on mobile)
+    button.navbar-toggler.d-lg-none(type='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasNavbar' aria-controls='offcanvasNavbar')
+      span.navbar-toggler-icon
+
+    // Define menuItems once
+    - var menuItems = [{ text: mainLanguage.home, href: '/' }, { text: mainLanguage.featuresnav, href: '/features' }, { text: mainLanguage.benefits, href: '/benefits' }, { text: mainLanguage.ourClients, href: '/clients' }, { text: mainLanguage.contactSales, href: '/contact-sales' }, { text: mainLanguage.contact, href: '/contact' }, { text: mainLanguage.prices, href: '/prices' }];
+
+    // Offcanvas Menu (Mobile Only)
+    #offcanvasNavbar.offcanvas.offcanvas-end.d-lg-none(tabindex='-1' aria-labelledby='offcanvasNavbarLabel')
+      .offcanvas-header.border-bottom
+        a(href='/')
+          img(src='/img/logoArabat.png' alt='Logo' height='32')
+        button.btn-close(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
+
+      .offcanvas-body
+        ul.navbar-nav.flex-grow-1.pe-3
+          each link in menuItems
+            li.nav-item
+              a.nav-link(href=link.href class=(currentPath === link.href ? 'active-link' : ''))= link.text
+
+          li.nav-item.mt-3
+            a.btn.btn-outline-secondary.rounded-pill.w-100(href=`?lang=${websiteLanguage === 'ar' ? 'en' : 'ar'}`)
+              i.fas.fa-globe.me-1
+              span= websiteLanguage === 'ar' ? 'English' : 'عربي'
+          li.nav-item.mt-2
+            a.btn.btn-account.rounded-pill.w-100(href='/account')= mainLanguage.myAccount
+
+    // Regular navbar for desktop (Only Visible on Large Screens)
+    #navbarNav.collapse.navbar-collapse.d-none.d-lg-flex
+      ul.navbar-nav.mx-auto
+        each link in menuItems
+          li.nav-item
+            a.nav-link(href=link.href class=(currentPath === link.href ? 'active-link' : ''))= link.text
+
+      .ms-auto.d-flex.align-items-center
+        a.btn.btn-outline-secondary.rounded-pill.me-2(href=`?lang=${websiteLanguage === 'ar' ? 'en' : 'ar'}`)
+          i.fas.fa-globe.me-1
+          span= websiteLanguage === 'ar' ? 'English' : 'عربي'
+        a.btn.btn-account.rounded-pill.me-2(href='/account')= mainLanguage.myAccount
