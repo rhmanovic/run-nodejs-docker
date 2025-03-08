@@ -9,9 +9,8 @@ module.exports = {
     clientSecret: 'oVmsdLuFMI16dBL0ivNOMyf2'
   },
   mongodb: {
-    dbURI: 'mongodb+srv://user2023:qEcyyl1kHEO3last@cluster0.k0kof.gcp.mongodb.net/ARABAT?retryWrites=true&w=majority'
     // dbURI: 'mongodb+srv://user2023:qEcyyl1kHEO3last@cluster0.k0kof.gcp.mongodb.net/ARABAT?retryWrites=true&w=majority'
-    // dbURI: 'mongodb+srv://user2023:qEcyyl1kHEO3last@cluster0.k0kof.gcp.mongodb.net/Ting?retryWrites=true&w=majority'
+    dbURI: 'mongodb+srv://user2023:qEcyyl1kHEO3last@cluster0.k0kof.gcp.mongodb.net/ARABAT?retryWrites=true&w=majority'
   },
   admin: {
     Id: 'eng.dugaim@gmail.com'
