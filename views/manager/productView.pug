@@ -24,7 +24,7 @@ block content
             .card-body
               .row
                 .col-12.col-sm-4.text-center
-                  img.mx-auto(src=product.product_image alt='Product image' style='width: 100%; max-width: 400px; height: auto; aspect-ratio: 1 / 1;')
+                  img.mx-auto(src=`${baseImageUrl}${product.product_image}` alt='Product image' style='width: 100%; max-width: 400px; height: auto; aspect-ratio: 1 / 1;')
                 .col-12.col-sm-8
                   
                   table.table.table-bordered.table-striped.table-hover

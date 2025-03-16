@@ -18,6 +18,7 @@ const routesAPI = require('./routes/api/index');
 const routesPayment = require('./routes/payment/index');
 const authRoutes = require('./routes/auth-routes');
 const profileRoutes = require('./routes/profile-routes');
+const routesTest = require('./routes/test/index');
 
 const app = express();
 
@@ -101,6 +102,7 @@ app.use('/manager', routesManager);
 app.use('/api', routesAPI);
 app.use('/payment', routesPayment);
 app.use('/profile', profileRoutes);
+app.use('/test', routesTest);
 
 app.set('views', __dirname + '/views');
 app.set('views/admin', __dirname + '/views/manager');

@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1= title
+  a.btn.btn-primary(href='/admin/download-images') Download All Images
+  .image-gallery
+    each image in images
+      img(src=image, alt=image, style='width: 300px;')

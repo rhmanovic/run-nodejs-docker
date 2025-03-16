@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Define the schema for a merchant counter
+const MerchantCounterSchema = new mongoose.Schema({
+  seq: { type: Number, default: 0 } // Sequence number for merchants
+});
+
 const merchantSchema = new mongoose.Schema({
+  merchant_number: { type: Number }, // Auto-incremented or explicitly provided
   name: { type: String, required: true },
   projectName: { type: String, required: true },
   phoneNumber: { type: String, required: true },
@@ -105,6 +111,45 @@ const merchantSchema = new mongoose.Schema({
 
 });
 
+// Embed the merchant counter model as a static function
+merchantSchema.statics.incrementCounter = async function () {
+  const MerchantCounter = mongoose.model('MerchantCounter', MerchantCounterSchema);
+
+  // Find or create a counter
+  const counter = await MerchantCounter.findOneAndUpdate(
+    {}, // No specific search criteria
+    { $inc: { seq: 1 } }, // Increment the sequence
+    { new: true, upsert: true } // Create a new counter if not found
+  );
+
+  return counter.seq; // Return the new sequence number
+};
+
+// Pre-save hook to handle merchant_number logic
+merchantSchema.pre('save', async function (next) {
+  if (this.isNew && !this.merchant_number) { // Only increment if merchant_number is not provided
+    try {
+      // Increment the counter
+      this.merchant_number = await this.constructor.incrementCounter();
+    } catch (error) {
+      return next(error);
+    }
+  } else if (this.isNew && this.merchant_number) {
+    // Check for uniqueness of the provided merchant_number
+    const existingMerchant = await this.constructor.findOne({
+      merchant_number: this.merchant_number
+    });
+    if (existingMerchant) {
+      return next(new Error('Merchant number already exists'));
+    }
+  }
+
+  next();
+});
+
+// Create a unique index to prevent duplicate merchant numbers
+merchantSchema.index({ merchant_number: 1 }, { unique: true });
+
 // Hash password before saving the document
 merchantSchema.pre('save', async function (next) {
   if (this.isModified('password') || this.isNew) {
@@ -115,5 +160,6 @@ merchantSchema.pre('save', async function (next) {
 });
 
 const Merchant = mongoose.model('Merchant', merchantSchema);
+const MerchantCounter = mongoose.model('MerchantCounter', MerchantCounterSchema);
 
 module.exports = Merchant;

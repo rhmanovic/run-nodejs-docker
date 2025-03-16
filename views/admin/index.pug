@@ -1,7 +1,10 @@
-
 extends layout
 
 block content
+  h1= title
+  p Welcome to the Admin Dashboard
+  ul
+    li: a(href='/admin/images') View Image Gallery
   .container.mt-4
     h1.mb-4 Admin Dashboard
     .card

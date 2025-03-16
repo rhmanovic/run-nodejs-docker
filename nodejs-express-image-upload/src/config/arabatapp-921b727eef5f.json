@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "arabatapp",
+  "private_key_id": "921b727eef5feb5534b067bd9713768f37eaed07",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDGefq+PNoNVU/J\n2qsDPfI9Lg+KhrgSrtsgoIj7YcsV4uvY4jxDEMcBgl4Nb7O1zIpfaX48JfzL6Ql1\nLL8Z0kqrcqi5a9nia2jli4Q4gUdLzBelmcPeLd3OXa3eBnUvl98pAJEhUnyj+BmO\nqG1bcr0boBIGU19UTOquxr07qXDhXxqIwWMY03xA30ERtWVKgXC2C6USNWSO/wbw\nyomVy4bqdjH3UZUfObP6qb5Lks0b3+ESe9v7z+osW1+uAL67GUOIx2O3WAnKsXgr\nFnCHacLgE8jhA5Z58iehVE2aYUgAeCIl0/XimWA72+o8NRNjIBzOB+ES9GLw+XQQ\np4vnHm1vAgMBAAECgf9LzksTQYAHJePFbfhVC8WytMiQIDm8PmIeFBY9tHGj6l1G\nsgWnl91OC5lu3aziba7d3sJYNtTI1DkBa6QDjhVou7e1xQnk/yFKUjguB2tspE4q\n8eUy9vxrY84g/wEYgcy6TifLBCglIw9Kie1zqtEBgz5CunjLD0BanVTF5pxTBYye\nZ7tYwdZb2VyvyZe+oiZazXsORtTyXR874QadjPn5Aj8C9JO3MNkZ1Q+ERWzzFmdt\nlXX1FQaqxCJ0liU2vo3MEPwRTibuTX/cMd+3dxg8YxBC5XPCCWYKyVZRmiwh3gJz\nwTfu9s6O8DJX4WK0iOpi2AWiXH8j8xva+QDozoECgYEA6IcWS25DmxbQ+vW6EX1P\n/5O/kSmTuFCfqm4IRZXrYoQtvzsARgk5AcDuPII07fb/LaCgBD7RYW/Ond6TMgDj\n911EVnsa8oGeCuFQXIHUV/Cxw7ie6KN5EmXgFcgjvEKFXoUBY7KYsPNq7j6m3Mq3\njzzgGWpPgVZ0tgMY1MZclr0CgYEA2oLze86EolCx6fFojzVUC6NLWFojtmwdb5m8\n7ldiX9RJCfSEbCpkdPPg5vtoNGJe5wpTsooeSWSoVLiYMeeWfMnjVQeyn/nr5nY1\n5t8rJeZEb628Hr42DgtCpKL7GKe8SJw0A+BlumyZevZfNs651jXbqCcPAuh6Mu1Y\nGliG3ZsCgYEAqo+sQtg2ruQllm/4dCu/KnFt60TcHi7Fb3YWizRU3IaoJ8VXhgft\n0ON73NaFjKfItedEeNi7LQWeQR6qSdttXF0Fa4oRUiDRlJmBINn6sCbVvgMGTQ7c\nGCqyHEgaLlV9Dr/xLPgsGF/055z9OKdZza+RkhLxDqYkJf5PkIOQFuECgYEAtQMZ\n1Ivlz9htKdEzvr58mw9w0QYK44l4cQS4P/Dfq2beAoMuV7Red4u32WCWmB6NY3No\nllRYdpAN6fDpEx43ybQswDmaPW/5fXabfF+PDNxOAP25AvarLMMjN+NTgr8g+D19\n0WBIpUBlfDkv8uUZiVwgVJHWm6Ad6qY2/8wqHNUCgYA99DiQ8IRG3oiXaqypGJtZ\nUcoixUNwLx2N5JGQNjHxYi8r3GgiVZgMWdPq5b5oDXFHc6sR7ciGVLQSh7m9xnPW\nLDss8CEX/Wld1Ro9+A+cfp7PI9YgCg3wyt55sHVX3H0kd27jWn6gy/zsyeZFrtNg\nzkSf8C2nvfr2TXd8/FMWHA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "arabatapp@arabatapp.iam.gserviceaccount.com",
+  "client_id": "117472104672295548277",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/arabatapp%40arabatapp.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

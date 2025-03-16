@@ -59,7 +59,7 @@ block content
                           td= category.category_number
                           td
                             if category.imgsrc
-                              img.rounded.category-image(src=category.imgsrc, alt='صورة التصنيف', style='height: 50px; width: 50px; object-fit: cover;')
+                              img.rounded.category-image(src=`${baseImageUrl}${category.imgsrc}`, alt='صورة التصنيف', style='height: 50px; width: 50px; object-fit: cover;')
                             else
                               .bg-light.rounded.d-flex.justify-content-center.align-items-center(style='height: 50px; width: 50px;')
                                 i.fa.fa-folder.text-muted

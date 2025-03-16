@@ -44,8 +44,8 @@ var nodemailer = require("nodemailer");
 
 
 
-// Set up storage engine
-const storage = multer.diskStorage({
+// Set up storageLocal engine
+const storageLocal = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, 'public/img/upload/'); // Save files to this directory
   },
@@ -54,12 +54,10 @@ const storage = multer.diskStorage({
   }
 });
 
-// const upload = multer({ storage: storage });
-
 
 
 const upload = multer({
-  storage: storage,
+  storage: storageLocal,
   limits: {
     fileSize: 2 * 1024 * 1024, // Limit file size to 2 MB
   },
@@ -83,13 +81,90 @@ const upload = multer({
 
 
 
+const { Storage } = require('@google-cloud/storage');
+const ImageController = require('../../controllers/imageController'); // Ensure this path is correct
+
+const storageGoogleCloud = new Storage({
+  projectId: 'arabatapp',
+  keyFilename: path.join(__dirname, '../../config/arabatapp-921b727eef5f.json')
+});
+const imageController = new ImageController(storageGoogleCloud);
+
+const multerStorageGoogleCloud = multer.memoryStorage();
+const uploadGoogleCloud = multer({ storage: multerStorageGoogleCloud });
 
 
 
 
+router.post('/add-category', uploadGoogleCloud.single('category_img'), async (req, res) => {
+  var { ArabicName, EnglishName, discountPerc, sort, status } = req.body;
+  
+  let imgsrc = "";
+
+  try {
+    const folder = req.session.merchant.merchant_number;
+
+    if (!folder) {
+        
+      return res.status(500).send('Merchant number is undefined');
+    }
+
+    const subfolder = "category";
 
 
 
+    // Pass folder and subfolder to the upload function
+    const response = await imageController.uploadGoogleCloudAndConvertToWebP(req, res, folder, subfolder);
+    console.log('Response from image upload:', response);
+    imgsrc = `${folder}/${subfolder}/${response.fileName}`;
+
+    const merchantId = req.session.merchant.id; // Assuming merchant ID is stored in the session
+
+    // Ensure sort is 0 if it is empty
+    if (sort === "") {
+        sort = 0;
+    }
+    if (discountPerc === "") {
+          discountPerc = 0;
+    }
+
+    const newCategory = new Category({
+      ArabicName,
+      EnglishName,
+      imgsrc, // Use the modified path
+      discountPerc,
+      sort,
+      status: status === 'on',
+      merchant: merchantId  // Adding the Merchant ID to the Category
+    });
+
+    await newCategory.save();
+    res.redirect('/manager/category');
+  } catch (error) {
+    console.error('Error uploading image or saving category:', error);
+    res.status(500).send('Error uploading image or saving category');
+  }
+});
+
+
+
+router.get("/category", mid.requiresLogin,  async function (req, res, next) {
+  
+
+  try {
+
+    console.log('req.session.merchant:', req.session.merchant);
+    const merchantId = req.session.merchant.id;
+    const categories = await Category.find({ merchant: merchantId });
+    return res.render("manager/category", {
+      title: "Category",
+      categories: categories // Pass the categories to the Pug template
+    });
+  } catch (error) {
+    console.error('Error retrieving categories:', error);
+    return res.status(500).send('Error retrieving categories');
+  }
+});
 
 
 // Set up storage engine for saving images in 'public/img/test/'
@@ -1496,7 +1571,8 @@ router.post('/login', async (req, res) => {
     req.session.merchant = {
       id: merchant._id,
       projectName: merchant.projectName,
-      name: merchant.name
+      name: merchant.name,
+      merchant_number: merchant.merchant_number
     };
 
     // Redirect or send a success message
@@ -2846,7 +2922,8 @@ router.post('/register', async (req, res) => {
     req.session.merchant = {
       id: newMerchant._id,
       projectName: newMerchant.projectName,
-      name: newMerchant.name
+      name: newMerchant.name,
+      merchant_number: newMerchant.merchant_number
     };
 
     // Redirect or send a success message
@@ -2899,41 +2976,7 @@ router.get('/downloadExcel', (req, res) => {
 
 
 
-router.post('/add-category', upload.single('category_img'), async (req, res) => {
-  var { ArabicName, EnglishName, discountPerc, sort, status } = req.body;
-  // Modify the path by removing the 'public/' prefix
-  const imgsrc = req.file ? req.file.path.replace('public', '') : ''; // Remove 'public/' from the path
 
-  const merchantId = req.session.merchant.id; // Assuming merchant ID is stored in the session
-
-  
-  // Ensure sort is 0 if it is empty
-  if (sort === "") {
-      sort = 0;
-  }
-  if (discountPerc === "") {
-        discountPerc = 0;
-  }
-
-  
-  try {
-    const newCategory = new Category({
-      ArabicName,
-      EnglishName,
-      imgsrc, // Use the modified path
-      discountPerc,
-      sort,
-      status: status === 'on',
-      merchant: merchantId  // Adding the Merchant ID to the Category
-    });
-
-    await newCategory.save();
-    res.redirect('/manager/category');
-  } catch (error) {
-    console.error('Failed to add category', error);
-    res.status(500).send('Error saving category');
-  }
-});
 
 
 router.post('/edit-category', upload.single('category_img'), async (req, res) => {

@@ -1,9 +1,11 @@
-
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const mid = require('../../middleware');
 const { admins } = require('../../config/admins');
+const fs = require('fs');
+const path = require('path');
+const archiver = require('archiver');
 
 // GET /admin/login
 router.get('/login', mid.loggedOut, function(req, res, next) {
@@ -112,6 +114,53 @@ router.get('/', async function(req, res, next) {
     console.error('Error fetching merchants:', error);
     return res.status(500).send('Error fetching merchants');
   }
+});
+
+// GET /admin/images
+router.get('/images', async function(req, res, next) {
+  if (!req.session.admin) {
+    return res.redirect('/admin/login');
+  }
+
+  const imgDir = path.join(__dirname, '../../public/img');
+  const getAllImages = (dir, fileList = []) => {
+    const files = fs.readdirSync(dir);
+    files.forEach(file => {
+      const filePath = path.join(dir, file);
+      if (fs.statSync(filePath).isDirectory()) {
+        getAllImages(filePath, fileList);
+      } else if (/\.(jpg|jpeg|png|gif)$/.test(file)) {
+        fileList.push(filePath.replace(path.join(__dirname, '../../public'), ''));
+      }
+    });
+    return fileList;
+  };
+
+  try {
+    const images = getAllImages(imgDir);
+    res.render('admin/images', { title: 'Image Gallery', images: images });
+  } catch (err) {
+    res.status(500).send('Unable to scan directory: ' + err);
+  }
+});
+
+// GET /admin/download-images
+router.get('/download-images', async function(req, res, next) {
+  if (!req.session.admin) {
+    return res.redirect('/admin/login');
+  }
+
+  const imgDir = path.join(__dirname, '../../public/img');
+  res.setHeader('Content-Disposition', 'attachment; filename=images.zip');
+  const archive = archiver('zip', { zlib: { level: 9 } });
+
+  archive.on('error', function(err) {
+    res.status(500).send({ error: err.message });
+  });
+
+  archive.pipe(res);
+  archive.directory(imgDir, false);
+  archive.finalize();
 });
 
 module.exports = router;

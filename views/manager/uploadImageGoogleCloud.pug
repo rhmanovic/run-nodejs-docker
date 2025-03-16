@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  form(action="/manager/uploadimagegooglecloud" method="post" enctype="multipart/form-data")
+    div
+      label(for="image") Select image to upload:
+      input(type="file" name="image" id="image" required)
+    div
+      button(type="submit") Upload
